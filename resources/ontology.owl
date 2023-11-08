@@ -1,0 +1,2144 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.semanticweb.org/thiagosilva/ontologies/2015/4/untitled-ontology-4"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://www.semanticweb.org/thiagosilva/ontologies/2015/4/untitled-ontology-4">
+    <Prefix name="" IRI="http://www.semanticweb.org/thiagosilva/ontologies/2015/4/untitled-ontology-4"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="#Input_Control"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isTriggeredBy"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#clickOnReferringTo"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#resetTheValueOfTheField"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Step"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isDescribedBy"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Breadcrumb"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Numeric_Stepper"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#level"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#number_input"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Prototype"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Narrative"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Menu"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Scenario"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#shouldRepresent"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#willNotBeDisplayedInTheFieldTheValue"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#behaviors"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Notification"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Dropdown_List"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Autocomplete"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Then"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#agreement"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#title"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Condition"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Presentation"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#text_input"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Text_Field"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#typeAndChooseInTheField"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isComposedBy"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#State_Machine_Element"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isAnOccurrenceOf"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Field_Set"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#state"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#concerns"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#value"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#images"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#symbol"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#options"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Grid"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Dialog"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#When"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#pages"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#User_Story"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Web"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Link"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Search_Field"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Button"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#locations"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Pagination"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Navigational_Component"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#willNotBeDisplayed"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Icon"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isDisplayed"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Event"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Interaction_Element"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#message"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Window"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Toggle"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Action"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Tool_Tip"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#willBeDisplayedTheValueInReferringTo"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#relations"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Task"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#confirmTheDialogBox"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Tree"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Platform"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Calendar"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Checkbox"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#data_and_time_input"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isSpecifiedBy"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Container"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#clickOn"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isRepresentedBy"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Window_Dialog"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Mobile"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#willNotBeDisplayedTheValueInReferringTo"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#willBeDisplayedInTheDialogBox"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#chooseTheOptionOfValueInTheField"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#setInTheField"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Transition"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Image_Carousel"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Browser_Window"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Accordion"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Modal_Window"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Progress_Bar"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isASetOf"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Menu_Item"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#willBeDisplayed"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#goTo"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Tag"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#chooseByIndexInTheField"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Message_Box"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#performs"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Information_Component"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Label"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#State"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isBuiltFor"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Text"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Radio_Button"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#chooseReferringTo"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#words"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#actions"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#List_Box"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Given"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#doNotTypeAnyValueToTheField"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Dropdown_Button"/>
+    </Declaration>
+    <Declaration>
+        <Datatype IRI="#element"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Tabs_Bar"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#choose"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#allowsUnique"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#willBeDisplayedInTheFieldTheValue"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Slider"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#allowsMultiple"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="#Accordion"/>
+        <Class IRI="#Container"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Action"/>
+        <Class IRI="#State_Machine_Element"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Autocomplete"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Breadcrumb"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Browser_Window"/>
+        <Class IRI="#Window"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Button"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Calendar"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Checkbox"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Condition"/>
+        <Class IRI="#State_Machine_Element"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Container"/>
+        <Class IRI="#Interaction_Element"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Dropdown_Button"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Dropdown_List"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Event"/>
+        <Class IRI="#State_Machine_Element"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Field_Set"/>
+        <Class IRI="#Container"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Grid"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Icon"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Image_Carousel"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Information_Component"/>
+        <Class IRI="#Interaction_Element"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Input_Control"/>
+        <Class IRI="#Interaction_Element"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Label"/>
+        <Class IRI="#Information_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Link"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#List_Box"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Menu"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Menu_Item"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Message_Box"/>
+        <Class IRI="#Information_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Mobile"/>
+        <Class IRI="#Platform"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Modal_Window"/>
+        <Class IRI="#Window_Dialog"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Navigational_Component"/>
+        <Class IRI="#Interaction_Element"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Notification"/>
+        <Class IRI="#Information_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Numeric_Stepper"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Pagination"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Progress_Bar"/>
+        <Class IRI="#Information_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Radio_Button"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Search_Field"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Slider"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#State"/>
+        <Class IRI="#State_Machine_Element"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Tabs_Bar"/>
+        <Class IRI="#Container"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Tag"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Text"/>
+        <Class IRI="#Information_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Text_Field"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Toggle"/>
+        <Class IRI="#Input_Control"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Tool_Tip"/>
+        <Class IRI="#Information_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Transition"/>
+        <Class IRI="#State_Machine_Element"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Tree"/>
+        <Class IRI="#Navigational_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Web"/>
+        <Class IRI="#Platform"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Window"/>
+        <Class IRI="#Container"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Window_Dialog"/>
+        <Class IRI="#Information_Component"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Window_Dialog"/>
+        <Class IRI="#Window"/>
+    </SubClassOf>
+    <ClassAssertion>
+        <Class IRI="#Condition"/>
+        <NamedIndividual IRI="#Given"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Action"/>
+        <NamedIndividual IRI="#Then"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Event"/>
+        <NamedIndividual IRI="#When"/>
+    </ClassAssertion>
+    <EquivalentObjectProperties>
+        <ObjectProperty IRI="#doNotTypeAnyValueToTheField"/>
+        <ObjectProperty IRI="#resetTheValueOfTheField"/>
+    </EquivalentObjectProperties>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#choose"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#chooseByIndexInTheField"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#chooseReferringTo"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#chooseTheOptionOfValueInTheField"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#clickOn"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#clickOnReferringTo"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#concerns"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#confirmTheDialogBox"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#doNotTypeAnyValueToTheField"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#goTo"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isASetOf"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isAnOccurrenceOf"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isBuiltFor"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isComposedBy"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isDescribedBy"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isDisplayed"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isRepresentedBy"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isSpecifiedBy"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isTriggeredBy"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#performs"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#resetTheValueOfTheField"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#setInTheField"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#shouldRepresent"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#typeAndChooseInTheField"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectProperty IRI="#relations"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#willBeDisplayed"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#willBeDisplayedInTheDialogBox"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#willBeDisplayedInTheFieldTheValue"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#willBeDisplayedTheValueInReferringTo"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#willNotBeDisplayed"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#willNotBeDisplayedInTheFieldTheValue"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#willNotBeDisplayedTheValueInReferringTo"/>
+        <ObjectProperty IRI="#behaviors"/>
+    </SubObjectPropertyOf>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#allowsMultiple"/>
+        <Class IRI="#Checkbox"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#allowsMultiple"/>
+        <Class IRI="#List_Box"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#allowsUnique"/>
+        <Class IRI="#Dropdown_Button"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#allowsUnique"/>
+        <Class IRI="#Dropdown_List"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#allowsUnique"/>
+        <Class IRI="#Radio_Button"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#allowsUnique"/>
+        <Class IRI="#Toggle"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#choose"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#choose"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#chooseByIndexInTheField"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#chooseByIndexInTheField"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#chooseReferringTo"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#chooseReferringTo"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#chooseTheOptionOfValueInTheField"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#chooseTheOptionOfValueInTheField"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#clickOn"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#clickOn"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#clickOnReferringTo"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#clickOnReferringTo"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#concerns"/>
+        <Class IRI="#State"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#confirmTheDialogBox"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#confirmTheDialogBox"/>
+        <Class IRI="#Condition"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#confirmTheDialogBox"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#goTo"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#goTo"/>
+        <Class IRI="#Condition"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#goTo"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isASetOf"/>
+        <Class IRI="#Scenario"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isAnOccurrenceOf"/>
+        <Class IRI="#Step"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isBuiltFor"/>
+        <Class IRI="#Prototype"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isComposedBy"/>
+        <Class IRI="#Dialog"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isDescribedBy"/>
+        <Class IRI="#User_Story"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isDisplayed"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isDisplayed"/>
+        <Class IRI="#Condition"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isDisplayed"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isRepresentedBy"/>
+        <Class IRI="#Presentation"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isSpecifiedBy"/>
+        <Class IRI="#Prototype"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isTriggeredBy"/>
+        <Class IRI="#Transition"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#performs"/>
+        <Class IRI="#Transition"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#resetTheValueOfTheField"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#setInTheField"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#setInTheField"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#shouldRepresent"/>
+        <Class IRI="#Step"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#typeAndChooseInTheField"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#typeAndChooseInTheField"/>
+        <Class IRI="#Event"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <Class IRI="#Mobile"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <Class IRI="#Web"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#willBeDisplayed"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#willBeDisplayedInTheDialogBox"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#willBeDisplayedInTheFieldTheValue"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#willBeDisplayedTheValueInReferringTo"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#willNotBeDisplayed"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#willNotBeDisplayedInTheFieldTheValue"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#willNotBeDisplayedTheValueInReferringTo"/>
+        <Class IRI="#Action"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#allowsMultiple"/>
+        <DataSomeValuesFrom>
+            <DataProperty IRI="#options"/>
+            <Datatype IRI="#element"/>
+        </DataSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#allowsUnique"/>
+        <DataAllValuesFrom>
+            <DataProperty IRI="#options"/>
+            <Datatype IRI="#element"/>
+        </DataAllValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#choose"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#choose"/>
+            <Class IRI="#Calendar"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#choose"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#choose"/>
+            <Class IRI="#Checkbox"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#choose"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#choose"/>
+            <Class IRI="#Link"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#choose"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#choose"/>
+            <Class IRI="#Radio_Button"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#chooseByIndexInTheField"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#chooseByIndexInTheField"/>
+            <Class IRI="#Dropdown_List"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#chooseReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#chooseReferringTo"/>
+            <Class IRI="#Calendar"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#chooseReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#chooseReferringTo"/>
+            <Class IRI="#Checkbox"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#chooseReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#chooseReferringTo"/>
+            <Class IRI="#Link"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#chooseReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#chooseReferringTo"/>
+            <Class IRI="#Radio_Button"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#chooseTheOptionOfValueInTheField"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#chooseTheOptionOfValueInTheField"/>
+            <Class IRI="#Dropdown_List"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#clickOn"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#clickOn"/>
+            <Class IRI="#Button"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#clickOn"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#clickOn"/>
+            <Class IRI="#Link"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#clickOn"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#clickOn"/>
+            <Class IRI="#Menu"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#clickOn"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#clickOn"/>
+            <Class IRI="#Menu_Item"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#clickOnReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#clickOnReferringTo"/>
+            <Class IRI="#Button"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#clickOnReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#clickOnReferringTo"/>
+            <Class IRI="#Grid"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#clickOnReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#clickOnReferringTo"/>
+            <Class IRI="#Link"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#clickOnReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#clickOnReferringTo"/>
+            <Class IRI="#Menu"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#clickOnReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#clickOnReferringTo"/>
+            <Class IRI="#Menu_Item"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#concerns"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#concerns"/>
+            <Class IRI="#Presentation"/>
+        </ObjectAllValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#confirmTheDialogBox"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#confirmTheDialogBox"/>
+            <Class IRI="#Window_Dialog"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#goTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#goTo"/>
+            <Class IRI="#Browser_Window"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isASetOf"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#isASetOf"/>
+            <Class IRI="#Step"/>
+        </ObjectAllValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isAnOccurrenceOf"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#isAnOccurrenceOf"/>
+            <Class IRI="#Task"/>
+        </ObjectAllValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isBuiltFor"/>
+        <ObjectMinCardinality cardinality="1">
+            <ObjectProperty IRI="#isBuiltFor"/>
+            <Class IRI="#Platform"/>
+        </ObjectMinCardinality>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isComposedBy"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isComposedBy"/>
+            <Class IRI="#State"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isComposedBy"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isComposedBy"/>
+            <Class IRI="#Transition"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isDescribedBy"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isDescribedBy"/>
+            <Class IRI="#Scenario"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isDescribedBy"/>
+        <ObjectExactCardinality cardinality="1">
+            <ObjectProperty IRI="#isDescribedBy"/>
+            <Class IRI="#Narrative"/>
+        </ObjectExactCardinality>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isDisplayed"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isDisplayed"/>
+            <Class IRI="#Browser_Window"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isRepresentedBy"/>
+        <ObjectMinCardinality cardinality="1">
+            <ObjectProperty IRI="#isRepresentedBy"/>
+            <Class IRI="#Interaction_Element"/>
+        </ObjectMinCardinality>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isSpecifiedBy"/>
+        <ObjectMaxCardinality cardinality="1">
+            <ObjectProperty IRI="#isSpecifiedBy"/>
+            <Class IRI="#Dialog"/>
+        </ObjectMaxCardinality>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isSpecifiedBy"/>
+        <ObjectMaxCardinality cardinality="1">
+            <ObjectProperty IRI="#isSpecifiedBy"/>
+            <Class IRI="#Presentation"/>
+        </ObjectMaxCardinality>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isTriggeredBy"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isTriggeredBy"/>
+            <Class IRI="#Action"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isTriggeredBy"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isTriggeredBy"/>
+            <Class IRI="#Condition"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isTriggeredBy"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isTriggeredBy"/>
+            <Class IRI="#Event"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#performs"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#performs"/>
+            <Class IRI="#Scenario"/>
+        </ObjectAllValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#resetTheValueOfTheField"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#resetTheValueOfTheField"/>
+            <Class IRI="#Text_Field"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#setInTheField"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#setInTheField"/>
+            <Class IRI="#Autocomplete"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#setInTheField"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#setInTheField"/>
+            <Class IRI="#Calendar"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#setInTheField"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#setInTheField"/>
+            <Class IRI="#Dropdown_List"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#setInTheField"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#setInTheField"/>
+            <Class IRI="#Text_Field"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#shouldRepresent"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#shouldRepresent"/>
+            <Class IRI="#Action"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#shouldRepresent"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#shouldRepresent"/>
+            <Class IRI="#Condition"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#shouldRepresent"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#shouldRepresent"/>
+            <Class IRI="#Event"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#typeAndChooseInTheField"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#typeAndChooseInTheField"/>
+            <Class IRI="#Autocomplete"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Accordion"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Button"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Calendar"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Checkbox"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Dropdown_Button"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Dropdown_List"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Field_Set"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Grid"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Icon"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Label"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#List_Box"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Menu"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Menu_Item"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Message_Box"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Notification"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Numeric_Stepper"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Progress_Bar"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Radio_Button"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Search_Field"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Slider"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Tabs_Bar"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Text"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Text_Field"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Toggle"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAMobileElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAMobileElement"/>
+            <Class IRI="#Tool_Tip"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Accordion"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Autocomplete"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Breadcrumb"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Browser_Window"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Button"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Calendar"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Checkbox"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Dropdown_Button"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Dropdown_List"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Field_Set"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Grid"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Icon"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Image_Carousel"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Label"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Link"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#List_Box"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Menu"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Menu_Item"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Message_Box"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Modal_Window"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Notification"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Numeric_Stepper"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Pagination"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Progress_Bar"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Radio_Button"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Search_Field"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Slider"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Tabs_Bar"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Tag"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Text"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Text_Field"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Toggle"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Tool_Tip"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Tree"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#usesAsAWebElement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#usesAsAWebElement"/>
+            <Class IRI="#Window_Dialog"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#willBeDisplayed"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#willBeDisplayed"/>
+            <Class IRI="#Text"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#willBeDisplayedInTheDialogBox"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#willBeDisplayedInTheDialogBox"/>
+            <Class IRI="#Window_Dialog"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#willBeDisplayedInTheFieldTheValue"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#willBeDisplayedInTheFieldTheValue"/>
+            <Class IRI="#Text"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#willBeDisplayedTheValueInReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#willBeDisplayedTheValueInReferringTo"/>
+            <Class IRI="#Text"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#willNotBeDisplayed"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#willNotBeDisplayed"/>
+            <Class IRI="#Text"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#willNotBeDisplayedInTheFieldTheValue"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#willNotBeDisplayedInTheFieldTheValue"/>
+            <Class IRI="#Text"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#willNotBeDisplayedTheValueInReferringTo"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#willNotBeDisplayedTheValueInReferringTo"/>
+            <Class IRI="#Text"/>
+        </ObjectSomeValuesFrom>
+    </ObjectPropertyRange>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#state"/>
+        <DataProperty IRI="#actions"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#state"/>
+        <DataProperty IRI="#locations"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#state"/>
+        <DataProperty IRI="#options"/>
+    </SubDataPropertyOf>
+    <DataPropertyDomain>
+        <DataProperty IRI="#actions"/>
+        <Class IRI="#Button"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#actions"/>
+        <Class IRI="#Link"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#actions"/>
+        <Class IRI="#Menu_Item"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#actions"/>
+        <Class IRI="#Message_Box"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#actions"/>
+        <Class IRI="#Modal_Window"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#actions"/>
+        <Class IRI="#Tree"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#agreement"/>
+        <Class IRI="#Notification"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#data_and_time_input"/>
+        <Class IRI="#Calendar"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#images"/>
+        <Class IRI="#Image_Carousel"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#level"/>
+        <Class IRI="#Prototype"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#locations"/>
+        <Class IRI="#Breadcrumb"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#message"/>
+        <Class IRI="#Message_Box"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#message"/>
+        <Class IRI="#Modal_Window"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#message"/>
+        <Class IRI="#Notification"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#message"/>
+        <Class IRI="#Text"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#message"/>
+        <Class IRI="#Tool_Tip"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#number_input"/>
+        <Class IRI="#Numeric_Stepper"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#options"/>
+        <Class IRI="#Accordion"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#options"/>
+        <Class IRI="#Checkbox"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#options"/>
+        <Class IRI="#Dropdown_Button"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#options"/>
+        <Class IRI="#Dropdown_List"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#options"/>
+        <Class IRI="#List_Box"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#options"/>
+        <Class IRI="#Menu"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#options"/>
+        <Class IRI="#Progress_Bar"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#options"/>
+        <Class IRI="#Radio_Button"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#options"/>
+        <Class IRI="#Tabs_Bar"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#options"/>
+        <Class IRI="#Toggle"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#pages"/>
+        <Class IRI="#Pagination"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#symbol"/>
+        <Class IRI="#Icon"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#text_input"/>
+        <Class IRI="#Autocomplete"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#text_input"/>
+        <Class IRI="#Grid"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#text_input"/>
+        <Class IRI="#Search_Field"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#text_input"/>
+        <Class IRI="#Text_Field"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#title"/>
+        <Class IRI="#Button"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#title"/>
+        <Class IRI="#Field_Set"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#title"/>
+        <Class IRI="#Label"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#title"/>
+        <Class IRI="#Link"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#title"/>
+        <Class IRI="#Menu_Item"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#value"/>
+        <Class IRI="#Slider"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#words"/>
+        <Class IRI="#Tag"/>
+    </DataPropertyDomain>
+    <DataPropertyRange>
+        <DataProperty IRI="#actions"/>
+        <Datatype IRI="#element"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#agreement"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#data_and_time_input"/>
+        <Datatype abbreviatedIRI="xsd:dateTime"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#images"/>
+        <Datatype abbreviatedIRI="xsd:hexBinary"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#locations"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#message"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#number_input"/>
+        <Datatype abbreviatedIRI="xsd:double"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#options"/>
+        <Datatype IRI="#element"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#pages"/>
+        <Datatype abbreviatedIRI="xsd:integer"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#state"/>
+        <Datatype abbreviatedIRI="xsd:boolean"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#symbol"/>
+        <Datatype abbreviatedIRI="xsd:hexBinary"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#text_input"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#title"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#value"/>
+        <Datatype abbreviatedIRI="xsd:double"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#value"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#words"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Accordion</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">An accordion is a vertically stacked list of items that utilizes show/hide functionality. When a label is clicked, it expands the section showing the content within. There can have one or more items showing at a time and may have default states that reveal one or more sections without the user clicking.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Autocomplete</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The Autocomplete widgets provides suggestions while you type into the field.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Breadcrumb</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Breadcrumbs allow users to identify their current location within the system by providing a clickable trail of proceeding pages to navigate by.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Browser_Window</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The top of a typical Web browser window contains a title bar that displays the title of the current page. Below the title is a toolbar with back and forward buttons, an address field, bookmarks, and other navigation buttons. Below the toolbar is the content of the current Web page. The bottom of the window may contain a status bar that displays the page loading status.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Button</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A button indicates an action upon touch and is typically labeled using text, an icon, or both.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Calendar</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A calendar (date picker) allows users to select a date and/or time. By using the picker, the information is consistently formatted and input into the system.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Checkbox</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Checkboxes allow the user to select one or more options from a set. It is usually best to present checkboxes in a vertical list. More than one column is acceptable as well if the list is long enough that it might require scrolling or if comparison of terms might be necessary.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Dropdown_Button</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">The dropdown button consists of a button that when clicked displays a drop-down list of mutually exclusive items.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Dropdown_List</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Dropdown lists allow users to select one item at a time, similarly to radio buttons, but are more compact allowing you to save space. Consider adding text to the field, such as ‘Select one’ to help the user recognize the necessary action.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Field_Set</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A fieldset element represents a set of form controls optionally grouped under a common name.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Grid</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A grid or a datagrid is a graphical control element that presents a tabular view of data.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Icon</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">An icon is a simplified image serving as an intuitive symbol that is used to help users to navigate the system.  Typically, icons are hyperlinked.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Image_Carousel</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Image carousels allow users to browse through a set of items and make a selection of one if they so choose. Typically, the images are hyperlinked.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Label</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A label displays content classification.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Link</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A Link is a reference to data that can be directly follow by clicking. It points to a whole document or to a specific element within a document.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#List_Box</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">List boxes, like checkboxes, allow users to select a multiple items at a time, but are more compact and can support a longer list of options if needed.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Menu</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Menu is a list of options or commands presented to an operator.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Menu_Item</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A Menu Item is a resultant item in a list of options or commands presented to an operator by clicking in a menu.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Message_Box</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A message box is a small window that provides information to users and requires them to take an action before they can move forward.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Modal_Window</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A modal window requires users to interact with it in some way before they can return to the system.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Notification</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A notification is an update message that announces something new for the user to see. Notifications are typically used to indicate items such as, the successful completion of a task, or an error or warning message.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Numeric_Stepper</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A numeric stepper serves the same function as a Numeric Input Object. It is a method of entering numeric data in which the numbers can be typed directly into the input object. However, numeric values can also be adjusted by using up and down arrows next to the numeric input. Clicking the up and down arrows normally causes the value to increment by one.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Pagination</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Pagination divides content up between pages, and allows users to skip between pages or go in order through the content.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Progress_Bar</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A progress bar indicates where a user is as they advance through a series of steps in a process. Typically, progress bars are not clickable.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Radio_Button</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Radio buttons are used to allow users to select one item at a time.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Search_Field</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A search box allows users to enter a keyword or phrase (query) and submit it to search the index with the intention of getting back the most relevant results. Typically search fields are single-line text boxes and are often accompanied by a search button.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Slider</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A slider, also known as a track bar, allows users to set or adjust a value. When the user changes the value, it does not change the format of the interface or other info on the screen.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Tabs_Bar</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A TabBar is a container widget that has typically multiple TabBarButtons which controls visibility of views. It can be used as a tab container.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Tag</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Tags allow users to find content in the same category. Some tagging systems also allow users to apply their own tags to content by entering them into the system.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Text</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Informative content in a page.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Text_Field</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Text fields allow users to enter text. It can allow either a single line or multiple lines of text.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Toggle</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A toggle button allows the user to change a setting between two states. They are most effective when the on/off states are visually distinct.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Tool_Tip</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A tooltip allows a user to see hints when they hover over an item indicating the name or purpose of the item.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Window</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A window is an area on the screen that displays information, with its contents being displayed independently from the rest of the screen.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Window_Dialog</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">A dialog box is a small window that communicates information to the user and prompts them for a response.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:isDefinedBy"/>
+        <IRI>#behaviors</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Actions to move forward.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:isDefinedBy"/>
+        <IRI>#options</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">a set of items</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#state</IRI>
+        <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Show, Hide</Literal>
+    </AnnotationAssertion>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi -->
+

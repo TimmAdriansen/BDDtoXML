@@ -1,0 +1,6 @@
+{
+    "featureFile": "./resources/Flight Tickets Search.feature",
+    "stepsDefintionFile": "./steps.js",
+    "ontologyFile": "./resources/ontology.owl"
+}
+  
