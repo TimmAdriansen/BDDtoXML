@@ -7,7 +7,7 @@ Feature: Confirm Flight Selection
 
 Scenario: Confirm a Flight Selection
 
-    Select a Return Flight Searched Without Full Options
+Select a Return Flight Searched Without Full Options
 Given "Confirmation Page" is displayed
 When I choose "I accept the General Terms and Conditions."
 And I click on "Finalize the trip"
@@ -36,7 +36,7 @@ Given "Confirmation Page" is displayed
 When I choose "I accept the General Terms and Conditions."
 And I click on "Finalize the trip"
 Then will be displayed "Votre voyage a été confirmé!"
-
+    
 Scenario: Decline a Flight Selection
 
 Select a One-way Flight
