@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <script type="module" defer src="../render.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Split Layout</title>
-    <style>
-        /* CSS styles */
-    </style>
+    <title>BDDFigmaBuilder</title>
+    <link rel="stylesheet" href="./style.css">
+
 </head>
+
 <body>
     <div class="container">
         <div class="text-input">
@@ -15,7 +17,10 @@
         </div>
         <div class="image-container">
             <img src="https://via.placeholder.com/500" alt="Placeholder Image">
+            <button id="testButton">test</button>
+            <button onclick="testFunction()">Generate Password</button>
         </div>
     </div>
 </body>
+
 </html>

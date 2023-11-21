@@ -1,6 +1,6 @@
-import * as fs from 'fs'
+const fs = require('fs');
 
-export class XMLHandler {
+class XMLHandler {
 
     pageArray;
 
@@ -59,3 +59,5 @@ export class XMLHandler {
 
 
 }
+
+module.exports = XMLHandler;

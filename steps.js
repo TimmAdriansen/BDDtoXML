@@ -1,7 +1,7 @@
-import { Given, When, Then } from '@cucumber/cucumber'
-import { XMLHandler } from '../XMLHandler.js';
-import { OntologyHandler } from '../OntologyHandler.js';
-import config from '../setup.json' assert { type: 'json' };
+const { Given, When, Then } = require('@cucumber/cucumber');
+const XMLHandler = require('../XMLHandler.js');
+const OntologyHandler = require('../OntologyHandler.js');
+const config = require('../setup.json');
 
 const XMLHandlerInstance = new XMLHandler();
 const OntologyHandlerInstance = new OntologyHandler(config.ontologyFile);

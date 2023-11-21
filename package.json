@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "devDependencies": {
     "@cucumber/cucumber": "^10.0.1",
     "electron": "^27.1.0",
@@ -15,8 +14,7 @@
   },
   "name": "bddtoxml",
   "version": "1.0.0",
-  "main": "index.cjs",
-  "module": "index.mjs",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TimmAdriansen/BDDtoXML.git"
