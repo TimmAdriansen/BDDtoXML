@@ -2,12 +2,10 @@ const { Given, When, Then } = require('@cucumber/cucumber');
 const XMLHandler = require('../XMLHandler.js');
 const OntologyHandler = require('../OntologyHandler.js');
 const config = require('../setup.json');
-
-const XMLHandlerInstance = new XMLHandler();
 const OntologyHandlerInstance = new OntologyHandler(config.ontologyFile);
 
 Given('I go to {string}', function (string) {
-    XMLHandlerInstance.addPage(OntologyHandlerInstance.getUIElements("#goTo"), string);
+    XMLHandler.addPage(OntologyHandlerInstance.getUIElements("#goTo"), string);
 });
 
 When('I select {string}', function (string) {

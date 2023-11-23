@@ -2,6 +2,8 @@ const electron = require('electron');
 const path = require('path');
 const url = require('url');
 const runTests = require('./main.js')
+const runServer = require('./server.js')
+const XMLHandler = require("./XMLHandler.js")
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -42,7 +44,13 @@ app.on("window-all-closed", () => {
 });
 
 electron.ipcMain.on("testFunction", (event, data) => {
-    runTests();
+    //runTests();
+    XMLHandler.updateXML();
+    console.log(XMLHandler.getXML());
+});
+
+electron.ipcMain.on("init", (event, data) => {
+    runServer();
 });
 
 // Define __filename and __dirname as they are not available when using 'require'

@@ -3,7 +3,6 @@ import { XMLHandler } from '../XMLHandler.js';
 import { OntologyHandler } from '../OntologyHandler.js';
 import config from '../setup.json' assert { type: 'json' };
 
-const XMLHandlerInstance = new XMLHandler();
 const OntologyHandlerInstance = new OntologyHandler(config.ontologyFile);
 
 Given('the user is on the {string} page', function (string) {
