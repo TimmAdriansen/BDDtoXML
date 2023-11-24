@@ -1,13 +1,11 @@
-import { Given, When, Then } from '@cucumber/cucumber'
-import { XMLHandler } from '../XMLHandler.js';
-import { OntologyHandler } from '../OntologyHandler.js';
-import config from '../setup.json' assert { type: 'json' };
-
-const XMLHandlerInstance = new XMLHandler();
+const { Given, When, Then } = require('@cucumber/cucumber');
+const XMLHandler = require('../XMLHandler.js');
+const OntologyHandler = require('../OntologyHandler.js');
+const config = require('../setup.json');
 const OntologyHandlerInstance = new OntologyHandler(config.ontologyFile);
 
 Given('I go to {string}', function (string) {
-    XMLHandlerInstance.addPage(OntologyHandlerInstance.getUIElements("#goTo"), string);
+    XMLHandler.addPage(OntologyHandlerInstance.getUIElements("#goTo"), string);
 });
 
 When('I select {string}', function (string) {
