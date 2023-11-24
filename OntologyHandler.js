@@ -1,7 +1,7 @@
-import fs from 'fs'
-import * as xml2js from 'xml2js'
+const fs = require('fs');
+const xml2js = require('xml2js');
 
-export class OntologyHandler {
+class OntologyHandler {
 
     ontologyPath = "";
 
@@ -71,3 +71,5 @@ export class OntologyHandler {
     }
 
 }
+
+module.exports = OntologyHandler;

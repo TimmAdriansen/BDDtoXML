@@ -1,13 +1,16 @@
-import { loadConfiguration, runCucumber } from '@cucumber/cucumber/api'
-import * as fs from 'fs'
-import * as path from 'path'
-import config from './setup.json' assert { type: 'json' };
+const cucumberApi = require('@cucumber/cucumber/api');
+const fs = require('fs');
+const path = require('path');
+const config = require('./setup.json');
+
+const loadConfiguration = cucumberApi.loadConfiguration;
+const runCucumber = cucumberApi.runCucumber;
 
 const featureFile = config.featureFile;
 const stepsDefinitionFile = config.stepsDefintionFile;
 const destinationFilePath = 'features/';
 
-export async function runTests() {
+async function runTests() {
     const { runConfiguration } = await loadConfiguration();
     let files = [featureFile, stepsDefinitionFile];
     let copiedFiles = copyFiles(files, destinationFilePath);
@@ -58,4 +61,6 @@ function deleteFiles(copiedFiles) {
     });
 }
 
-runTests()
+//runTests()
+
+module.exports = runTests;

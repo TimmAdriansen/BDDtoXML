@@ -1,11 +1,30 @@
-import * as fs from 'fs'
+const fs = require('fs');
 
-export class XMLHandler {
+class XMLHandler {
 
-    pageArray;
+    static pageArray = ['<empty></empty>'];
 
-    constructor() {
-        this.pageArray = [];
+    static lastUpdated;
+
+    static setLastUpdated() {
+        this.lastUpdated = Date.now();
+    }
+
+    static getLastUpdated() {
+        return this.lastUpdated;
+    }
+
+    static getXML() {
+        let XMLString = "";
+        this.pageArray.forEach(function(item, index) {
+            XMLString += item;
+        });
+        return XMLString;
+    }
+
+    static updateXML() {
+        this.pageArray = ["test"];
+        this.setLastUpdated();
     }
 
     myFunction() {
@@ -27,12 +46,12 @@ export class XMLHandler {
         });
     }
 
-    addPage(pageString) {
-        if(this.pageArray.includes(pageString)) return;
-        let xmlContent = '<page ='+pageString+'></page>';
+    static addPage(pageString) {
+        if (this.pageArray.includes(pageString)) return;
+        let xmlContent = '<page =' + pageString + '></page>';
         this.pageArray.push(xmlContent);
     }
-    
+
     addButton() {
 
     }
@@ -54,8 +73,10 @@ export class XMLHandler {
     }
 
     addAlert() {
-        
+
     }
 
 
 }
+
+module.exports = XMLHandler;
