@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const XMLHandler = require('./XMLHandler.js');
+const XMLHandler = require('./handlers/XMLHandler.js');
 
 const app = express();
 const port = 3000;

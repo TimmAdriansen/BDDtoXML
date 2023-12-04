@@ -1,6 +1,6 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
-const XMLHandler = require('../XMLHandler.js');
-const OntologyHandler = require('../OntologyHandler.js');
+const XMLHandler = require('../handlers/XMLHandler.js');
+const OntologyHandler = require('../handlers/OntologyHandler.js');
 const config = require('../setup.json');
 const OntologyHandlerInstance = new OntologyHandler(config.ontologyFile);
 

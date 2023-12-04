@@ -1,22 +1,26 @@
 const electron = require('electron');
+const fs = require('fs');
 const path = require('path');
 const url = require('url');
-const runTests = require('./main.js')
-const runServer = require('./server.js')
-const XMLHandler = require("./XMLHandler.js")
+const runTests = require('./main.js');
+const runServer = require('./server.js');
+const XMLHandler = require("./handlers/XMLHandler.js");
+const CodeMirror = require('codemirror');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 var width, height;
+var win;
 
 function createWindow() {
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         width: width,
         height: height,
         icon: path.join(__dirname, './resources/resume.PNG'),
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
-            nodeIntegration: true
+            nodeIntegration: false,
+            contextIsolation: true
         },
     });
 
@@ -51,6 +55,7 @@ electron.ipcMain.on("testFunction", (event, data) => {
 
 electron.ipcMain.on("init", (event, data) => {
     runServer();
+    win.webContents.send('loadPDF', '../resources/test.pdf');
 });
 
 // Define __filename and __dirname as they are not available when using 'require'
