@@ -5,27 +5,59 @@ const url = require('url');
 const runTests = require('./main.js');
 const runServer = require('./server.js');
 const XMLHandler = require("./handlers/XMLHandler.js");
-const CodeMirror = require('codemirror');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 var width, height;
 var win;
+let theme = "dark";
 
 function createWindow() {
     win = new BrowserWindow({
         width: width,
         height: height,
-        icon: path.join(__dirname, './resources/resume.PNG'),
+        icon: path.join(__dirname, './resources/resumeWhite.PNG'),
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
-            nodeIntegration: false,
-            contextIsolation: true
+            nodeIntegration: true
         },
     });
 
     win.loadFile("./www/index.html");
     win.maximize();
+
+    const menuTemplate = [
+        {
+            label: 'Run',
+            click() {
+                console.log('Run button clicked');
+            }
+        },
+        {
+            label: 'Theme',
+            click() {
+                if(theme === "dark"){
+                    theme = "light";
+                    electron.nativeTheme.themeSource = "light";
+                    win.setIcon(path.join(__dirname, './resources/resume.PNG'));
+                    win.webContents.send('toggleTheme', 'light');
+                } else {
+                    theme = "dark";
+                    electron.nativeTheme.themeSource = "dark";
+                    win.setIcon(path.join(__dirname, './resources/resumeWhite.PNG'));
+                    win.webContents.send('toggleTheme', 'dark');
+                }
+                console.log('Theme button clicked');
+                //win.webContents.send('toggle-theme');
+            }
+        }
+    ];
+
+    const menu = electron.Menu.buildFromTemplate(menuTemplate);
+
+    electron.Menu.setApplicationMenu(menu);
+
+    electron.nativeTheme.themeSource = 'dark'
 }
 
 app.whenReady().then(() => {

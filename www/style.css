@@ -1,27 +1,54 @@
-body, html {
-    height: 100%;
+html,
+body {
     margin: 0;
+    padding: 0;
+    height: 100%;
+    /* Set full height */
+    overflow: hidden;
+    /* Optional: Prevents scrolling if content overflows */
 }
 
 .container {
     display: flex;
-    height: 100%;
-}
-
-.text-input, .image-container {
-    flex: 1; /* Ensures each section takes half the width */
-    height: 100%; /* Full height of the container */
-}
-
-.text-input textarea {
+    /* Enable flexbox layout */
     width: 100%;
+    /* Full width */
     height: 100%;
-    resize: none; /* Prevents resizing of the textarea */
+    /* Full height */
+    position: relative;
+    /* For absolute positioning of children */
+}
+
+.text-input {
+    position: absolute;
+    /* Absolute positioning */
+    width: 50%;
+    /* Half of the container, adjust as needed */
+    height: 100%;
+    /* Full height */
+    left: 0;
+    /* Align left */
 }
 
 .image-container {
-    background: #f0f0f0; /* Light grey background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-grow: 1;
+    /* Take remaining space */
+    height: 100%;
+    /* Full height */
+}
+
+#pdfViewer {
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+}
+
+
+#editor {
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }

@@ -15,15 +15,14 @@ function loadPDF(pdfPath) {
     iframe.src = pdfPath;
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
-        lineNumbers: true,
-        mode: "javascript",
-        extraKeys: { "Ctrl-Space": "autocomplete" },
-    });
-    editor.on("inputRead", function (cm, change) {
-        if (!cm.state.completionActive && change.origin !== "+input") { // avoid opening autocomplete on every input
-            cm.showHint({ completeSingle: false });
-        }
-    });
+var editor = ace.edit("editor");
+editor.setTheme("ace/theme/dracula");
+editor.session.setMode("ace/mode/javascript");
+
+window.electronAPI.receiveMessage('toggleTheme', (arg) => {
+    if (arg === "light") {
+        editor.setTheme("ace/theme/crimson_editor");
+    } else {
+        editor.setTheme("ace/theme/dracula");
+    }
 });
