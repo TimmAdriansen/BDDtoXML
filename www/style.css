@@ -19,6 +19,39 @@ body {
     /* For absolute positioning of children */
 }
 
+.input-content {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background for the input area */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 80%; /* Adjust width as per design */
+    max-width: 400px; /* Maximum width */
+}
+
+.url-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.set-url-button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #4CAF50; /* Example button color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.set-url-button:hover {
+    background-color: #45a049; /* Darker shade on hover */
+}
+
 .text-input {
     position: absolute;
     /* Absolute positioning */
@@ -51,4 +84,66 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4); 
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align the child elements */
+    justify-content: center; /* Vertically center */
+    padding: 20px;
+}
+
+.image-container {
+    flex: 1;
+    padding: 10px;
+    text-align: center; /* Center the image if it's smaller than the container */
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto; /* Keep the aspect ratio of the image */
 }

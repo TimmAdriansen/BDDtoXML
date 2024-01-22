@@ -5,6 +5,9 @@ const url = require('url');
 const runTests = require('./main.js');
 const runServer = require('./server.js');
 const XMLHandler = require("./handlers/XMLHandler.js");
+const FigmaViewHandler = require("./handlers/FigmaViewHandler.js");
+const jsonFile = "./setup.json";
+const config = require(jsonFile);
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -34,9 +37,15 @@ function createWindow() {
             }
         },
         {
+            label: 'Set URL',
+            click() {
+                win.webContents.send('showUrlModal');
+            }
+        },
+        {
             label: 'Theme',
             click() {
-                if(theme === "dark"){
+                if (theme === "dark") {
                     theme = "light";
                     electron.nativeTheme.themeSource = "light";
                     win.setIcon(path.join(__dirname, './resources/resume.PNG'));
@@ -59,6 +68,7 @@ function createWindow() {
 
     electron.nativeTheme.themeSource = 'dark'
 }
+
 
 app.whenReady().then(() => {
     const { width: screenWidth, height: screenHeight } = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -85,9 +95,24 @@ electron.ipcMain.on("testFunction", (event, data) => {
     console.log(XMLHandler.getXML());
 });
 
+electron.ipcMain.on("setUrl", (event, data) => {
+    config.figmaSrc = FigmaViewHandler.convertLinkToEmbed(data);
+    fs.writeFile(jsonFile, JSON.stringify(config, null, 2), function writeJSON(err) {
+        if (err) return console.log(err);
+    });
+    win.webContents.send('setFigmaSource', config.figmaSrc);
+});
+
+
 electron.ipcMain.on("init", (event, data) => {
     runServer();
-    win.webContents.send('loadPDF', '../resources/test.pdf');
+
+    if (config.figmaSrc == "" || config.figmaSrc == "0" ) {
+        win.webContents.send('showUrlModal');
+        return;
+    }
+    win.webContents.send('setFigmaSource', config.figmaSrc);
+    //win.webContents.send('loadPDF', '../resources/test.pdf');
 });
 
 // Define __filename and __dirname as they are not available when using 'require'
