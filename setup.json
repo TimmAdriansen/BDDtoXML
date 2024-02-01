@@ -1,6 +1,6 @@
 {
-    "featureFile": "./resources/Confirm Flight Selection.feature",
-    "stepsDefintionFile": "./steps.js",
-    "ontologyFile": "./resources/ontology.owl"
+  "featureFile": "./resources/Confirm Flight Selection.feature",
+  "stepsDefintionFile": "./steps.js",
+  "ontologyFile": "./resources/ontology.owl",
+  "figmaSrc": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FGELGDgp7e7TnZPfSK98nCe%2FFigma-Website-Template---Landing-Page-(Free)-(Community)%3Fpage-id%26type%3Ddesign%26node-id%3D0-88%26scaling%3Dscale-down-width%26mode%3Ddesign"
 }
-  

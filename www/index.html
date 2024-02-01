@@ -2,24 +2,94 @@
 <html lang="en">
 
 <head>
-    <script type="module" defer src="../render.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript"></script>
+    <script src="./dsl/my-dsl-mode.js"></script>
+    <script src="./dsl/my-dsl-highlight-rules.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDDFigmaBuilder</title>
     <link rel="stylesheet" href="./style.css">
-
 </head>
 
 <body onload="init()">
-    <div class="container">
-        <div class="text-input">
-            <textarea placeholder="Enter your text here..."></textarea>
-        </div>
-        <div class="image-container">
-            <img src="https://via.placeholder.com/500" alt="Placeholder Image">
-            <button onclick="testFunction()">testFunction</button>
+    <div id="urlModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+
+            <div class="modal-body">
+                <div class="input-container">
+                    <div class="input-content">
+                        <p class="input-description">Insert Figma share link:</p>
+                        <input type="text" id="urlInput"
+                            placeholder="https://www.figma.com/file/GELGDgp7e7TnZPfSK98nCe/Figma-Website-Template---Landing-Page-(Free)-(Community)?type=design&node-id=0%3A88&mode=design&t=eZIDwjqJxbfic5bV-1"
+                            class="url-input">
+                        <button id="setUrlButton" class="set-url-button">Set URL</button>
+                    </div>
+                </div>
+                <div class="image-container">
+                    <img src="../resources/copyUrl.png" alt="Descriptive Alt Text">
+                </div>
+            </div>
         </div>
     </div>
+    <div class="container">
+        <div class="text-input" id="editor">Feature: Select a Suitable Flight
+Narrative:
+As a IRIT researcher
+I want to get a list of compatible flights (including their rates and times) in accordance with my search criteria
+So that I can select a suitable flight based on my needs.
+
+Scenario: Select a Return Flight Searched Without Full Options
+    
+Successful Roundtrip Tickets Search
+Given "Availability Page" is displayed
+When I click on "No Bag" referring to "Air France 7519"
+And I click on "No Bag" referring to "Air France 7522"
+When I click on "Book"
+Then will be displayed "J'accepte les Conditions d'achat concernant le(s) tarif(s) aérien(s)."
+
+Scenario: Select a Return Flight Searched With Full Options
+
+Successful Roundtrip Tickets Search With Full Options
+Given "Availability Page" is displayed
+When I click on "No Bag" referring to "Air France 7519"
+And I click on "No Bag" referring to "Air France 7522"
+When I click on "Book"
+Then will be displayed "J'accepte les Conditions d'achat concernant le(s) tarif(s) aérien(s)."
+
+Scenario: Select a One-way Flight
+
+Successful One-way Tickets Search
+Given "Availability Page" is displayed
+When I click on "No Bag" referring to "Air France 7519"
+And I click on "Book"
+Then will be displayed "J'accepte les Conditions d'achat concernant le(s) tarif(s) aérien(s)."
+
+Scenario: Select a Multidestination Flight
+
+Successful Multidestination Tickets Search
+Given "Availability Page" is displayed
+When I click on "No Bag" referring to "Air France 7519"
+And I click on "No Bag" referring to "Air France 7700"
+When I click on "Book"
+Then will be displayed "J'accepte les Conditions d'achat concernant le(s) tarif(s) aérien(s)."
+        </div>
+        <div class="image-container">
+            <iframe id="figmaView" style="border: 1px solid rgba(0, 0, 0, 0.1);" width="100%" height="100%" src=""
+                allowfullscreen></iframe>
+        </div>
+    </div>
+    <script>
+        require(["ace/mode/my-dsl"], function (MyDslMode) {
+            // Initialize Ace editor with your custom DSL mode
+            var editor = ace.edit("editor");
+            editor.setTheme("ace/theme/dracula");
+            editor.session.setMode(new MyDslMode.Mode());
+        });
+    </script>
+    <script type="" defer src="../render.js"></script>
 </body>
+
 
 </html>
