@@ -1,3 +1,5 @@
+var editor = ace.edit("editor");
+
 window.testFunction = () => {
     window.electronAPI.sendTestFunction();
 };
@@ -15,10 +17,6 @@ function loadPDF(pdfPath) {
     iframe.src = pdfPath;
 };
 
-var editor = ace.edit("editor");
-editor.setTheme("ace/theme/dracula");
-editor.session.setMode("ace/mode/javascript");
-
 window.electronAPI.receiveMessage('toggleTheme', (arg) => {
     if (arg === "light") {
         editor.setTheme("ace/theme/crimson_editor");
@@ -32,14 +30,14 @@ const span = document.getElementsByClassName("close")[0];
 const url = document.getElementById('urlInput');
 const setUrlButton = document.getElementById('setUrlButton');
 
-url.addEventListener('keypress', function(event) {
+url.addEventListener('keypress', function (event) {
     if (event.key === 'Enter') {
         event.preventDefault(); // Prevent the default action (form submission, if any)
         setUrlButton.click(); // Trigger the button click programmatically
     }
 });
 
-span.onclick = function() {
+span.onclick = function () {
     modal.style.display = "none";
 }
 

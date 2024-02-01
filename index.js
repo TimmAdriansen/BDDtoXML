@@ -22,7 +22,8 @@ function createWindow() {
         icon: path.join(__dirname, './resources/resumeWhite.PNG'),
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
-            nodeIntegration: true
+            nodeIntegration: true,
+            devTools: true, // Enable DevTools
         },
     });
 
@@ -33,6 +34,8 @@ function createWindow() {
         {
             label: 'Run',
             click() {
+                XMLHandler.updateXML();
+                console.log(XMLHandler.getXML());
                 console.log('Run button clicked');
             }
         },
@@ -107,7 +110,7 @@ electron.ipcMain.on("setUrl", (event, data) => {
 electron.ipcMain.on("init", (event, data) => {
     runServer();
 
-    if (config.figmaSrc == "" || config.figmaSrc == "0" ) {
+    if (config.figmaSrc == "" || config.figmaSrc == "0") {
         win.webContents.send('showUrlModal');
         return;
     }
