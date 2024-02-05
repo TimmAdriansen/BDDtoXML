@@ -1,4 +1,5 @@
 const { By, Key, until, Builder } = require("selenium-webdriver");
+const chrome = require('selenium-webdriver/chrome');
 require("chromedriver");
 const path = require('path');
 const fs = require('fs');
@@ -12,7 +13,9 @@ class SeleniumHandler {
     static driver;
 
     static async initDriver() {
-        this.driver = await new Builder().forBrowser('chrome').build();
+        const chromeOptions = new chrome.Options();
+        chromeOptions.addArguments("--headless");
+        this.driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
     }
 
     static async closeDriver() {
@@ -62,15 +65,15 @@ class SeleniumHandler {
 
             await this.driver.sleep(2000);
 
-            // Get handles of all open windows or tabs
             const windowHandles = await this.driver.getAllWindowHandles();
 
-            console.log("Window Handles:", windowHandles);
-
-            // Switch to the new window or tab (assuming it's the last one)
             await this.driver.switchTo().window(windowHandles[windowHandles.length - 1]);
 
-            const overlay = this.driver.wait(until.elementLocated(By.css('.fullscreen_view--filebar--FYjSm')),10000);
+            return await this.driver.getCurrentUrl();
+
+            /*
+
+            const overlay = this.driver.wait(until.elementLocated(By.css('.fullscreen_view--filebar--FYjSm')), 10000);
             await this.driver.wait(until.stalenessOf(overlay), 10000);
 
             const shareButton = this.driver.wait(until.elementLocated(By.css('[data-testid="multiplayer-toolbar-share-button"]')), 10000);
@@ -79,15 +82,10 @@ class SeleniumHandler {
             const copyLinkButton = this.driver.wait(until.elementLocated(By.css('.permissions_modal--copyIconBase--1h3x-')), 10000);
             await copyLinkButton.click();
 
-            config.figmaSrc = clipboard.readText();
-            fs.writeFile(jsonFile, JSON.stringify(config, null, 2), function writeJSON(err) {
-                if (err) return console.log(err);
-            });
-
-            return true;
+            return clipboard.readText();*/
         } catch (error) {
             console.log(error);
-            return false;
+            return null;
         }
     }
 

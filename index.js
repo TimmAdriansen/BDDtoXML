@@ -50,12 +50,6 @@ function createWindow() {
             }
         },
         {
-            label: 'Set URL',
-            click() {
-                win.webContents.send('showUrlModal');
-            }
-        },
-        {
             label: 'Theme',
             click() {
                 if (theme === "dark") {
@@ -79,25 +73,25 @@ function createWindow() {
                 {
                     label: 'Export as .pdf',
                     click() {
-                      // Handle the "Export as PDF" action here
-                      // You can open a dialog or perform any other action
-                      console.log('Export as PDF clicked');
+                        // Handle the "Export as PDF" action here
+                        // You can open a dialog or perform any other action
+                        console.log('Export as PDF clicked');
                     },
-                  },
-                  {
+                },
+                {
                     label: 'Export as .fig',
                     click() {
-                      // Handle the "Export as Figma" action here
-                      console.log('Export as Figma clicked');
+                        // Handle the "Export as Figma" action here
+                        console.log('Export as Figma clicked');
                     },
-                  },
-                  {
+                },
+                {
                     label: 'Export as link',
                     click() {
-                      // Handle the "Export as Link" action here
-                      console.log('Export as Link clicked');
+                        // Handle the "Export as Link" action here
+                        console.log('Export as Link clicked');
                     },
-                  }
+                }
             ]
         },
     ];
@@ -135,20 +129,10 @@ electron.ipcMain.on("testFunction", (event, data) => {
     console.log(XMLHandler.getXML());
 });
 
-electron.ipcMain.on("setUrl", (event, data) => {
-    config.figmaSrc = data;
-    fs.writeFile(jsonFile, JSON.stringify(config, null, 2), function writeJSON(err) {
-        if (err) return console.log(err);
-    });
-    win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
-});
-
-
 electron.ipcMain.on("init", (event, data) => {
     runServer();
 
     if (config.figmaSrc == "" || config.figmaSrc == "0") {
-        win.webContents.send('showUrlModal');
         return;
     }
     win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
@@ -196,7 +180,8 @@ async function runSelenium() {
         return;
     }
 
-    if (!await SeleniumHandler.copyTemplate()) {
+    let figmaSrc = await SeleniumHandler.copyTemplate();
+    if (figmaSrc == null) {
         electron.dialog.showMessageBox({
             type: 'info',
             buttons: ['OK'],
@@ -207,6 +192,11 @@ async function runSelenium() {
         return;
     }
 
+    config.figmaSrc = figmaSrc;
+    fs.writeFile(jsonFile, JSON.stringify(config, null, 2), function writeJSON(err) {
+        if (err) return console.log(err);
+    });
+    console.log(config.figmaSrc);
     win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
     SeleniumHandler.closeDriver();
 }
