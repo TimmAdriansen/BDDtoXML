@@ -72,7 +72,34 @@ function createWindow() {
                 console.log('Theme button clicked');
                 //win.webContents.send('toggle-theme');
             }
-        }
+        },
+        {
+            label: 'Export',
+            submenu: [
+                {
+                    label: 'Export as .pdf',
+                    click() {
+                      // Handle the "Export as PDF" action here
+                      // You can open a dialog or perform any other action
+                      console.log('Export as PDF clicked');
+                    },
+                  },
+                  {
+                    label: 'Export as .fig',
+                    click() {
+                      // Handle the "Export as Figma" action here
+                      console.log('Export as Figma clicked');
+                    },
+                  },
+                  {
+                    label: 'Export as link',
+                    click() {
+                      // Handle the "Export as Link" action here
+                      console.log('Export as Link clicked');
+                    },
+                  }
+            ]
+        },
     ];
 
     const menu = electron.Menu.buildFromTemplate(menuTemplate);
@@ -109,11 +136,11 @@ electron.ipcMain.on("testFunction", (event, data) => {
 });
 
 electron.ipcMain.on("setUrl", (event, data) => {
-    config.figmaSrc = FigmaViewHandler.convertLinkToEmbed(data);
+    config.figmaSrc = data;
     fs.writeFile(jsonFile, JSON.stringify(config, null, 2), function writeJSON(err) {
         if (err) return console.log(err);
     });
-    win.webContents.send('setFigmaSource', config.figmaSrc);
+    win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
 });
 
 
@@ -124,7 +151,7 @@ electron.ipcMain.on("init", (event, data) => {
         win.webContents.send('showUrlModal');
         return;
     }
-    win.webContents.send('setFigmaSource', config.figmaSrc);
+    win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
     //win.webContents.send('loadPDF', '../resources/test.pdf');
 });
 
@@ -179,6 +206,9 @@ async function runSelenium() {
         SeleniumHandler.closeDriver();
         return;
     }
+
+    win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
+    SeleniumHandler.closeDriver();
 }
 
 // Define __filename and __dirname as they are not available when using 'require'

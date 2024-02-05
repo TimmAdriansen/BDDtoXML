@@ -1,6 +1,11 @@
 const { By, Key, until, Builder } = require("selenium-webdriver");
 require("chromedriver");
 const path = require('path');
+const fs = require('fs');
+const jsonFile = "../setup.json";
+const config = require(jsonFile);
+
+const { clipboard } = require('electron');
 
 class SeleniumHandler {
 
@@ -18,7 +23,6 @@ class SeleniumHandler {
 
     static async login(username, password) {
         try {
-
             await this.initDriver();
 
             await this.driver.get("https://www.figma.com/login");
@@ -56,6 +60,30 @@ class SeleniumHandler {
             const button = this.driver.wait(until.elementLocated(By.css('[data-testid="community-duplicate-button"]')), 10000);
             await button.click();
 
+            await this.driver.sleep(2000);
+
+            // Get handles of all open windows or tabs
+            const windowHandles = await this.driver.getAllWindowHandles();
+
+            console.log("Window Handles:", windowHandles);
+
+            // Switch to the new window or tab (assuming it's the last one)
+            await this.driver.switchTo().window(windowHandles[windowHandles.length - 1]);
+
+            const overlay = this.driver.wait(until.elementLocated(By.css('.fullscreen_view--filebar--FYjSm')),10000);
+            await this.driver.wait(until.stalenessOf(overlay), 10000);
+
+            const shareButton = this.driver.wait(until.elementLocated(By.css('[data-testid="multiplayer-toolbar-share-button"]')), 10000);
+            await shareButton.click();
+
+            const copyLinkButton = this.driver.wait(until.elementLocated(By.css('.permissions_modal--copyIconBase--1h3x-')), 10000);
+            await copyLinkButton.click();
+
+            config.figmaSrc = clipboard.readText();
+            fs.writeFile(jsonFile, JSON.stringify(config, null, 2), function writeJSON(err) {
+                if (err) return console.log(err);
+            });
+
             return true;
         } catch (error) {
             console.log(error);
@@ -65,6 +93,46 @@ class SeleniumHandler {
 
     async renameFile() {
 
+    }
+
+    static async exportAsPdf() {
+        let bool = false;
+        try {
+            config.figmaSrc
+            bool = true;
+        } catch (error) {
+            console.log(error);
+            bool = false;
+        } finally {
+            await this.closeDriver();
+            return bool;
+        }
+    }
+
+    static async exportAsFig() {
+        let bool = false;
+        try {
+            bool = true;
+        } catch (error) {
+            console.log(error);
+            bool = false;
+        } finally {
+            await this.closeDriver();
+            return bool;
+        }
+    }
+
+    static async exportAsLink() {
+        let bool = false;
+        try {
+            bool = true;
+        } catch (error) {
+            console.log(error);
+            bool = false;
+        } finally {
+            await this.closeDriver();
+            return bool;
+        }
     }
 
     async import_base_file(filename) {
