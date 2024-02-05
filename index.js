@@ -6,8 +6,12 @@ const runTests = require('./main.js');
 const runServer = require('./server.js');
 const XMLHandler = require("./handlers/XMLHandler.js");
 const FigmaViewHandler = require("./handlers/FigmaViewHandler.js");
+const SeleniumHandler = require("./handlers/SeleniumHandler.js");
+const EncryptionHandler = require("./handlers/EncryptionHandler.js")
 const jsonFile = "./setup.json";
 const config = require(jsonFile);
+const secretsPath = path.join(__dirname, 'secrets.json');
+
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -37,6 +41,20 @@ function createWindow() {
                 XMLHandler.updateXML();
                 console.log(XMLHandler.getXML());
                 console.log('Run button clicked');
+                let username, password;
+                if (fs.existsSync(secretsPath)) {
+                    const decryptedValues = decrypted();
+                    username = decryptedValues.decryptedUsername;
+                    password = decryptedValues.decryptedPassword;
+                } else {
+                    //please input username and password popup....
+                    EncryptionHandler.initializeSecrets("andreaserchang@gmail.com", "nicolineHku57edg");
+                    const decryptedValues = decrypted();
+                    username = decryptedValues.decryptedUsername;
+                    password = decryptedValues.decryptedPassword;
+                }
+
+                SeleniumHandler.login(username, password);
             }
         },
         {
@@ -117,6 +135,20 @@ electron.ipcMain.on("init", (event, data) => {
     win.webContents.send('setFigmaSource', config.figmaSrc);
     //win.webContents.send('loadPDF', '../resources/test.pdf');
 });
+
+function decrypted() {
+    const secretsContent = fs.readFileSync(secretsPath, 'utf8');
+    const secrets = JSON.parse(secretsContent);
+
+    const secretKey = secrets.secretKey;
+    const encryptedUsername = secrets.encryptedUsername;
+    const encryptedPassword = secrets.encryptedPassword;
+
+    decryptedUsername = EncryptionHandler.decrypt(encryptedUsername, secretKey);
+    decryptedPassword = EncryptionHandler.decrypt(encryptedPassword, secretKey);
+
+    return { decryptedUsername, decryptedPassword };
+}
 
 // Define __filename and __dirname as they are not available when using 'require'
 global.__filename = __filename;
