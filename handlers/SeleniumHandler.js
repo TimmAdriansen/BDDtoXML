@@ -7,28 +7,24 @@ class SeleniumHandler {
     static async login(username, password) {
         let driver = await new Builder().forBrowser('chrome').build();
         try {
-            // Open Figma login page
             await driver.get("https://www.figma.com/login");
 
-            // Wait for the email input to be present and visible
-            await driver.wait(until.elementLocated(By.id('email')), 10000); // Waits up to 10 seconds
-            await driver.findElement(By.id('email')).sendKeys(username); // Replace with your actual email
+            await driver.wait(until.elementLocated(By.id('email')), 10000);
+            await driver.findElement(By.id('email')).sendKeys(username);
 
-            // Wait for the password input to be present and visible
-            await driver.wait(until.elementLocated(By.id('current-password')), 10000); // Waits up to 10 seconds
-            await driver.findElement(By.id('current-password')).sendKeys(password); // Replace with your actual password
+            await driver.wait(until.elementLocated(By.id('current-password')), 10000);
+            await driver.findElement(By.id('current-password')).sendKeys(password);
 
-            // Wait for the login button to be clickable and then click it
             let loginButton = await driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'Log in')]")), 10000);
             await loginButton.click();
 
-            // Optionally, add a wait here to ensure the login has been processed and you've navigated to the next page or a login confirmation element is visible
+            await driver.wait(until.elementLocated(By.css('[data-testid="file-import-button"]')), 10000);
 
-            console.log("Login successful.");
             return true;
         } catch (error) {
-            console.error("Login failed:", error);
             return false;
+        } finally{
+            driver.close();
         }
     }
 

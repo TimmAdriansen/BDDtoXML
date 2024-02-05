@@ -41,20 +41,12 @@ function createWindow() {
                 XMLHandler.updateXML();
                 console.log(XMLHandler.getXML());
                 console.log('Run button clicked');
-                let username, password;
                 if (fs.existsSync(secretsPath)) {
-                    const decryptedValues = decrypted();
-                    username = decryptedValues.decryptedUsername;
-                    password = decryptedValues.decryptedPassword;
+                    runSelenium();
                 } else {
-                    //please input username and password popup....
-                    EncryptionHandler.initializeSecrets("andreaserchang@gmail.com", "nicolineHku57edg");
-                    const decryptedValues = decrypted();
-                    username = decryptedValues.decryptedUsername;
-                    password = decryptedValues.decryptedPassword;
+                    win.webContents.send('showCredentialsModal');
                 }
 
-                SeleniumHandler.login(username, password);
             }
         },
         {
@@ -136,6 +128,11 @@ electron.ipcMain.on("init", (event, data) => {
     //win.webContents.send('loadPDF', '../resources/test.pdf');
 });
 
+electron.ipcMain.on("setUsernamePassword", (event, username, password) => {
+    EncryptionHandler.initializeSecrets(username, password);
+    runSelenium();
+});
+
 function decrypted() {
     const secretsContent = fs.readFileSync(secretsPath, 'utf8');
     const secrets = JSON.parse(secretsContent);
@@ -148,6 +145,32 @@ function decrypted() {
     decryptedPassword = EncryptionHandler.decrypt(encryptedPassword, secretKey);
 
     return { decryptedUsername, decryptedPassword };
+}
+
+async function runSelenium() {
+    const decryptedValues = decrypted();
+    username = decryptedValues.decryptedUsername;
+    password = decryptedValues.decryptedPassword;
+    const loginResult = await SeleniumHandler.login(username, password);
+
+    if (loginResult) {
+
+    } else {
+        electron.dialog.showMessageBox({
+            type: 'info',
+            buttons: ['OK'],
+            title: 'Alert',
+            message: 'Error in login - try again',
+        });
+        fs.unlink('./secrets.json', (err) => {
+            if (err) {
+                console.error("Error deleting 'secrets.json':", err);
+            } else {
+                console.log("'secrets.json' deleted.");
+            }
+        });
+    }
+
 }
 
 // Define __filename and __dirname as they are not available when using 'require'

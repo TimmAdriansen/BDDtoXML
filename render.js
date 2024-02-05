@@ -54,3 +54,18 @@ window.electronAPI.receiveMessage('setFigmaSource', (arg) => {
     let iframe = document.getElementById('figmaView');
     iframe.src = arg;
 });
+
+window.electronAPI.receiveMessage('showCredentialsModal', (arg) => {
+    document.getElementById('credentialsModal').style.display = 'block';
+});
+
+function closeCredentialsModal() {
+    document.getElementById('credentialsModal').style.display = 'none';
+}
+
+document.getElementById('loginButton').addEventListener('click', function () {
+    const username = document.getElementById('usernameInput').value;
+    const password = document.getElementById('passwordInput').value;
+    window.electronAPI.sendUsernamePassword(username,password);
+    closeCredentialsModal();
+});
