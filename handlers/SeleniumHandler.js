@@ -4,27 +4,40 @@ const path = require('path');
 
 class SeleniumHandler {
 
+    static driver;
+
+    static async initDriver() {
+        this.driver = await new Builder().forBrowser('chrome').build();
+    }
+
+    static async closeDriver() {
+        if (this.driver) {
+            await this.driver.quit();
+        }
+    }
+
     static async login(username, password) {
-        let driver = await new Builder().forBrowser('chrome').build();
         try {
-            await driver.get("https://www.figma.com/login");
 
-            await driver.wait(until.elementLocated(By.id('email')), 10000);
-            await driver.findElement(By.id('email')).sendKeys(username);
+            await this.initDriver();
 
-            await driver.wait(until.elementLocated(By.id('current-password')), 10000);
-            await driver.findElement(By.id('current-password')).sendKeys(password);
+            await this.driver.get("https://www.figma.com/login");
 
-            let loginButton = await driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'Log in')]")), 10000);
+            await this.driver.wait(until.elementLocated(By.id('email')), 10000);
+            await this.driver.findElement(By.id('email')).sendKeys(username);
+
+            await this.driver.wait(until.elementLocated(By.id('current-password')), 10000);
+            await this.driver.findElement(By.id('current-password')).sendKeys(password);
+
+            let loginButton = await this.driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'Log in')]")), 10000);
             await loginButton.click();
 
-            await driver.wait(until.elementLocated(By.css('[data-testid="file-import-button"]')), 10000);
+            await this.driver.wait(until.elementLocated(By.css('[data-testid="file-import-button"]')), 10000);
 
             return true;
         } catch (error) {
+            console.log(error);
             return false;
-        } finally{
-            driver.close();
         }
     }
 
@@ -36,8 +49,18 @@ class SeleniumHandler {
 
     }
 
-    async copyTemplate() {
-        await driver.get("https://www.figma.com/community/file/1336027068808915351/wireframe-component-template");
+    static async copyTemplate() {
+        try {
+            await this.driver.get("https://www.figma.com/community/file/1336027068808915351/wireframe-component-template");
+
+            const button = this.driver.wait(until.elementLocated(By.css('[data-testid="community-duplicate-button"]')), 10000);
+            await button.click();
+
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 
     async renameFile() {

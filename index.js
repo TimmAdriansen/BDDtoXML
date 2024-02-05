@@ -151,11 +151,7 @@ async function runSelenium() {
     const decryptedValues = decrypted();
     username = decryptedValues.decryptedUsername;
     password = decryptedValues.decryptedPassword;
-    const loginResult = await SeleniumHandler.login(username, password);
-
-    if (loginResult) {
-
-    } else {
+    if (!await SeleniumHandler.login(username, password)) {
         electron.dialog.showMessageBox({
             type: 'info',
             buttons: ['OK'],
@@ -169,8 +165,20 @@ async function runSelenium() {
                 console.log("'secrets.json' deleted.");
             }
         });
+        SeleniumHandler.closeDriver();
+        return;
     }
 
+    if (!await SeleniumHandler.copyTemplate()) {
+        electron.dialog.showMessageBox({
+            type: 'info',
+            buttons: ['OK'],
+            title: 'Alert',
+            message: 'Error in copying template',
+        });
+        SeleniumHandler.closeDriver();
+        return;
+    }
 }
 
 // Define __filename and __dirname as they are not available when using 'require'
