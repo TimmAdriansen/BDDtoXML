@@ -15,6 +15,7 @@ class SeleniumHandler {
     static async initDriver() {
         const chromeOptions = new chrome.Options();
         //chromeOptions.addArguments("--headless");
+        //chromeOptions.addArguments("window-size=500x500");
         this.driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
     }
 
@@ -118,6 +119,9 @@ class SeleniumHandler {
             element = await loopElements(childElements, "Export frames to PDF…");
 
             await element.click();
+
+            await sleep(5000);
+
             bool = true;
         } catch (error) {
             console.log(error);
@@ -153,6 +157,8 @@ class SeleniumHandler {
             element = await loopElements(childElements, "Save local copy…");
 
             await element.click();
+
+            await sleep(5000);
 
             /*let printElement = await printElements(childElements);
 
@@ -257,6 +263,10 @@ async function printElements(childElements) {
         }
     }
 }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
 module.exports = SeleniumHandler;
 
