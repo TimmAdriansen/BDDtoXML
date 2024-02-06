@@ -1,5 +1,6 @@
 const electron = require('electron');
 const fs = require('fs');
+const fsPromises = require('fs').promises; 
 const os = require('os');
 const path = require('path');
 const url = require('url');
@@ -243,6 +244,17 @@ async function runSelenium() {
         return;
     }
 
+    if (!await SeleniumHandler.renameFile("test")) {
+        electron.dialog.showMessageBox({
+            type: 'info',
+            buttons: ['OK'],
+            title: 'Alert',
+            message: 'Error in renaming file',
+        });
+        SeleniumHandler.closeDriver();
+        return;
+    }
+
     config.figmaSrc = figmaSrc;
     fs.writeFile(jsonFile, JSON.stringify(config, null, 2), function writeJSON(err) {
         if (err) return console.log(err);
@@ -260,6 +272,25 @@ function openDownloadsFolder() {
         .then(() => console.log('Downloads folder opened'))
         .catch(err => console.error('Error opening downloads folder:', err));
 }
+
+async function createAndSaveJson(filename, figmaSrc, BDD) {
+    // Create the JSON object
+    const jsonObj = {
+      figmaSrc: figmaSrc,
+      BDD: BDD
+    };
+  
+    try {
+      // Convert the JSON object to a string
+      const jsonString = JSON.stringify(jsonObj, null, 2); // Beautify the JSON output
+  
+      // Write the JSON string to a file
+      await fsPromises.writeFile(filename, jsonString, 'utf8');
+      console.log(`${filename} has been successfully saved.`);
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  }
 
 // Define __filename and __dirname as they are not available when using 'require'
 global.__filename = __filename;
