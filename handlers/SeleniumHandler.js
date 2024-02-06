@@ -14,7 +14,7 @@ class SeleniumHandler {
 
     static async initDriver() {
         const chromeOptions = new chrome.Options();
-        chromeOptions.addArguments("--headless");
+        //chromeOptions.addArguments("--headless");
         this.driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
     }
 
@@ -30,16 +30,16 @@ class SeleniumHandler {
 
             await this.driver.get("https://www.figma.com/login");
 
-            await this.driver.wait(until.elementLocated(By.id('email')), 10000);
+            await this.driver.wait(until.elementLocated(By.id('email')), 20000);
             await this.driver.findElement(By.id('email')).sendKeys(username);
 
-            await this.driver.wait(until.elementLocated(By.id('current-password')), 10000);
+            await this.driver.wait(until.elementLocated(By.id('current-password')), 20000);
             await this.driver.findElement(By.id('current-password')).sendKeys(password);
 
-            let loginButton = await this.driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'Log in')]")), 10000);
+            let loginButton = await this.driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'Log in')]")), 20000);
             await loginButton.click();
 
-            await this.driver.wait(until.elementLocated(By.css('[data-testid="file-import-button"]')), 10000);
+            await this.driver.wait(until.elementLocated(By.css('[data-testid="file-import-button"]')), 20000);
 
             return true;
         } catch (error) {
@@ -93,10 +93,31 @@ class SeleniumHandler {
 
     }
 
-    static async exportAsPdf() {
+    static async exportAsPdf(url) {
         let bool = false;
         try {
-            config.figmaSrc
+            await this.driver.get(url);
+
+            const button = await this.driver.wait(until.elementLocated(By.id("toggle-menu-button")), 10000);
+            await button.click();
+
+            let parentDiv = await this.driver.wait(
+                until.elementLocated(By.xpath('//div[@role="none"]')),
+                10000
+            );
+
+            let childElements = await parentDiv.findElements(By.xpath(".//*"));
+
+            let element = await loopElements(childElements, "File");
+
+            await element.click();
+
+            const bodyElement = await this.driver.wait(until.elementLocated(By.css('body')), 10000);
+            childElements = await bodyElement.findElements(By.xpath(".//*"));
+
+            element = await loopElements(childElements, "Export frames to PDF…");
+
+            await element.click();
             bool = true;
         } catch (error) {
             console.log(error);
@@ -107,22 +128,62 @@ class SeleniumHandler {
         }
     }
 
-    static async exportAsFig() {
+    static async exportAsFig(url) {
         let bool = false;
         try {
-            bool = true;
-        } catch (error) {
-            console.log(error);
-            bool = false;
-        } finally {
-            await this.closeDriver();
-            return bool;
-        }
-    }
+            await this.driver.get(url);
 
-    static async exportAsLink() {
-        let bool = false;
-        try {
+            const button = await this.driver.wait(until.elementLocated(By.id("toggle-menu-button")), 10000);
+            await button.click();
+
+            let parentDiv = await this.driver.wait(
+                until.elementLocated(By.xpath('//div[@role="none"]')),
+                10000
+            );
+
+            let childElements = await parentDiv.findElements(By.xpath(".//*"));
+
+            let element = await loopElements(childElements, "File");
+
+            await element.click();
+
+            const bodyElement = await this.driver.wait(until.elementLocated(By.css('body')), 10000);
+            childElements = await bodyElement.findElements(By.xpath(".//*"));
+
+            element = await loopElements(childElements, "Save local copy…");
+
+            await element.click();
+
+            /*let printElement = await printElements(childElements);
+
+            console.log(await printElement.getText())
+
+            printElement.click();*/
+            /*
+            parentDiv = await this.driver.wait(
+                until.elementLocated(By.xpath('//div[@role="none"]')),
+                10000
+            );
+
+            childElements = await parentDiv.findElements(By.xpath(".//*"));
+
+            element = await loopElements(childElements, "Save local copy");
+
+            await element.click();
+
+            /*
+
+            parentDiv = await this.driver.wait(
+                until.elementLocated(By.xpath('//div[@role="none"]')),
+                10000
+            );
+
+            childElements = await parentDiv.findElements(By.xpath(".//*"));
+
+            element = await loopElements(childElements, "Save local copy...");
+
+            await element.click();*/
+
             bool = true;
         } catch (error) {
             console.log(error);
@@ -177,8 +238,26 @@ class SeleniumHandler {
 
 }
 
+async function loopElements(childElements, searchString) {
+    for (let element of childElements) {
+        let text = await element.getText();
+
+        if (text === searchString) {
+            return element
+        }
+    }
+}
+
+async function printElements(childElements) {
+    for (let element of childElements) {
+        let text = await element.getText();
+
+        if (text.includes("")) {
+            return element;
+        }
+    }
+}
+
 module.exports = SeleniumHandler;
-
-
 
 //import_base_file();

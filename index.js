@@ -1,5 +1,6 @@
 const electron = require('electron');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const url = require('url');
 const runTests = require('./main.js');
@@ -36,7 +37,7 @@ function createWindow() {
 
     const menuTemplate = [
         {
-            label: 'Run',
+            label: 'Generate',
             click() {
                 XMLHandler.updateXML();
                 console.log(XMLHandler.getXML());
@@ -46,7 +47,6 @@ function createWindow() {
                 } else {
                     win.webContents.send('showCredentialsModal');
                 }
-
             }
         },
         {
@@ -72,24 +72,70 @@ function createWindow() {
             submenu: [
                 {
                     label: 'Export as .pdf',
-                    click() {
-                        // Handle the "Export as PDF" action here
-                        // You can open a dialog or perform any other action
-                        console.log('Export as PDF clicked');
+                    async click() {
+                        if (!fs.existsSync(secretsPath)) {
+                            win.webContents.send('showCredentialsModal');
+                            return;
+                        }
+                        const decryptedValues = decrypted();
+                        username = decryptedValues.decryptedUsername;
+                        password = decryptedValues.decryptedPassword;
+                        if (!await SeleniumHandler.login(username, password)) {
+                            electron.dialog.showMessageBox({
+                                type: 'info',
+                                buttons: ['OK'],
+                                title: 'Alert',
+                                message: 'Error in login - try again',
+                            });
+                            fs.unlink('./secrets.json', (err) => {
+                                if (err) {
+                                    console.error("Error deleting 'secrets.json':", err);
+                                } else {
+                                    console.log("'secrets.json' deleted.");
+                                }
+                            });
+                            SeleniumHandler.closeDriver();
+                            return;
+                        }
+                        await SeleniumHandler.exportAsPdf(config.figmaSrc);
+                        openDownloadsFolder();
                     },
                 },
                 {
                     label: 'Export as .fig',
-                    click() {
-                        // Handle the "Export as Figma" action here
-                        console.log('Export as Figma clicked');
+                    async click() {
+                        if (!fs.existsSync(secretsPath)) {
+                            win.webContents.send('showCredentialsModal');
+                            return;
+                        }
+                        const decryptedValues = decrypted();
+                        username = decryptedValues.decryptedUsername;
+                        password = decryptedValues.decryptedPassword;
+                        if (!await SeleniumHandler.login(username, password)) {
+                            electron.dialog.showMessageBox({
+                                type: 'info',
+                                buttons: ['OK'],
+                                title: 'Alert',
+                                message: 'Error in login - try again',
+                            });
+                            fs.unlink('./secrets.json', (err) => {
+                                if (err) {
+                                    console.error("Error deleting 'secrets.json':", err);
+                                } else {
+                                    console.log("'secrets.json' deleted.");
+                                }
+                            });
+                            SeleniumHandler.closeDriver();
+                            return;
+                        }
+                        await SeleniumHandler.exportAsFig(config.figmaSrc);
+                        openDownloadsFolder();
                     },
                 },
                 {
                     label: 'Export as link',
                     click() {
-                        // Handle the "Export as Link" action here
-                        console.log('Export as Link clicked');
+                        electron.clipboard.writeText(FigmaViewHandler.convertLinkToEmbed(config.figmaSrc))
                     },
                 }
             ]
@@ -141,7 +187,12 @@ electron.ipcMain.on("init", (event, data) => {
 
 electron.ipcMain.on("setUsernamePassword", (event, username, password) => {
     EncryptionHandler.initializeSecrets(username, password);
-    runSelenium();
+    electron.dialog.showMessageBox({
+        type: 'info',
+        buttons: ['OK'],
+        title: 'Info',
+        message: 'Credentials stored - perform action again.',
+    });
 });
 
 function decrypted() {
@@ -198,7 +249,16 @@ async function runSelenium() {
     });
     console.log(config.figmaSrc);
     win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
+
     SeleniumHandler.closeDriver();
+}
+
+function openDownloadsFolder() {
+    const homeDir = os.homedir();
+    const downloadsPath = path.join(homeDir, 'Downloads'); // This might need adjustment based on the OS or user settings
+    electron.shell.openPath(downloadsPath)
+        .then(() => console.log('Downloads folder opened'))
+        .catch(err => console.error('Error opening downloads folder:', err));
 }
 
 // Define __filename and __dirname as they are not available when using 'require'

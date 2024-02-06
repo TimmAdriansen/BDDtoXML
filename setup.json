@@ -2,5 +2,5 @@
   "featureFile": "./resources/Confirm Flight Selection.feature",
   "stepsDefintionFile": "./steps.js",
   "ontologyFile": "./resources/ontology.owl",
-  "figmaSrc": ""
+  "figmaSrc": "https://www.figma.com/file/aGvGhQwPYJrCs5OrWW2Liq/Wireframe-component-template-(Community)?type=design&mode=design&t=mDp1oVFmqXl439MV-0"
 }
