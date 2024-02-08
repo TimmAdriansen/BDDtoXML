@@ -3,24 +3,26 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Project Selection</title>
+    <title>BDDFigmaBuilder</title>
     <link rel="stylesheet" href="initialPromptStyles.css">
 </head>
 
 <body>
     <div class="container">
-        <h1>Project Selection</h1>
-        <div id="projectOptions">
-            <button id="newProject">New Project</button>
-            <button id="existingProject">Existing Project</button>
-        </div>
-        <div id="newProjectName" style="display:none;">
+        <h1 id="title">Project Setup</h1>
+        <div id="newProjectSetup">
+            <input type="text" id="folderPathInput" placeholder="Click to choose folder" readonly>
+            <br><br>
             <input type="text" id="projectName" placeholder="Enter project name" />
-            <button id="createProject">Create Project</button>
+            <br><br>
+            <div class="projectActions">
+                <button id="createProject">Create Project</button>
+                <button id="chooseExisting">Choose Existing</button>
+            </div>
         </div>
     </div>
 
-    <script type="" defer src="../initialPromptRender.js"></script>
+    <script defer src="../initialPromptRender.js"></script>
 </body>
 
 </html>

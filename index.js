@@ -19,7 +19,14 @@ var width, height;
 var win;
 let theme = "dark";
 
+let initialWindow;
+
 function createWindow() {
+    if (initialWindow) {
+        initialWindow.close();
+        initialWindow = null;
+    }
+
     win = new BrowserWindow({
         width: width,
         height: height,
@@ -27,7 +34,7 @@ function createWindow() {
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true,
-            devTools: true, // Enable DevTools
+            devTools: true,
         },
     });
 
@@ -137,9 +144,10 @@ function createWindow() {
 }
 
 function createInitialPromptWindow() {
-    let promptWin = new BrowserWindow({
+    initialWindow = new BrowserWindow({
         width: 400,
-        height: 250,
+        height: 350,
+        resizable: false,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true,
@@ -147,7 +155,7 @@ function createInitialPromptWindow() {
         },
     });
 
-    promptWin.loadFile("./www/initialPrompt.html");
+    initialWindow.loadFile("./www/initialPrompt.html");
 
     electron.Menu.setApplicationMenu(null);
 
@@ -159,13 +167,13 @@ app.whenReady().then(() => {
     const { width: screenWidth, height: screenHeight } = electron.screen.getPrimaryDisplay().workAreaSize;
     width = screenWidth;
     height = screenHeight;
-    //createInitialPromptWindow();
-    createWindow();
+    createInitialPromptWindow();
+    //createWindow();
 
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-            //createInitialPromptWindow();
-            createWindow();
+            createInitialPromptWindow();
+            //createWindow();
         }
     });
 });
@@ -202,8 +210,10 @@ electron.ipcMain.on("setUsernamePassword", (event, username, password) => {
     });
 });
 
-electron.ipcMain.on('create-new-project', (event, projectName) => {
+electron.ipcMain.on('create-new-project', async (event, filePath, projectName) => {
+    createWindow();
 });
+
 
 electron.ipcMain.on('project-selection', (event) => {
 });
@@ -222,7 +232,7 @@ function decrypted() {
     return { decryptedUsername, decryptedPassword };
 }
 
-async function runSelenium() {
+async function initProject(projectName) {
     const decryptedValues = decrypted();
     username = decryptedValues.decryptedUsername;
     password = decryptedValues.decryptedPassword;
@@ -250,7 +260,7 @@ async function runSelenium() {
         return;
     }
 
-    if (!await SeleniumHandler.renameFile("test")) {
+    if (!await SeleniumHandler.renameFile(projectName)) {
         electron.dialog.showMessageBox({
             type: 'info',
             buttons: ['OK'],
@@ -278,6 +288,22 @@ function openDownloadsFolder() {
         .then(() => console.log('Downloads folder opened'))
         .catch(err => console.error('Error opening downloads folder:', err));
 }
+
+electron.ipcMain.on('open-folder-dialog', async (event) => {
+    const { filePaths } = await electron.dialog.showOpenDialog({
+        title: 'Choose a directory to save the new project',
+        properties: ['openDirectory', 'createDirectory']
+    });
+
+    if (filePaths && filePaths.length > 0) {
+        const selectedDirectoryPath = filePaths[0];
+        initialWindow.webContents.send('folder-selected', selectedDirectoryPath);
+
+
+    } else {
+        console.log('Project creation cancelled');
+    }
+});
 
 // Define __filename and __dirname as they are not available when using 'require'
 global.__filename = __filename;

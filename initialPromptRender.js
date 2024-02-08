@@ -1,15 +1,23 @@
-document.getElementById('newProject').addEventListener('click', () => {
-    // Hide project selection buttons and show project name input
-    document.querySelector('button#newProject').style.display = 'none';
-    document.querySelector('button#existingProject').style.display = 'none';
-    document.getElementById('newProjectName').style.display = 'block';
-});
-
 document.getElementById('createProject').addEventListener('click', () => {
-    const projectName = document.getElementById('projectName').value;
-    window.electronAPI.sendMessage('create-new-project', projectName);
+    const projectName = document.getElementById('projectName').value.trim();
+    const folderPath = document.getElementById('folderPathInput').value.trim();
+
+    if (!projectName || !folderPath) {
+        alert('Both project name and folder path are required.');
+        return;
+    }
+
+    window.electronAPI.sendMessage('create-new-project', projectName, folderPath);
 });
 
-document.getElementById('existingProject').addEventListener('click', () => {
+document.getElementById('chooseExisting').addEventListener('click', () => {
     window.electronAPI.sendMessage('project-selection');
+});
+
+document.getElementById('folderPathInput').addEventListener('click', () => {
+    window.electronAPI.sendMessage('open-folder-dialog');
+});
+
+window.electronAPI.receiveMessage('folder-selected', (path) => {
+    document.getElementById('folderPathInput').value = path ? path : 'Click to choose folder';
 });
