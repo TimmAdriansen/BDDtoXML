@@ -1,15 +1,13 @@
 const electron = require('electron');
-const fs = require('fs');
-const fsPromises = require('fs').promises; 
-const os = require('os');
 const path = require('path');
-const url = require('url');
+const os = require('os');
 const runTests = require('./main.js');
 const runServer = require('./server.js');
 const XMLHandler = require("./handlers/XMLHandler.js");
 const FigmaViewHandler = require("./handlers/FigmaViewHandler.js");
 const SeleniumHandler = require("./handlers/SeleniumHandler.js");
 const EncryptionHandler = require("./handlers/EncryptionHandler.js")
+const FileHandler = require("./handlers/FileHandler.js")
 const jsonFile = "./setup.json";
 const config = require(jsonFile);
 const secretsPath = path.join(__dirname, 'secrets.json');
@@ -43,7 +41,7 @@ function createWindow() {
                 XMLHandler.updateXML();
                 console.log(XMLHandler.getXML());
                 console.log('Run button clicked');
-                if (fs.existsSync(secretsPath)) {
+                if (FileHandler.fileExists(secretsPath)) {
                     runSelenium();
                 } else {
                     win.webContents.send('showCredentialsModal');
@@ -74,7 +72,7 @@ function createWindow() {
                 {
                     label: 'Export as .pdf',
                     async click() {
-                        if (!fs.existsSync(secretsPath)) {
+                        if (!FileHandler.fileExists(secretsPath)) {
                             win.webContents.send('showCredentialsModal');
                             return;
                         }
@@ -88,13 +86,7 @@ function createWindow() {
                                 title: 'Alert',
                                 message: 'Error in login - try again',
                             });
-                            fs.unlink('./secrets.json', (err) => {
-                                if (err) {
-                                    console.error("Error deleting 'secrets.json':", err);
-                                } else {
-                                    console.log("'secrets.json' deleted.");
-                                }
-                            });
+                            FileHandler.deleteFile(secretsPath);
                             SeleniumHandler.closeDriver();
                             return;
                         }
@@ -105,7 +97,7 @@ function createWindow() {
                 {
                     label: 'Export as .fig',
                     async click() {
-                        if (!fs.existsSync(secretsPath)) {
+                        if (!FileHandler.fileExists(secretsPath)) {
                             win.webContents.send('showCredentialsModal');
                             return;
                         }
@@ -119,13 +111,7 @@ function createWindow() {
                                 title: 'Alert',
                                 message: 'Error in login - try again',
                             });
-                            fs.unlink('./secrets.json', (err) => {
-                                if (err) {
-                                    console.error("Error deleting 'secrets.json':", err);
-                                } else {
-                                    console.log("'secrets.json' deleted.");
-                                }
-                            });
+                            FileHandler.deleteFile(secretsPath);
                             SeleniumHandler.closeDriver();
                             return;
                         }
@@ -150,15 +136,35 @@ function createWindow() {
     electron.nativeTheme.themeSource = 'dark'
 }
 
+function createInitialPromptWindow() {
+    let promptWin = new BrowserWindow({
+        width: 400,
+        height: 250,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
+            nodeIntegration: true,
+            contextIsolation: true
+        },
+    });
+
+    promptWin.loadFile("./www/initialPrompt.html");
+
+    electron.Menu.setApplicationMenu(null);
+
+    electron.nativeTheme.themeSource = 'dark'
+}
+
 
 app.whenReady().then(() => {
     const { width: screenWidth, height: screenHeight } = electron.screen.getPrimaryDisplay().workAreaSize;
     width = screenWidth;
     height = screenHeight;
+    //createInitialPromptWindow();
     createWindow();
 
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) {
+            //createInitialPromptWindow();
             createWindow();
         }
     });
@@ -196,8 +202,14 @@ electron.ipcMain.on("setUsernamePassword", (event, username, password) => {
     });
 });
 
+electron.ipcMain.on('create-new-project', (event, projectName) => {
+});
+
+electron.ipcMain.on('project-selection', (event) => {
+});
+
 function decrypted() {
-    const secretsContent = fs.readFileSync(secretsPath, 'utf8');
+    const secretsContent = FileHandler.readFileSync(secretsPath);
     const secrets = JSON.parse(secretsContent);
 
     const secretKey = secrets.secretKey;
@@ -221,13 +233,7 @@ async function runSelenium() {
             title: 'Alert',
             message: 'Error in login - try again',
         });
-        fs.unlink('./secrets.json', (err) => {
-            if (err) {
-                console.error("Error deleting 'secrets.json':", err);
-            } else {
-                console.log("'secrets.json' deleted.");
-            }
-        });
+        FileHandler.deleteFile(secretsPath);
         SeleniumHandler.closeDriver();
         return;
     }
@@ -256,9 +262,9 @@ async function runSelenium() {
     }
 
     config.figmaSrc = figmaSrc;
-    fs.writeFile(jsonFile, JSON.stringify(config, null, 2), function writeJSON(err) {
-        if (err) return console.log(err);
-    });
+
+    FileHandler.writeConfig(jsonFile, config);
+
     console.log(config.figmaSrc);
     win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
 
@@ -272,25 +278,6 @@ function openDownloadsFolder() {
         .then(() => console.log('Downloads folder opened'))
         .catch(err => console.error('Error opening downloads folder:', err));
 }
-
-async function createAndSaveJson(filename, figmaSrc, BDD) {
-    // Create the JSON object
-    const jsonObj = {
-      figmaSrc: figmaSrc,
-      BDD: BDD
-    };
-  
-    try {
-      // Convert the JSON object to a string
-      const jsonString = JSON.stringify(jsonObj, null, 2); // Beautify the JSON output
-  
-      // Write the JSON string to a file
-      await fsPromises.writeFile(filename, jsonString, 'utf8');
-      console.log(`${filename} has been successfully saved.`);
-    } catch (error) {
-      console.error('An error occurred:', error);
-    }
-  }
 
 // Define __filename and __dirname as they are not available when using 'require'
 global.__filename = __filename;

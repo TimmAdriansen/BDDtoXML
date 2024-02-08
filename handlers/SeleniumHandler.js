@@ -1,12 +1,6 @@
 const { By, Key, until, Builder, Actions } = require("selenium-webdriver");
 const chrome = require('selenium-webdriver/chrome');
 require("chromedriver");
-const path = require('path');
-const fs = require('fs');
-const jsonFile = "../setup.json";
-const config = require(jsonFile);
-
-const { clipboard } = require('electron');
 
 class SeleniumHandler {
 

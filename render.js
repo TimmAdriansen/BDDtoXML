@@ -1,11 +1,6 @@
 var editor = ace.edit("editor");
-
-window.testFunction = () => {
-    window.electronAPI.sendTestFunction();
-};
-
 window.init = () => {
-    window.electronAPI.sendInit();
+    window.electronAPI.sendMessage("init");
 };
 
 window.electronAPI.receiveMessage('loadPDF', (arg) => {
