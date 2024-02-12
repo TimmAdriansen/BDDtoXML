@@ -13,22 +13,21 @@
 </head>
 
 <body onload="init()">
-    <div id="urlModal" class="modal">
+    <div id="statusBarContainer">
+        <div id="statusBar" style="width: 0%;"></div>
+    </div>
+    <div id="overlay"></div>
+    <div id="credentialsModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-
+            <span class="close" onclick="closeCredentialsModal()">&times;</span>
             <div class="modal-body">
                 <div class="input-container">
                     <div class="input-content">
-                        <p class="input-description">Insert Figma share link:</p>
-                        <input type="text" id="urlInput"
-                            placeholder="https://www.figma.com/file/GELGDgp7e7TnZPfSK98nCe/Figma-Website-Template---Landing-Page-(Free)-(Community)?type=design&node-id=0%3A88&mode=design&t=eZIDwjqJxbfic5bV-1"
-                            class="url-input">
-                        <button id="setUrlButton" class="set-url-button">Set URL</button>
+                        <p class="input-description">Please enter your Figma credentials:</p>
+                        <input type="text" id="usernameInput" placeholder="Username" class="url-input">
+                        <input type="password" id="passwordInput" placeholder="Password" class="url-input">
+                        <button id="loginButton" class="set-url-button">Log In</button>
                     </div>
-                </div>
-                <div class="image-container">
-                    <img src="../resources/copyUrl.png" alt="Descriptive Alt Text">
                 </div>
             </div>
         </div>
@@ -41,7 +40,7 @@ I want to get a list of compatible flights (including their rates and times) in 
 So that I can select a suitable flight based on my needs.
 
 Scenario: Select a Return Flight Searched Without Full Options
-    
+
 Successful Roundtrip Tickets Search
 Given "Availability Page" is displayed
 When I click on "No Bag" referring to "Air France 7519"
@@ -67,7 +66,6 @@ And I click on "Book"
 Then will be displayed "J'accepte les Conditions d'achat concernant le(s) tarif(s) aérien(s)."
 
 Scenario: Select a Multidestination Flight
-
 Successful Multidestination Tickets Search
 Given "Availability Page" is displayed
 When I click on "No Bag" referring to "Air France 7519"
@@ -82,10 +80,10 @@ Then will be displayed "J'accepte les Conditions d'achat concernant le(s) tarif(
     </div>
     <script>
         require(["ace/mode/my-dsl"], function (MyDslMode) {
-            // Initialize Ace editor with your custom DSL mode
             var editor = ace.edit("editor");
             editor.setTheme("ace/theme/dracula");
             editor.session.setMode(new MyDslMode.Mode());
+            editor.session.setUseWrapMode(true);
         });
     </script>
     <script type="" defer src="../render.js"></script>
