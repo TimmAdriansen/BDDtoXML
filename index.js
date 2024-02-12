@@ -19,7 +19,10 @@ var width, height;
 var win;
 let theme = "dark";
 let newProject = false;
+let projectPath = "";
 let projectName = "";
+let figmaSrc = "";
+let BDD;
 
 let initialWindow;
 
@@ -79,7 +82,7 @@ const menuTemplate = [
                         SeleniumHandler.closeDriver();
                         return;
                     }
-                    await SeleniumHandler.exportAsPdf(config.figmaSrc);
+                    await SeleniumHandler.exportAsPdf(figmaSrc);
                     openDownloadsFolder();
                 },
             },
@@ -104,17 +107,23 @@ const menuTemplate = [
                         SeleniumHandler.closeDriver();
                         return;
                     }
-                    await SeleniumHandler.exportAsFig(config.figmaSrc);
+                    await SeleniumHandler.exportAsFig(figmaSrc);
                     openDownloadsFolder();
                 },
             },
             {
                 label: 'Export as link',
                 click() {
-                    electron.clipboard.writeText(FigmaViewHandler.convertLinkToEmbed(config.figmaSrc))
+                    electron.clipboard.writeText(FigmaViewHandler.convertLinkToEmbed(figmaSrc))
                 },
             }
         ]
+    },
+    {
+        label: 'Save',
+        click() {
+            win.webContents.send('getBDD');
+        }
     },
 ];
 
@@ -149,6 +158,8 @@ function createWindow() {
 
         if (newProject) {
             initProject();
+        } else {
+            loadProject();
         }
     });
 }
@@ -188,7 +199,8 @@ app.whenReady().then(() => {
     });
 });
 
-app.on("window-all-closed", () => {
+app.on("window-all-closed", async () => {
+    await saveProject();
     if (process.platform !== "darwin") {
         app.quit();
     }
@@ -203,10 +215,10 @@ electron.ipcMain.on("testFunction", (event, data) => {
 electron.ipcMain.on("init", (event, data) => {
     runServer();
 
-    if (config.figmaSrc == "" || config.figmaSrc == "0") {
+    if (figmaSrc == "" || figmaSrc == "0") {
         return;
     }
-    win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
+    win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(figmaSrc));
     //win.webContents.send('loadPDF', '../resources/test.pdf');
 });
 
@@ -226,6 +238,8 @@ electron.ipcMain.on("setUsernamePassword", async (event, username, password) => 
         EncryptionHandler.initializeSecrets(username, password);
         if (newProject) {
             initProject();
+        } else {
+            loadProject();
         }
     }
 });
@@ -244,11 +258,30 @@ async function attemptLogin(username, password) {
 electron.ipcMain.on('create-new-project', async (event, projectN, filePath) => {
     newProject = true;
     projectName = projectN;
+    projectPath = filePath;
     createWindow();
 });
 
-
 electron.ipcMain.on('project-selection', (event) => {
+    electron.dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+            { name: 'JSON Files', extensions: ['json'] }
+        ]
+    }).then(result => {
+        if (!result.canceled && result.filePaths.length > 0) {
+            const fileContent = FileHandler.readFileSync(result.filePaths[0]);
+            const jsonVars = JSON.parse(fileContent);
+            BDD = jsonVars.BDD;
+            figmaSrc = jsonVars.figmaSrc;
+            const fileExtension = path.extname(result.filePaths[0]);
+            projectPath = path.dirname(result.filePaths[0]);
+            projectName = path.basename(result.filePaths[0], fileExtension);
+            createWindow();
+        }
+    }).catch(err => {
+        console.log('Error opening file dialog:', err);
+    });
 });
 
 function decrypted() {
@@ -266,6 +299,8 @@ function decrypted() {
 }
 
 async function initProject() {
+    win.webContents.send('showOverlay');
+    win.webContents.send('setBDD', BDD);
     win.webContents.send('updateStatusBar', 10);
     const decryptedValues = decrypted();
     username = decryptedValues.decryptedUsername;
@@ -283,8 +318,8 @@ async function initProject() {
 
     win.webContents.send('updateStatusBar', 33);
 
-    let figmaSrc = await SeleniumHandler.copyTemplate();
-    if (figmaSrc == null) {
+    let figma = await SeleniumHandler.copyTemplate();
+    if (figma == null) {
         electron.dialog.showMessageBox({
             type: 'info',
             buttons: ['OK'],
@@ -308,22 +343,35 @@ async function initProject() {
         return;
     }
 
-    config.figmaSrc = figmaSrc;
+    FileHandler.createAndSaveJson(projectPath + "\\" + projectName, figma, "")
 
-    FileHandler.writeConfig(jsonFile, config);
+    win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(figma));
 
-    console.log(config.figmaSrc);
-    win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
+    figmaSrc = figma;
 
     SeleniumHandler.closeDriver();
 
     win.webContents.send('updateStatusBar', 100);
     win.webContents.send('hideOverlay');
 
-    
+
     const menu = electron.Menu.buildFromTemplate(menuTemplate);
 
     electron.Menu.setApplicationMenu(menu);
+    
+    win.webContents.send('setTitle', "BDDFigmaBuilder\t - \t" + projectName);
+}
+
+function loadProject() {
+    win.webContents.send('setBDD', BDD);
+    win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(figmaSrc));
+
+    win.webContents.send('updateStatusBar', 100);
+
+    const menu = electron.Menu.buildFromTemplate(menuTemplate);
+
+    electron.Menu.setApplicationMenu(menu);
+    win.webContents.send('setTitle', "BDDFigmaBuilder\t - \t" + projectName);
 }
 
 function openDownloadsFolder() {
@@ -349,6 +397,15 @@ electron.ipcMain.on('open-folder-dialog', async (event) => {
         console.log('Project creation cancelled');
     }
 });
+
+electron.ipcMain.on('saveBDD', (event,newBDD) => {
+    BDD = newBDD;
+    saveProject();
+});
+
+async function saveProject() {
+    await FileHandler.updateBddInJsonFile(projectPath + "\\" + projectName, BDD);
+}
 
 // Define __filename and __dirname as they are not available when using 'require'
 global.__filename = __filename;

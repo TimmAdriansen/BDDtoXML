@@ -1,7 +1,6 @@
 var editor = ace.edit("editor");
 window.init = () => {
     window.electronAPI.sendMessage("init");
-    showOverlay();
 };
 
 window.electronAPI.receiveMessage('loadPDF', (arg) => {
@@ -68,3 +67,23 @@ window.electronAPI.receiveMessage('updateStatusBar', (arg) => {
 window.electronAPI.receiveMessage('hideOverlay', (arg) => {
     hideOverlay();
 });
+
+window.electronAPI.receiveMessage('showOverlay', (arg) => {
+    showOverlay();
+});
+
+window.electronAPI.receiveMessage('setBDD', (arg) => {
+    editor.setValue(arg);
+});
+
+window.electronAPI.receiveMessage('getBDD', (arg) => {
+    window.electronAPI.sendMessage("saveBDD", editor.getValue());
+});
+
+window.electronAPI.receiveMessage('setTitle', (arg) => {
+    document.title = arg;
+});
+
+window.onbeforeunload = (e) => {
+    window.electronAPI.sendMessage("saveBDD", editor.getValue());
+};

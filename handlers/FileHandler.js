@@ -9,15 +9,33 @@ class FileHandler {
             BDD: BDD
         };
 
-        try {
-            // Convert the JSON object to a string
-            const jsonString = JSON.stringify(jsonObj, null, 2); // Beautify the JSON output
+        filename = filename + ".json";
 
-            // Write the JSON string to a file
+        try {
+            const jsonString = JSON.stringify(jsonObj, null, 2);
+            
             await fsPromises.writeFile(filename, jsonString, 'utf8');
             console.log(`${filename} has been successfully saved.`);
         } catch (error) {
             console.error('An error occurred:', error);
+        }
+    }
+
+    static async updateBddInJsonFile(filename, newBDD) {
+        filename = filename + ".json";
+    
+        try {
+            const data = await fsPromises.readFile(filename, 'utf8');
+            const jsonObj = JSON.parse(data);
+    
+            jsonObj.BDD = newBDD;
+    
+            const updatedJsonString = JSON.stringify(jsonObj, null, 2);
+    
+            await fsPromises.writeFile(filename, updatedJsonString, 'utf8');
+            console.log(`${filename} has been successfully updated with new BDD.`);
+        } catch (error) {
+            console.error('An error occurred while updating BDD:', error);
         }
     }
 

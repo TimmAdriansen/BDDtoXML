@@ -106,7 +106,7 @@ class SeleniumHandler {
 
             await actions.contextClick(element).perform();
 
-            bodyElement = await this.driver.wait(until.elementLocated(By.css('body')), 10000);
+            bodyElement = await this.driver.wait(until.elementLocated(By.css('body')), 50000);
             childElements = await bodyElement.findElements(By.xpath(".//*"));
 
             element = await loopElements(childElements, "Rename");
@@ -252,6 +252,7 @@ async function loopElements(childElements, searchString) {
         let text = await element.getText();
 
         if (text === searchString) {
+            console.log(text)
             return element
         }
     }
