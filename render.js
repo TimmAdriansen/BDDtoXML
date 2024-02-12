@@ -1,6 +1,7 @@
 var editor = ace.edit("editor");
 window.init = () => {
     window.electronAPI.sendMessage("init");
+    showOverlay();
 };
 
 window.electronAPI.receiveMessage('loadPDF', (arg) => {
@@ -37,7 +38,7 @@ function closeCredentialsModal() {
 document.getElementById('loginButton').addEventListener('click', function () {
     const username = document.getElementById('usernameInput').value;
     const password = document.getElementById('passwordInput').value;
-    window.electronAPI.sendUsernamePassword(username,password);
+    window.electronAPI.sendUsernamePassword(username, password);
     closeCredentialsModal();
 });
 
@@ -46,4 +47,24 @@ document.getElementById('passwordInput').addEventListener('keypress', function (
         event.preventDefault(); // Prevent the default action (form submission, if any)
         document.getElementById('loginButton').click(); // Trigger the button click programmatically
     }
+});
+
+function showOverlay() {
+    document.getElementById('overlay').style.display = 'block';
+}
+
+function hideOverlay() {
+    document.getElementById('overlay').style.display = 'none';
+}
+
+function updateStatusBar(progress) {
+    document.getElementById('statusBar').style.width = progress + '%';
+}
+
+window.electronAPI.receiveMessage('updateStatusBar', (arg) => {
+    updateStatusBar(arg);
+});
+
+window.electronAPI.receiveMessage('hideOverlay', (arg) => {
+    hideOverlay();
 });

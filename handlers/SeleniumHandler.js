@@ -8,8 +8,11 @@ class SeleniumHandler {
 
     static async initDriver() {
         const chromeOptions = new chrome.Options();
-        //chromeOptions.addArguments("--headless");
+        chromeOptions.addArguments("--headless");
         //chromeOptions.addArguments("window-size=500x500");
+        chromeOptions.addArguments('disable-infobars'); // Disables the "Chrome is being controlled by automated test software" notification
+        chromeOptions.addArguments('--disable-extensions'); // Disables extensions to avoid pop-ups from them
+        chromeOptions.addArguments('--disable-popup-blocking');
         this.driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
     }
 
@@ -25,13 +28,13 @@ class SeleniumHandler {
 
             await this.driver.get("https://www.figma.com/login");
 
-            await this.driver.wait(until.elementLocated(By.id('email')), 20000);
+            await this.driver.wait(until.elementLocated(By.id('email')), 10000);
             await this.driver.findElement(By.id('email')).sendKeys(username);
 
-            await this.driver.wait(until.elementLocated(By.id('current-password')), 20000);
+            await this.driver.wait(until.elementLocated(By.id('current-password')), 10000);
             await this.driver.findElement(By.id('current-password')).sendKeys(password);
 
-            let loginButton = await this.driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'Log in')]")), 20000);
+            let loginButton = await this.driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'Log in')]")), 10000);
             await loginButton.click();
 
             await this.driver.wait(until.elementLocated(By.css('[data-testid="file-import-button"]')), 20000);
@@ -39,6 +42,11 @@ class SeleniumHandler {
             return true;
         } catch (error) {
             console.log(error);
+            await this.driver.takeScreenshot().then(
+                function(image, err) {
+                    require('fs').writeFileSync('screenshot.png', image, 'base64');
+                }
+            );
             return false;
         }
     }
@@ -76,6 +84,11 @@ class SeleniumHandler {
             return clipboard.readText();*/
         } catch (error) {
             console.log(error);
+            await this.driver.takeScreenshot().then(
+                function(image, err) {
+                    require('fs').writeFileSync('screenshot.png', image, 'base64');
+                }
+            );
             return null;
         }
     }
@@ -107,6 +120,11 @@ class SeleniumHandler {
             return true;
         } catch (error) {
             console.log(error);
+            await this.driver.takeScreenshot().then(
+                function(image, err) {
+                    require('fs').writeFileSync('screenshot.png', image, 'base64');
+                }
+            );
             return false;
         }
     }
@@ -141,6 +159,11 @@ class SeleniumHandler {
 
             bool = true;
         } catch (error) {
+            await this.driver.takeScreenshot().then(
+                function(image, err) {
+                    require('fs').writeFileSync('screenshot.png', image, 'base64');
+                }
+            );
             console.log(error);
             bool = false;
         } finally {
@@ -209,6 +232,11 @@ class SeleniumHandler {
 
             bool = true;
         } catch (error) {
+            await this.driver.takeScreenshot().then(
+                function(image, err) {
+                    require('fs').writeFileSync('screenshot.png', image, 'base64');
+                }
+            );
             console.log(error);
             bool = false;
         } finally {
@@ -233,7 +261,7 @@ async function printElements(childElements) {
     for (let element of childElements) {
         let text = await element.getText();
 
-        if (text === "Wireframe component template (Community)") {
+        if (text === "Rename") {
             return element;
         }
     }

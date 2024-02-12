@@ -18,8 +18,105 @@ const BrowserWindow = electron.BrowserWindow;
 var width, height;
 var win;
 let theme = "dark";
+let newProject = false;
+let projectName = "";
 
 let initialWindow;
+
+const menuTemplate = [
+    {
+        label: 'Generate',
+        click() {
+            XMLHandler.updateXML();
+            console.log(XMLHandler.getXML());
+            console.log('Run button clicked');
+            if (FileHandler.fileExists(secretsPath)) {
+                runSelenium();
+            } else {
+                win.webContents.send('showCredentialsModal');
+            }
+        }
+    },
+    {
+        label: 'Theme',
+        click() {
+            if (theme === "dark") {
+                theme = "light";
+                electron.nativeTheme.themeSource = "light";
+                win.setIcon(path.join(__dirname, './resources/resume.PNG'));
+                win.webContents.send('toggleTheme', 'light');
+            } else {
+                theme = "dark";
+                electron.nativeTheme.themeSource = "dark";
+                win.setIcon(path.join(__dirname, './resources/resumeWhite.PNG'));
+                win.webContents.send('toggleTheme', 'dark');
+            }
+            console.log('Theme button clicked');
+            //win.webContents.send('toggle-theme');
+        }
+    },
+    {
+        label: 'Export',
+        submenu: [
+            {
+                label: 'Export as .pdf',
+                async click() {
+                    if (!FileHandler.fileExists(secretsPath)) {
+                        win.webContents.send('showCredentialsModal');
+                        return;
+                    }
+                    const decryptedValues = decrypted();
+                    username = decryptedValues.decryptedUsername;
+                    password = decryptedValues.decryptedPassword;
+                    if (!await SeleniumHandler.login(username, password)) {
+                        electron.dialog.showMessageBox({
+                            type: 'info',
+                            buttons: ['OK'],
+                            title: 'Alert',
+                            message: 'Error in login - try again',
+                        });
+                        FileHandler.deleteFile(secretsPath);
+                        SeleniumHandler.closeDriver();
+                        return;
+                    }
+                    await SeleniumHandler.exportAsPdf(config.figmaSrc);
+                    openDownloadsFolder();
+                },
+            },
+            {
+                label: 'Export as .fig',
+                async click() {
+                    if (!FileHandler.fileExists(secretsPath)) {
+                        win.webContents.send('showCredentialsModal');
+                        return;
+                    }
+                    const decryptedValues = decrypted();
+                    username = decryptedValues.decryptedUsername;
+                    password = decryptedValues.decryptedPassword;
+                    if (!await SeleniumHandler.login(username, password)) {
+                        electron.dialog.showMessageBox({
+                            type: 'info',
+                            buttons: ['OK'],
+                            title: 'Alert',
+                            message: 'Error in login - try again',
+                        });
+                        FileHandler.deleteFile(secretsPath);
+                        SeleniumHandler.closeDriver();
+                        return;
+                    }
+                    await SeleniumHandler.exportAsFig(config.figmaSrc);
+                    openDownloadsFolder();
+                },
+            },
+            {
+                label: 'Export as link',
+                click() {
+                    electron.clipboard.writeText(FigmaViewHandler.convertLinkToEmbed(config.figmaSrc))
+                },
+            }
+        ]
+    },
+];
 
 function createWindow() {
     if (initialWindow) {
@@ -41,106 +138,19 @@ function createWindow() {
     win.loadFile("./www/index.html");
     win.maximize();
 
-    const menuTemplate = [
-        {
-            label: 'Generate',
-            click() {
-                XMLHandler.updateXML();
-                console.log(XMLHandler.getXML());
-                console.log('Run button clicked');
-                if (FileHandler.fileExists(secretsPath)) {
-                    runSelenium();
-                } else {
-                    win.webContents.send('showCredentialsModal');
-                }
-            }
-        },
-        {
-            label: 'Theme',
-            click() {
-                if (theme === "dark") {
-                    theme = "light";
-                    electron.nativeTheme.themeSource = "light";
-                    win.setIcon(path.join(__dirname, './resources/resume.PNG'));
-                    win.webContents.send('toggleTheme', 'light');
-                } else {
-                    theme = "dark";
-                    electron.nativeTheme.themeSource = "dark";
-                    win.setIcon(path.join(__dirname, './resources/resumeWhite.PNG'));
-                    win.webContents.send('toggleTheme', 'dark');
-                }
-                console.log('Theme button clicked');
-                //win.webContents.send('toggle-theme');
-            }
-        },
-        {
-            label: 'Export',
-            submenu: [
-                {
-                    label: 'Export as .pdf',
-                    async click() {
-                        if (!FileHandler.fileExists(secretsPath)) {
-                            win.webContents.send('showCredentialsModal');
-                            return;
-                        }
-                        const decryptedValues = decrypted();
-                        username = decryptedValues.decryptedUsername;
-                        password = decryptedValues.decryptedPassword;
-                        if (!await SeleniumHandler.login(username, password)) {
-                            electron.dialog.showMessageBox({
-                                type: 'info',
-                                buttons: ['OK'],
-                                title: 'Alert',
-                                message: 'Error in login - try again',
-                            });
-                            FileHandler.deleteFile(secretsPath);
-                            SeleniumHandler.closeDriver();
-                            return;
-                        }
-                        await SeleniumHandler.exportAsPdf(config.figmaSrc);
-                        openDownloadsFolder();
-                    },
-                },
-                {
-                    label: 'Export as .fig',
-                    async click() {
-                        if (!FileHandler.fileExists(secretsPath)) {
-                            win.webContents.send('showCredentialsModal');
-                            return;
-                        }
-                        const decryptedValues = decrypted();
-                        username = decryptedValues.decryptedUsername;
-                        password = decryptedValues.decryptedPassword;
-                        if (!await SeleniumHandler.login(username, password)) {
-                            electron.dialog.showMessageBox({
-                                type: 'info',
-                                buttons: ['OK'],
-                                title: 'Alert',
-                                message: 'Error in login - try again',
-                            });
-                            FileHandler.deleteFile(secretsPath);
-                            SeleniumHandler.closeDriver();
-                            return;
-                        }
-                        await SeleniumHandler.exportAsFig(config.figmaSrc);
-                        openDownloadsFolder();
-                    },
-                },
-                {
-                    label: 'Export as link',
-                    click() {
-                        electron.clipboard.writeText(FigmaViewHandler.convertLinkToEmbed(config.figmaSrc))
-                    },
-                }
-            ]
-        },
-    ];
-
-    const menu = electron.Menu.buildFromTemplate(menuTemplate);
-
-    electron.Menu.setApplicationMenu(menu);
-
     electron.nativeTheme.themeSource = 'dark'
+
+    win.once('ready-to-show', () => {
+        win.show();
+        if (!FileHandler.fileExists(secretsPath)) {
+            win.webContents.send('showCredentialsModal');
+            return;
+        }
+
+        if (newProject) {
+            initProject();
+        }
+    });
 }
 
 function createInitialPromptWindow() {
@@ -200,17 +210,40 @@ electron.ipcMain.on("init", (event, data) => {
     //win.webContents.send('loadPDF', '../resources/test.pdf');
 });
 
-electron.ipcMain.on("setUsernamePassword", (event, username, password) => {
-    EncryptionHandler.initializeSecrets(username, password);
-    electron.dialog.showMessageBox({
-        type: 'info',
-        buttons: ['OK'],
-        title: 'Info',
-        message: 'Credentials stored - perform action again.',
-    });
+electron.ipcMain.on("setUsernamePassword", async (event, username, password) => {
+
+    let loginSuccess = await attemptLogin(username, password);
+
+    if (!loginSuccess) {
+        electron.dialog.showMessageBox({
+            type: 'info',
+            buttons: ['OK'],
+            title: 'Alert',
+            message: 'Error in login - try again',
+        });
+        win.webContents.send('showCredentialsModal');
+    } else {
+        EncryptionHandler.initializeSecrets(username, password);
+        if (newProject) {
+            initProject();
+        }
+    }
 });
 
-electron.ipcMain.on('create-new-project', async (event, filePath, projectName) => {
+async function attemptLogin(username, password) {
+    if (!await SeleniumHandler.login(username, password)) {
+        FileHandler.deleteFile(secretsPath);
+        SeleniumHandler.closeDriver();
+        return false;
+    }
+    SeleniumHandler.closeDriver();
+    return true;
+}
+
+
+electron.ipcMain.on('create-new-project', async (event, projectN, filePath) => {
+    newProject = true;
+    projectName = projectN;
     createWindow();
 });
 
@@ -232,7 +265,8 @@ function decrypted() {
     return { decryptedUsername, decryptedPassword };
 }
 
-async function initProject(projectName) {
+async function initProject() {
+    win.webContents.send('updateStatusBar', 10);
     const decryptedValues = decrypted();
     username = decryptedValues.decryptedUsername;
     password = decryptedValues.decryptedPassword;
@@ -245,8 +279,9 @@ async function initProject(projectName) {
         });
         FileHandler.deleteFile(secretsPath);
         SeleniumHandler.closeDriver();
-        return;
     }
+
+    win.webContents.send('updateStatusBar', 33);
 
     let figmaSrc = await SeleniumHandler.copyTemplate();
     if (figmaSrc == null) {
@@ -259,6 +294,8 @@ async function initProject(projectName) {
         SeleniumHandler.closeDriver();
         return;
     }
+
+    win.webContents.send('updateStatusBar', 66);
 
     if (!await SeleniumHandler.renameFile(projectName)) {
         electron.dialog.showMessageBox({
@@ -279,6 +316,14 @@ async function initProject(projectName) {
     win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(config.figmaSrc));
 
     SeleniumHandler.closeDriver();
+
+    win.webContents.send('updateStatusBar', 100);
+    win.webContents.send('hideOverlay');
+
+    
+    const menu = electron.Menu.buildFromTemplate(menuTemplate);
+
+    electron.Menu.setApplicationMenu(menu);
 }
 
 function openDownloadsFolder() {
