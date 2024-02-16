@@ -30,14 +30,19 @@ const menuTemplate = [
     {
         label: 'Generate',
         click() {
-            XMLHandler.updateXML();
-            console.log(XMLHandler.getXML());
-            console.log('Run button clicked');
             if (FileHandler.fileExists(secretsPath)) {
                 runSelenium();
             } else {
                 win.webContents.send('showCredentialsModal');
             }
+        }
+    },
+    {
+        label: 'test',
+        click() {
+            XMLHandler.updateXML();
+            //console.log(XMLHandler.getXML());
+            console.log('Run button clicked');
         }
     },
     {

@@ -1,5 +1,5 @@
 {
-  "featureFile": "./resources/Confirm Flight Selection.feature",
-  "stepsDefintionFile": "./steps.js",
+  "featureFile": "./widget features/button.feature",
+  "stepsDefintionFile": "./steps/buttonSteps.js",
   "ontologyFile": "./resources/ontology.owl"
 }
