@@ -1,5 +1,7 @@
 {
   "featureFile": "./widget features/button.feature",
   "stepsDefintionFile": "./steps/buttonSteps.js",
+  "featureFolder": "./widget features",
+  "stepsFolder": "./steps",
   "ontologyFile": "./resources/ontology.owl"
 }
