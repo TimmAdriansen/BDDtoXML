@@ -143,6 +143,50 @@ Given('the row #{string} is not pressed', function (string) {
     return null;
 });
 
+Given('the cell {string} of #{string} is not clicked', function (string, string2) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
+});
+
+Given('the cell {string} of the table #{string} is not clicked', function (string, string2) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
+});
+
+Given('#{string} of the table {string} is not clicked', function (string, string2) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
+});
+
+Given('#{string} of #{string} is not clicked', function (string, string2) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
+});
+
+Given('{string} of the table #{string} is not clicked', function (string, string2) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
+});
+
+Given('the cell {string} for the  #{string} is not clicked', function (string, string2) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
+});
+
+Given('the cell {string} is not clicked of the table {string}', function (string, string2) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
+});
+
+Given('the cell {string} of the table {string} is not clicked', function (string, string2) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
+});
+
+Given('#{string}  of the table {string} is not clicked', function (string, string2) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
+});
 //
 //Given the string of string is compared
 //
@@ -207,12 +251,22 @@ Given('the title {string} of the row #{string} is not compared', function (strin
 
 Given('the value {string} of #{string} is not typed', function (string, string2) {
     // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+    return null;
 });
 
 Given('the value {string} of the table #{string} is not typed', function (string, string2) {
     // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+    return null;
+});
+
+Given('#{string} of #{string} is not typed', function (string, string2) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
+});
+
+Given('the value #{string} is not typed', function (string) {
+    // Write code here that turns the phrase above into concrete actions
+    return null;
 });
 
 //
@@ -566,15 +620,15 @@ When('I do not type the value {string} of the table {string}', function (string,
 
 When('I do not type the value #{string}', function (string) {
     // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+    return null;
 });
 
 When('I do not type {string} of the table #{string}', function (string, string2) {
     // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+    return null;
 });
 
 When('I do not type the value {string} of the table #{string}', function (string, string2) {
     // Write code here that turns the phrase above into concrete actions
-    return 'pending';
+    return null;
 });
