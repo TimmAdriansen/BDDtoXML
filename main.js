@@ -88,6 +88,6 @@ function deleteFiles(copiedFiles) {
     });
 }
 
-runTests()
+//runTests()
 
 module.exports = runTests;

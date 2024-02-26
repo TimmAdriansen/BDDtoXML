@@ -412,6 +412,10 @@ async function saveProject() {
     await FileHandler.updateBddInJsonFile(projectPath + "\\" + projectName, BDD);
 }
 
+function runSelenium(){
+    console.log("hello");
+}
+
 // Define __filename and __dirname as they are not available when using 'require'
 global.__filename = __filename;
 global.__dirname = __dirname;
