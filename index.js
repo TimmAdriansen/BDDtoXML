@@ -8,6 +8,8 @@ const FigmaViewHandler = require("./handlers/FigmaViewHandler.js");
 const SeleniumHandler = require("./handlers/SeleniumHandler.js");
 const EncryptionHandler = require("./handlers/EncryptionHandler.js")
 const FileHandler = require("./handlers/FileHandler.js")
+const WidgetHandler = require("./handlers/WidgetHandler.js")
+const EditorHandler = require("./handlers/EditorHandler.js")
 const jsonFile = "./setup.json";
 const config = require(jsonFile);
 const secretsPath = path.join(__dirname, 'secrets.json');
@@ -43,6 +45,22 @@ const menuTemplate = [
             XMLHandler.updateXML();
             //console.log(XMLHandler.getXML());
             console.log('Run button clicked');
+            // Assuming the functions are imported correctly
+
+            // Example for lookupByProperty
+            console.log(WidgetHandler.lookupByProperty('option')); // Finds widgets with the 'option' property
+            console.log(WidgetHandler.lookupByProperty('value')); // Finds widgets with the 'value' property
+            console.log(WidgetHandler.lookupByProperty('date')); // Finds widgets with the 'date' property
+
+            // Example for lookupByAction
+            console.log(WidgetHandler.lookupByAction('click')); // Finds widgets that can be clicked
+            console.log(WidgetHandler.lookupByAction('select')); // Finds widgets that can be selected
+            console.log(WidgetHandler.lookupByAction('type')); // Finds widgets where you can type
+
+            // Example for lookupByState
+            console.log(WidgetHandler.lookupByState('selected')); // Finds widgets that can have a 'selected' state
+            console.log(WidgetHandler.lookupByState('clicked')); // Finds widgets that can have a 'clicked' state
+            console.log(WidgetHandler.lookupByState('typed')); // Finds widgets that can have a 'typed' state
         }
     },
     {
@@ -151,6 +169,9 @@ function createWindow() {
 
     win.loadFile("./www/index.html");
     win.maximize();
+
+    win.webContents.openDevTools();
+
 
     electron.nativeTheme.themeSource = 'dark'
 
@@ -363,7 +384,7 @@ async function initProject() {
     const menu = electron.Menu.buildFromTemplate(menuTemplate);
 
     electron.Menu.setApplicationMenu(menu);
-    
+
     win.webContents.send('setTitle', "BDDFigmaBuilder\t - \t" + projectName);
 }
 
@@ -403,16 +424,20 @@ electron.ipcMain.on('open-folder-dialog', async (event) => {
     }
 });
 
-electron.ipcMain.on('saveBDD', (event,newBDD) => {
+electron.ipcMain.on('saveBDD', (event, newBDD) => {
     BDD = newBDD;
     saveProject();
+});
+
+electron.ipcMain.on('errorDetection', (event, editor) => {
+    win.webContents.send('setErrorAnnotations', EditorHandler.updateEditorAnnotations(editor));
 });
 
 async function saveProject() {
     await FileHandler.updateBddInJsonFile(projectPath + "\\" + projectName, BDD);
 }
 
-function runSelenium(){
+function runSelenium() {
     console.log("hello");
 }
 
