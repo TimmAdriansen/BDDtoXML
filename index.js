@@ -77,7 +77,6 @@ const menuTemplate = [
                 win.setIcon(path.join(__dirname, './resources/resumeWhite.PNG'));
                 win.webContents.send('toggleTheme', 'dark');
             }
-            console.log('Theme button clicked');
             //win.webContents.send('toggle-theme');
         }
     },
