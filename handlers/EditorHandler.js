@@ -39,8 +39,8 @@ class EditorHandler {
                         lastMethodCalled = DslSpecificationHandler.testWhen;
                         break;
                     case "Then":
-                        errorString = DslSpecificationHandler.testWhen(step.content);
-                        lastMethodCalled = DslSpecificationHandler.testWhen;
+                        errorString = DslSpecificationHandler.testGiven(step.content);
+                        lastMethodCalled = DslSpecificationHandler.testGiven;
                         break;
                     case "And":
                         if (lastMethodCalled)  errorString = lastMethodCalled(step.content);

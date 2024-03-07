@@ -121,6 +121,10 @@ class DslSpecificationHandler {
                 }
             });
 
+            if(widgets.length == 0){
+                return "Widget not found";
+            }
+
             let { actions, states, properties } = WidgetHandler.widgets[widgets[0]];
 
             let possibleAttributes = [...actions, ...states, ...properties];
@@ -142,6 +146,10 @@ class DslSpecificationHandler {
                     widgets.push(word);
                 }
             });
+
+            if(widgets.length == 0){
+                return "Widget not found";
+            }
 
             let { actions, states, properties } = WidgetHandler.widgets[widgets[0]];
 

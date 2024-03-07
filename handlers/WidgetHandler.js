@@ -1,7 +1,7 @@
 class WidgetHandler {
 
     static commonActions = ['move'];
-    static commonStates = ['displayed', 'shown', 'available', 'enabled/disabled'];
+    static commonStates = ['displayed', 'shown', 'available', 'enabled','disabled'];
 
     static widgets = {
         Field: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
@@ -10,7 +10,7 @@ class WidgetHandler {
         Label: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
         ProgressBar: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
         Tooltip: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
-        CheckBox: { actions: [...this.commonActions, 'check', 'pick', 'select', 'choose', 'uncheck'], states: [...this.commonStates, 'checked/unchecked', 'picked', 'selected', 'chosen'], properties: ['option', 'options'] },
+        CheckBox: { actions: [...this.commonActions, 'check', 'pick', 'select', 'choose', 'uncheck'], states: [...this.commonStates, 'checked','unchecked', 'picked', 'selected', 'chosen'], properties: ['option', 'options'] },
         ListBox: { actions: [...this.commonActions, 'pick', 'select', 'choose'], states: [...this.commonStates, 'picked', 'selected', 'chosen'], properties: ['option', 'options'] },
         RadioButton: { actions: [...this.commonActions, 'pick', 'select', 'choose'], states: [...this.commonStates, 'picked', 'selected', 'chosen'], properties: ['option'] },
         Button: { actions: [...this.commonActions, 'click', 'submit'], states: [...this.commonStates, 'clicked', 'submitted'], properties: ['value'] },
