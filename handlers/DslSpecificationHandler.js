@@ -85,7 +85,19 @@ class DslSpecificationHandler {
             return "Widget not found";
         }
 
-        let { actions, states, properties } = WidgetHandler.widgets[widget];
+        let regexPattern = new RegExp(`${widget}\\s+"(.*?)"`);
+        let match = content.match(regexPattern);
+
+        if (match && match[1]) {
+            // match[1] contains the widget ID, including cases where it spans multiple words
+            let widgetID = match[1];
+            widget = [{ widget: widget, id: widgetID }];
+        } else {
+            // Handle the case where no ID is found following the widget
+            return "Widget ID not found";
+        }
+
+        let { actions, states, properties } = WidgetHandler.widgets[widget[0].widget];
 
         let possibleAttributes = [...actions, ...states, ...properties];
 
@@ -98,7 +110,7 @@ class DslSpecificationHandler {
         //console.log(widget)
         ///console.log(attribute)
 
-        return null;
+        return widget;
     }
 
     static testWhen(content) {
@@ -112,52 +124,78 @@ class DslSpecificationHandler {
         let attribute = null;
 
         if (verbActionRegex.test(content)) {
-            let words = content.split(/\s+/);
+            /*let words = content.split(/\s+/);
 
             words.forEach((word, index) => {
                 if (getWidget(word) != null) {
-                    console.log(`Word ${index + 1}: ${word}`);
-                    widgets.push(word);
+                    let widgetID = words[index + 1];
+                    //console.log(`Widget: ${word}, ID: ${widgetID}`);
+                    widgets.push({ widget: word, id: widgetID });
                 }
             });
 
-            if(widgets.length == 0){
+            if (widgets.length == 0) {
                 return "Widget not found";
+            }*/
+
+            const pattern = new RegExp(`\\b(${widgetsPattern})\\s+"\([^"]+\)"`, "g");
+
+            let matches;
+
+            while ((matches = pattern.exec(content)) !== null) {
+                // Extract the widget name and ID from the matches
+                let widget = matches[1]; // The widget name
+                let id = matches[2]; // The widget ID, extracted including quotes
+
+                widgets.push({ widget: widget, id: id });
             }
 
-            let { actions, states, properties } = WidgetHandler.widgets[widgets[0]];
+            let { actions, states, properties } = WidgetHandler.widgets[widgets[0].widget];
 
             let possibleAttributes = [...actions, ...states, ...properties];
 
             attribute = getAttribute(content, possibleAttributes)
 
-            console.log(attribute);
+            //console.log(attribute);
 
             if (attribute === null) {
                 return "No matching state or property found in content for the identified widget.";
             }
 
         } else if (DeclarativeEntityActionRegex.test(content)) {
-            let words = content.split(/\s+/);
+            /*let words = content.split(/\s+/);
 
             words.forEach((word, index) => {
                 if (getWidget(word) != null) {
-                    console.log(`Word ${index + 1}: ${word}`);
-                    widgets.push(word);
+                    let widgetID = words[index + 1];
+                    //console.log(`Widget: ${word}, ID: ${widgetID}`);
+                    widgets.push({ widget: word, id: widgetID });
                 }
             });
 
-            if(widgets.length == 0){
+            if (widgets.length == 0) {
                 return "Widget not found";
+            }*/
+
+            const pattern = new RegExp(`\\b(${widgetsPattern})\\s+"\([^"]+\)"`, "g");
+
+            let matches;
+
+            while ((matches = pattern.exec(content)) !== null) {
+                // Extract the widget name and ID from the matches
+                let widget = matches[1]; // The widget name
+                let id = matches[2]; // The widget ID, extracted including quotes
+
+                widgets.push({ widget: widget, id: id });
             }
 
-            let { actions, states, properties } = WidgetHandler.widgets[widgets[0]];
+            let { actions, states, properties } = WidgetHandler.widgets[widgets[0].widget];
 
             let possibleAttributes = [...actions, ...states, ...properties];
 
             attribute = getAttribute(content, possibleAttributes)
 
-            console.log(attribute);
+            //console.log(attribute);
 
             if (attribute === null) {
                 return "No matching state or property found in content for the identified widget.";
@@ -167,7 +205,7 @@ class DslSpecificationHandler {
             return "Content is invalid";
         }
 
-        return null;
+        return widgets;
     }
 }
 

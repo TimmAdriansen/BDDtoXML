@@ -3,8 +3,6 @@ const DslSpecificationHandler = require("./DslSpecificationHandler.js");
 class EditorHandler {
 
     static errorDetection(input) {
-        //const tasks = [];
-        //let errors = [];
         const lines = input.split('\n');
 
         const { scenarios, errors } = this.getScenarios(input);
@@ -19,38 +17,44 @@ class EditorHandler {
             scenario.steps.forEach(step => {
                 console.log(`Step: ${step.type} ${step.content}, ${step.line}`);
                 let lineNumber = step.line;
-                //errors.push({ lineNumber, text: `Cannot start line with cunt`, type: "error" });
+                //errors.push({ lineNumber, text: `Cannot start line with j`, type: "error" });
             });
         });*/
 
         let lastMethodCalled = null;
-        let errorString = null;
+        let result = null;
+        let currentPage = "Name Not Specified"
+
+        let widgets = [];
 
         scenarios.forEach(scenario => {
             scenario.steps.forEach(step => {
 
                 switch (step.type) {
                     case "Given":
-                        errorString = DslSpecificationHandler.testGiven(step.content);
+                        result = DslSpecificationHandler.testGiven(step.content);
                         lastMethodCalled = DslSpecificationHandler.testGiven;
                         break;
                     case "When":
-                        errorString = DslSpecificationHandler.testWhen(step.content);
+                        result = DslSpecificationHandler.testWhen(step.content);
                         lastMethodCalled = DslSpecificationHandler.testWhen;
                         break;
                     case "Then":
-                        errorString = DslSpecificationHandler.testGiven(step.content);
+                        result = DslSpecificationHandler.testGiven(step.content);
                         lastMethodCalled = DslSpecificationHandler.testGiven;
                         break;
                     case "And":
-                        if (lastMethodCalled)  errorString = lastMethodCalled(step.content);
+                        if (lastMethodCalled)  result = lastMethodCalled(step.content);
                         break;
                 }
 
-                if (errorString != null) {
-                    errors.push({ lineNumber: step.line, text: errorString, type: "error" });
-                    errorString = null;
+                if (typeof result === 'string' || result instanceof String) {
+                    errors.push({ lineNumber: step.line, text: result, type: "error" });
+                    result = null;
+                    return;
                 }
+
+                console.log(result);
             });
         });
 
@@ -89,7 +93,6 @@ class EditorHandler {
             line = line.trim();
             let words = line.split(/\s+/);
 
-            // Check if the line starts a new scenario
             if (words[0] === 'Scenario:') {
                 if (words.length < 2) {
                     errors.push({ lineNumber, text: "Scenario name missing", type: "error" });
