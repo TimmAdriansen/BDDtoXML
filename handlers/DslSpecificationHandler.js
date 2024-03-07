@@ -89,7 +89,7 @@ class DslSpecificationHandler {
 
         let possibleAttributes = [...actions, ...states, ...properties];
 
-        let attribute = getAttribute(content,possibleAttributes)
+        let attribute = getAttribute(content, possibleAttributes);
 
         if (attribute === null) {
             return "No matching state or property found in content for the identified widget.";
@@ -102,35 +102,64 @@ class DslSpecificationHandler {
     }
 
     static testWhen(content) {
-        //const declarativeEntityAction = `^${whenWordsPattern}\\s*${widgetAndWidgetIDPattern}\\s+${actionsPattern}(\\s+${prepPattern})?(\\s+the)?\\s+${widgetAndWidgetIDPattern}$`;
-        let actionRef = `^${whenWordsPattern}(${actionsPattern})( on)?(?:\\s+(${propertiesPattern})\\s+".+?")?(?:\\s+(on|in|from|to|into|for))?\\s*(?:(the|on)\\s+(${widgetsPattern})\\s+".+?")?`;
-        let action = `${actionRef}(?:\\s+and)?\\s*(?:.+?)?(?:\\s+on)?(?:\\s+(.+?)-(.+?))?(?:\\s+(for the|the|on))?\\s*(?:(${widgetsPattern})\\s+".+?")?\\s*$`;
-        //let action = `${actionRef}(?:\\s+and)?\\s*(?:.+?)?(?:\\s+on)?(?:\\s+(.+?)-(.+?))?(?:\\s+(for the|the|on))?\\s*(?:(${widgetsPattern})\\s+".+?")?(?:\\s+(on|off|in))?\\s*$`;
+        const verbAction = `^${whenWordsPattern}(${actionsPattern})(?:\\s+(${prepPattern}(?:\\s+the)?|the))?\\s*-?\\s*(\\w+)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s+(${prepPattern})\\s+(${widgetsPattern})\\s+"[^"]*"\\s+(${prepPattern})(?:\\s+the)?\\s*(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
+        const DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})(?:\\s+(${prepPattern}))?(?:\\s+the)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
 
-        let verbAction = `^${whenWordsPattern}(${actionsPattern})(?:\\s+(${prepPattern}(?:\\s+the)?|the))?\\s*-?\\s*(\\w+)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s+(${prepPattern})\\s+(${widgetsPattern})\\s+"[^"]*"\\s+(${prepPattern})(?:\\s+the)?\\s*(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
-        let DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
-        DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})\\s*$`;
-        DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})(?:\\s+(${prepPattern}))?\\s*$`;
-        DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})(?:\\s+(${prepPattern}))?(?:\\s+the)?\\s*$`;
-        DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})(?:\\s+(${prepPattern}))?(?:\\s+the)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
-
-
-
-
-
-        /*const declarativeEntityRefPattern = `(${widgetsPattern})\\s+"[^"]+"`;
-        const verbAction = `(${actionsPattern})\\s+(${prepPattern}\\s+the|the|${prepPattern})?\\s*(${declarativeEntityRefPattern})?\\s+(${prepPattern})\\s+(${declarativeEntityRefPattern})\\s+(${prepPattern}\\s+(the\\s+)?(${declarativeEntityRefPattern})?)?`;
-        const verbActionRegex = new RegExp(verbAction);*/
         const verbActionRegex = new RegExp(verbAction);
         const DeclarativeEntityActionRegex = new RegExp(DeclarativeEntityAction);
-        if (!verbActionRegex.test(content) && !DeclarativeEntityActionRegex.test(content)) {
+
+        let widgets = []
+        let attribute = null;
+
+        if (verbActionRegex.test(content)) {
+            let words = content.split(/\s+/);
+
+            words.forEach((word, index) => {
+                if (getWidget(word) != null) {
+                    console.log(`Word ${index + 1}: ${word}`);
+                    widgets.push(word);
+                }
+            });
+
+            let { actions, states, properties } = WidgetHandler.widgets[widgets[0]];
+
+            let possibleAttributes = [...actions, ...states, ...properties];
+
+            attribute = getAttribute(content, possibleAttributes)
+
+            console.log(attribute);
+
+            if (attribute === null) {
+                return "No matching state or property found in content for the identified widget.";
+            }
+
+        } else if (DeclarativeEntityActionRegex.test(content)) {
+            let words = content.split(/\s+/);
+
+            words.forEach((word, index) => {
+                if (getWidget(word) != null) {
+                    console.log(`Word ${index + 1}: ${word}`);
+                    widgets.push(word);
+                }
+            });
+
+            let { actions, states, properties } = WidgetHandler.widgets[widgets[0]];
+
+            let possibleAttributes = [...actions, ...states, ...properties];
+
+            attribute = getAttribute(content, possibleAttributes)
+
+            console.log(attribute);
+
+            if (attribute === null) {
+                return "No matching state or property found in content for the identified widget.";
+            }
+        }
+        else {
             return "Content is invalid";
         }
-    }
 
-    static testThen(content) {
-        console.log("Then here")
-        console.log(content)
+        return null;
     }
 }
 
