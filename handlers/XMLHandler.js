@@ -2,7 +2,7 @@ const fs = require('fs');
 
 class XMLHandler {
 
-    static pageArray = ['<empty></empty>'];
+    static pages;
 
     static lastUpdated;
 
@@ -15,15 +15,17 @@ class XMLHandler {
     }
 
     static getXML() {
-        let XMLString = "";
+        /*let XMLString = "";
         this.pageArray.forEach(function(item, index) {
             XMLString += item;
         });
-        return this.getWebpagesJson();
+        return this.getWebpagesJson();*/
+        //console.log(this.pages)
+        return this.pages;
     }
 
-    static updateXML() {
-        this.pageArray = ["test"];
+    static updateXML(newPages) {
+        this.pages = newPages;
         this.setLastUpdated();
     }
 

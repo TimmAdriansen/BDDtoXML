@@ -6,12 +6,17 @@ class EditorHandler {
         "BrowserWindows": []
     };
 
-    static generate = false;
+    static tryToGenerate = false;
+    static canGenerate = false;
 
     static errorDetection(input) {
         const lines = input.split('\n');
 
         const { scenarios, errors } = this.getScenarios(input);
+
+        this.pages = {
+            "BrowserWindows": []
+        };
 
 
         /*console.log(errors);
@@ -30,6 +35,8 @@ class EditorHandler {
         let lastMethodCalled = null;
         let result = null;
         let currentPage = null
+
+        let i = 0;
 
         scenarios.forEach(scenario => {
             scenario.steps.forEach(step => {
@@ -55,21 +62,23 @@ class EditorHandler {
                 if (typeof result === 'string' || result instanceof String) {
                     errors.push({ lineNumber: step.line, text: result, type: "error" });
                     result = null;
+                    this.canGenerate = false;
                     return;
                 }
 
-                if(!this.generate){
+                if(!this.tryToGenerate || !this.canGenerate){
                     return;
                 }
 
                 result.forEach(item => {
-
+                    i++;
+                    console.log(i);
                     if (item.widget === 'BrowserWindow') {
                         //currentPage = item.id;
                         //console.log(currentPage);
                         if (!this.browserWindowExists(item.id)) {
                             this.pages.BrowserWindows.push({
-                                name: item.id, // Use item.id as the name of the BrowserWindow
+                                page: item.id, // Use item.id as the name of the BrowserWindow
                                 widgets: [] // Initialize an empty array for widgets
                             });
                         }
@@ -82,14 +91,14 @@ class EditorHandler {
                     if (currentPage === null) {
                         if (!this.browserWindowExists('Name Not Specified')) {
                             this.pages.BrowserWindows.push({
-                                name: 'Name Not Specified', // Use item.id as the name of the BrowserWindow
+                                page: 'Name Not Specified', // Use item.id as the name of the BrowserWindow
                                 widgets: [] // Initialize an empty array for widgets
                             });
                             currentPage = 'Name Not Specified';
                         }
                     }
 
-                    const browserWindow = this.pages.BrowserWindows.find(bw => bw.name === currentPage);
+                    const browserWindow = this.pages.BrowserWindows.find(bw => bw.page === currentPage);
 
                     const widgetExists = browserWindow.widgets.some(widget => widget.id === item.id);
 
@@ -99,9 +108,6 @@ class EditorHandler {
                 });
             });
         });
-
-        this.generate = false;
-
 
         /*lines.forEach((line, lineNumber) => {
             line = line.trim();
@@ -124,7 +130,7 @@ class EditorHandler {
             }
         });*/
 
-        logPagesAndWidgets(this.pages);
+        //logPagesAndWidgets(this.pages);
 
         return { scenarios, errors };
     }

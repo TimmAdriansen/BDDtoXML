@@ -34,6 +34,8 @@ const menuTemplate = [
         click() {
             if (FileHandler.fileExists(secretsPath)) {
                 runSelenium();
+                EditorHandler.tryToGenerate = true;
+                win.webContents.send('generateJSON');
             } else {
                 win.webContents.send('showCredentialsModal');
             }
@@ -61,9 +63,9 @@ const menuTemplate = [
             console.log(WidgetHandler.lookupByState('selected')); // Finds widgets that can have a 'selected' state
             console.log(WidgetHandler.lookupByState('clicked')); // Finds widgets that can have a 'clicked' state
             console.log(WidgetHandler.lookupByState('typed')); // Finds widgets that can have a 'typed' state*/
-            console.log("test")
+            /*console.log("test")
             EditorHandler.generate = true;
-            win.webContents.send('generateJSON');
+            win.webContents.send('generateJSON');*/
         }
     },
     {
@@ -238,7 +240,7 @@ electron.ipcMain.on("testFunction", (event, data) => {
     //runTests();
     //XMLHandler.updateXML();
     //console.log(XMLHandler.getXML());
-    
+
 });
 
 electron.ipcMain.on("init", (event, data) => {
@@ -433,7 +435,26 @@ electron.ipcMain.on('saveBDD', (event, newBDD) => {
 });
 
 electron.ipcMain.on('errorDetection', (event, editor) => {
-    win.webContents.send('setErrorAnnotations', EditorHandler.updateEditorAnnotations(editor));
+    let annotations = EditorHandler.updateEditorAnnotations(editor);
+    if (annotations.length == 0) {
+        EditorHandler.canGenerate = true;
+    }
+
+    if (EditorHandler.tryToGenerate && EditorHandler.canGenerate) {
+        annotations = EditorHandler.updateEditorAnnotations(editor);
+        console.log(EditorHandler.pages);
+        EditorHandler.tryToGenerate = false;
+        XMLHandler.updateXML(EditorHandler.pages);
+    } else if (EditorHandler.tryToGenerate && !EditorHandler.canGenerate) {
+        EditorHandler.tryToGenerate = false;
+        electron.dialog.showMessageBox({
+            type: 'info',
+            title: 'Alert',
+            message: "Please fix all errors before generating",
+            buttons: ['OK']
+        });
+    }
+    win.webContents.send('setErrorAnnotations', annotations);
 });
 
 async function saveProject() {
