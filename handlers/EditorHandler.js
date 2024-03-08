@@ -2,6 +2,12 @@ const DslSpecificationHandler = require("./DslSpecificationHandler.js");
 
 class EditorHandler {
 
+    static pages = {
+        "BrowserWindows": []
+    };
+
+    static generate = false;
+
     static errorDetection(input) {
         const lines = input.split('\n');
 
@@ -23,9 +29,7 @@ class EditorHandler {
 
         let lastMethodCalled = null;
         let result = null;
-        let currentPage = "Name Not Specified"
-
-        let widgets = [];
+        let currentPage = null
 
         scenarios.forEach(scenario => {
             scenario.steps.forEach(step => {
@@ -44,7 +48,7 @@ class EditorHandler {
                         lastMethodCalled = DslSpecificationHandler.testGiven;
                         break;
                     case "And":
-                        if (lastMethodCalled)  result = lastMethodCalled(step.content);
+                        if (lastMethodCalled) result = lastMethodCalled(step.content);
                         break;
                 }
 
@@ -54,9 +58,49 @@ class EditorHandler {
                     return;
                 }
 
-                console.log(result);
+                if(!this.generate){
+                    return;
+                }
+
+                result.forEach(item => {
+
+                    if (item.widget === 'BrowserWindow') {
+                        //currentPage = item.id;
+                        //console.log(currentPage);
+                        if (!this.browserWindowExists(item.id)) {
+                            this.pages.BrowserWindows.push({
+                                name: item.id, // Use item.id as the name of the BrowserWindow
+                                widgets: [] // Initialize an empty array for widgets
+                            });
+                        }
+                        if (step.type === "Given") {
+                            currentPage = item.id;
+                        }
+                        return;
+                    }
+
+                    if (currentPage === null) {
+                        if (!this.browserWindowExists('Name Not Specified')) {
+                            this.pages.BrowserWindows.push({
+                                name: 'Name Not Specified', // Use item.id as the name of the BrowserWindow
+                                widgets: [] // Initialize an empty array for widgets
+                            });
+                            currentPage = 'Name Not Specified';
+                        }
+                    }
+
+                    const browserWindow = this.pages.BrowserWindows.find(bw => bw.name === currentPage);
+
+                    const widgetExists = browserWindow.widgets.some(widget => widget.id === item.id);
+
+                    if (!widgetExists) {
+                        browserWindow.widgets.push(item);
+                    }
+                });
             });
         });
+
+        this.generate = false;
 
 
         /*lines.forEach((line, lineNumber) => {
@@ -79,6 +123,8 @@ class EditorHandler {
                 errors.push({ lineNumber, text: "Line does not start with expected 'task ' keyword", type: "error" });
             }
         });*/
+
+        logPagesAndWidgets(this.pages);
 
         return { scenarios, errors };
     }
@@ -147,6 +193,25 @@ class EditorHandler {
 
         return annotations;
     }
+
+    static browserWindowExists(name) {
+        return this.pages.BrowserWindows.some(browserWindow => browserWindow.name === name);
+    }
 }
+
+function logPagesAndWidgets(pages) {
+    console.log(pages);
+    pages.BrowserWindows.forEach((browserWindow) => {
+        console.log(`Page: ${browserWindow.name}`);
+        if (browserWindow.widgets.length > 0) {
+            browserWindow.widgets.forEach((widget, index) => {
+                console.log(` Widget ${index + 1}: Type - ${widget.widget}, ID - ${widget.id}`);
+            });
+        } else {
+            console.log(' No widgets');
+        }
+    });
+}
+
 
 module.exports = EditorHandler;

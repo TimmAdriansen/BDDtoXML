@@ -42,7 +42,7 @@ const menuTemplate = [
     {
         label: 'test',
         click() {
-            XMLHandler.updateXML();
+            /*XMLHandler.updateXML();
             //console.log(XMLHandler.getXML());
             console.log('Run button clicked');
             // Assuming the functions are imported correctly
@@ -60,7 +60,10 @@ const menuTemplate = [
             // Example for lookupByState
             console.log(WidgetHandler.lookupByState('selected')); // Finds widgets that can have a 'selected' state
             console.log(WidgetHandler.lookupByState('clicked')); // Finds widgets that can have a 'clicked' state
-            console.log(WidgetHandler.lookupByState('typed')); // Finds widgets that can have a 'typed' state
+            console.log(WidgetHandler.lookupByState('typed')); // Finds widgets that can have a 'typed' state*/
+            console.log("test")
+            EditorHandler.generate = true;
+            win.webContents.send('generateJSON');
         }
     },
     {
@@ -233,8 +236,9 @@ app.on("window-all-closed", async () => {
 
 electron.ipcMain.on("testFunction", (event, data) => {
     //runTests();
-    XMLHandler.updateXML();
-    console.log(XMLHandler.getXML());
+    //XMLHandler.updateXML();
+    //console.log(XMLHandler.getXML());
+    
 });
 
 electron.ipcMain.on("init", (event, data) => {

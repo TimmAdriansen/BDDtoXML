@@ -150,6 +150,10 @@ class DslSpecificationHandler {
                 widgets.push({ widget: widget, id: id });
             }
 
+            if (widgets.length == 0) {
+                return "Widget not found";
+            }
+
             let { actions, states, properties } = WidgetHandler.widgets[widgets[0].widget];
 
             let possibleAttributes = [...actions, ...states, ...properties];
@@ -187,6 +191,10 @@ class DslSpecificationHandler {
                 let id = matches[2]; // The widget ID, extracted including quotes
 
                 widgets.push({ widget: widget, id: id });
+            }
+
+            if (widgets.length == 0) {
+                return "Widget not found";
             }
 
             let { actions, states, properties } = WidgetHandler.widgets[widgets[0].widget];

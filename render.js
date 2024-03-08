@@ -93,6 +93,10 @@ editor.getSession().on('change', function () {
     timeoutId = setTimeout(() => window.electronAPI.sendMessage("errorDetection", editor.getValue()), 500); // Update after a 500ms pause
 });
 
+window.electronAPI.receiveMessage('generateJSON', () => {
+    window.electronAPI.sendMessage("errorDetection", editor.getValue())
+});
+
 window.electronAPI.receiveMessage('setErrorAnnotations', (arg) => {
     editor.getSession().setAnnotations(arg);
 });
