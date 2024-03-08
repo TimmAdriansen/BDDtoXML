@@ -8,6 +8,8 @@ const FigmaViewHandler = require("./handlers/FigmaViewHandler.js");
 const SeleniumHandler = require("./handlers/SeleniumHandler.js");
 const EncryptionHandler = require("./handlers/EncryptionHandler.js")
 const FileHandler = require("./handlers/FileHandler.js")
+const WidgetHandler = require("./handlers/WidgetHandler.js")
+const EditorHandler = require("./handlers/EditorHandler.js")
 const jsonFile = "./setup.json";
 const config = require(jsonFile);
 const secretsPath = path.join(__dirname, 'secrets.json');
@@ -30,14 +32,40 @@ const menuTemplate = [
     {
         label: 'Generate',
         click() {
-            XMLHandler.updateXML();
-            console.log(XMLHandler.getXML());
-            console.log('Run button clicked');
             if (FileHandler.fileExists(secretsPath)) {
                 runSelenium();
+                EditorHandler.tryToGenerate = true;
+                win.webContents.send('generateJSON');
             } else {
                 win.webContents.send('showCredentialsModal');
             }
+        }
+    },
+    {
+        label: 'test',
+        click() {
+            /*XMLHandler.updateXML();
+            //console.log(XMLHandler.getXML());
+            console.log('Run button clicked');
+            // Assuming the functions are imported correctly
+
+            // Example for lookupByProperty
+            console.log(WidgetHandler.lookupByProperty('option')); // Finds widgets with the 'option' property
+            console.log(WidgetHandler.lookupByProperty('value')); // Finds widgets with the 'value' property
+            console.log(WidgetHandler.lookupByProperty('date')); // Finds widgets with the 'date' property
+
+            // Example for lookupByAction
+            console.log(WidgetHandler.lookupByAction('click')); // Finds widgets that can be clicked
+            console.log(WidgetHandler.lookupByAction('select')); // Finds widgets that can be selected
+            console.log(WidgetHandler.lookupByAction('type')); // Finds widgets where you can type
+
+            // Example for lookupByState
+            console.log(WidgetHandler.lookupByState('selected')); // Finds widgets that can have a 'selected' state
+            console.log(WidgetHandler.lookupByState('clicked')); // Finds widgets that can have a 'clicked' state
+            console.log(WidgetHandler.lookupByState('typed')); // Finds widgets that can have a 'typed' state*/
+            /*console.log("test")
+            EditorHandler.generate = true;
+            win.webContents.send('generateJSON');*/
         }
     },
     {
@@ -54,7 +82,6 @@ const menuTemplate = [
                 win.setIcon(path.join(__dirname, './resources/resumeWhite.PNG'));
                 win.webContents.send('toggleTheme', 'dark');
             }
-            console.log('Theme button clicked');
             //win.webContents.send('toggle-theme');
         }
     },
@@ -147,6 +174,9 @@ function createWindow() {
     win.loadFile("./www/index.html");
     win.maximize();
 
+    win.webContents.openDevTools();
+
+
     electron.nativeTheme.themeSource = 'dark'
 
     win.once('ready-to-show', () => {
@@ -208,8 +238,9 @@ app.on("window-all-closed", async () => {
 
 electron.ipcMain.on("testFunction", (event, data) => {
     //runTests();
-    XMLHandler.updateXML();
-    console.log(XMLHandler.getXML());
+    //XMLHandler.updateXML();
+    //console.log(XMLHandler.getXML());
+
 });
 
 electron.ipcMain.on("init", (event, data) => {
@@ -358,7 +389,7 @@ async function initProject() {
     const menu = electron.Menu.buildFromTemplate(menuTemplate);
 
     electron.Menu.setApplicationMenu(menu);
-    
+
     win.webContents.send('setTitle', "BDDFigmaBuilder\t - \t" + projectName);
 }
 
@@ -398,13 +429,40 @@ electron.ipcMain.on('open-folder-dialog', async (event) => {
     }
 });
 
-electron.ipcMain.on('saveBDD', (event,newBDD) => {
+electron.ipcMain.on('saveBDD', (event, newBDD) => {
     BDD = newBDD;
     saveProject();
 });
 
+electron.ipcMain.on('errorDetection', (event, editor) => {
+    let annotations = EditorHandler.updateEditorAnnotations(editor);
+    if (annotations.length == 0) {
+        EditorHandler.canGenerate = true;
+    }
+
+    if (EditorHandler.tryToGenerate && EditorHandler.canGenerate) {
+        annotations = EditorHandler.updateEditorAnnotations(editor);
+        console.log(EditorHandler.pages);
+        EditorHandler.tryToGenerate = false;
+        XMLHandler.updateXML(EditorHandler.pages);
+    } else if (EditorHandler.tryToGenerate && !EditorHandler.canGenerate) {
+        EditorHandler.tryToGenerate = false;
+        electron.dialog.showMessageBox({
+            type: 'info',
+            title: 'Alert',
+            message: "Please fix all errors before generating",
+            buttons: ['OK']
+        });
+    }
+    win.webContents.send('setErrorAnnotations', annotations);
+});
+
 async function saveProject() {
     await FileHandler.updateBddInJsonFile(projectPath + "\\" + projectName, BDD);
+}
+
+function runSelenium() {
+    console.log("hello");
 }
 
 // Define __filename and __dirname as they are not available when using 'require'

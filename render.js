@@ -21,7 +21,6 @@ window.electronAPI.receiveMessage('toggleTheme', (arg) => {
 });
 
 window.electronAPI.receiveMessage('setFigmaSource', (arg) => {
-    console.log("hello");
     let iframe = document.getElementById('figmaView');
     iframe.src = arg;
 });
@@ -87,3 +86,17 @@ window.electronAPI.receiveMessage('setTitle', (arg) => {
 window.onbeforeunload = (e) => {
     window.electronAPI.sendMessage("saveBDD", editor.getValue());
 };
+
+let timeoutId;
+editor.getSession().on('change', function () {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => window.electronAPI.sendMessage("errorDetection", editor.getValue()), 500); // Update after a 500ms pause
+});
+
+window.electronAPI.receiveMessage('generateJSON', () => {
+    window.electronAPI.sendMessage("errorDetection", editor.getValue())
+});
+
+window.electronAPI.receiveMessage('setErrorAnnotations', (arg) => {
+    editor.getSession().setAnnotations(arg);
+});

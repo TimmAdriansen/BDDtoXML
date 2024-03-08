@@ -2,7 +2,7 @@ const fs = require('fs');
 
 class XMLHandler {
 
-    static pageArray = ['<empty></empty>'];
+    static pages;
 
     static lastUpdated;
 
@@ -15,15 +15,17 @@ class XMLHandler {
     }
 
     static getXML() {
-        let XMLString = "";
+        /*let XMLString = "";
         this.pageArray.forEach(function(item, index) {
             XMLString += item;
         });
-        return XMLString;
+        return this.getWebpagesJson();*/
+        //console.log(this.pages)
+        return this.pages;
     }
 
-    static updateXML() {
-        this.pageArray = ["test"];
+    static updateXML(newPages) {
+        this.pages = newPages;
         this.setLastUpdated();
     }
 
@@ -75,6 +77,94 @@ class XMLHandler {
     addAlert() {
 
     }
+
+    static getWebpagesJson() {
+        const webpagesJson = {
+          "pages": [
+            {
+              "title": "Main",
+              "sections": [
+                {
+                  "type": "header",
+                  "content": "Welcome to Our Main Page"
+                },
+                {
+                  "type": "navigation",
+                  "widgets": [
+                    {
+                      "type": "button",
+                      "label": "Home",
+                      "action": "navigate",
+                      "target": "/"
+                    },
+                    {
+                      "type": "button",
+                      "label": "About Us",
+                      "action": "navigate",
+                      "target": "/about"
+                    }
+                  ]
+                },
+                {
+                  "type": "searchSection",
+                  "widgets": [
+                    {
+                      "type": "searchBar",
+                      "placeholder": "Search here...",
+                      "searchButtonLabel": "Search",
+                      "action": "search"
+                    }
+                  ]
+                },
+                {
+                  "type": "content",
+                  "widgets": [
+                    {
+                      "type": "text",
+                      "content": "Here is some introductory text about the main page."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": "Contact",
+              "sections": [
+                {
+                  "type": "header",
+                  "content": "Get in Touch"
+                },
+                {
+                  "type": "form",
+                  "widgets": [
+                    {
+                      "type": "textInput",
+                      "label": "Your Name",
+                      "placeholder": "John Doe"
+                    },
+                    {
+                      "type": "emailInput",
+                      "label": "Your Email",
+                      "placeholder": "john.doe@example.com"
+                    },
+                    {
+                      "type": "submitButton",
+                      "label": "Submit",
+                      "action": "submitForm"
+                    }
+                  ]
+                },
+                {
+                  "type": "footer",
+                  "content": "Thank you for visiting our contact page. We will get back to you soon!"
+                }
+              ]
+            }
+          ]
+        };
+        
+        return JSON.stringify(webpagesJson, null, 2);
+      }
 
 
 }
