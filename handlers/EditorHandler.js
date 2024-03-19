@@ -66,13 +66,59 @@ class EditorHandler {
                     return;
                 }
 
-                if(!this.tryToGenerate || !this.canGenerate){
+                if (!this.tryToGenerate || !this.canGenerate) {
+                    return;
+                }
+
+                let isContainerPresent = result.some(widget =>
+                    widget.widget === 'FieldSet' ||
+                    widget.widget === 'Menu' ||
+                    widget.widget === 'ListBox' ||
+                    widget.widget === 'DropdownList'
+                );
+
+                if (isContainerPresent) {
+                    if (currentPage === null) {
+                        if (!this.browserWindowExists('Name Not Specified')) {
+                            this.pages.BrowserWindows.push({
+                                page: 'Name Not Specified', // Use item.id as the name of the BrowserWindow
+                                widgets: [] // Initialize an empty array for widgets
+                            });
+                            currentPage = 'Name Not Specified';
+                        }
+                    }
+                    const browserWindow = this.pages.BrowserWindows.find(bw => bw.page === currentPage);
+
+                    // Process all container widgets
+                    result.forEach(container => {
+                        if (['FieldSet', 'Menu', 'ListBox', 'DropdownList'].includes(container.widget)) {
+                            // Filter out the current container from its own widgets list
+                            let newWidgets = result.filter(widget => widget.id !== container.id);
+
+                            // Check if the container already exists and update or add
+                            const existingContainerIndex = browserWindow.widgets.findIndex(widget => widget.id === container.id);
+                            if (existingContainerIndex !== -1) {
+                                // Append new widgets to existing container
+                                let existingContainer = browserWindow.widgets[existingContainerIndex];
+                                newWidgets.forEach(newWidget => {
+                                    // Ensure we're not adding duplicates
+                                    if (!existingContainer.widgets.some(w => w.id === newWidget.id)) {
+                                        existingContainer.widgets.push(newWidget);
+                                    }
+                                });
+                            } else {
+                                // Add new container
+                                container.widgets = newWidgets; // Assign filtered widgets to the new container
+                                browserWindow.widgets.push(container);
+                            }
+                        }
+                    });
+
                     return;
                 }
 
                 result.forEach(item => {
                     i++;
-                    console.log(i);
                     if (item.widget === 'BrowserWindow') {
                         //currentPage = item.id;
                         //console.log(currentPage);
@@ -82,7 +128,7 @@ class EditorHandler {
                                 widgets: [] // Initialize an empty array for widgets
                             });
                         }
-                        if (step.type === "Given") {
+                        if (step.type === "Given" || step.type === "Then") {
                             currentPage = item.id;
                         }
                         return;

@@ -442,7 +442,6 @@ electron.ipcMain.on('errorDetection', (event, editor) => {
 
     if (EditorHandler.tryToGenerate && EditorHandler.canGenerate) {
         annotations = EditorHandler.updateEditorAnnotations(editor);
-        console.log(EditorHandler.pages);
         EditorHandler.tryToGenerate = false;
         XMLHandler.updateXML(EditorHandler.pages);
     } else if (EditorHandler.tryToGenerate && !EditorHandler.canGenerate) {
@@ -462,7 +461,7 @@ async function saveProject() {
 }
 
 function runSelenium() {
-    console.log("hello");
+    //console.log("hello");
 }
 
 // Define __filename and __dirname as they are not available when using 'require'

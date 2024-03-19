@@ -114,16 +114,21 @@ class DslSpecificationHandler {
     }
 
     static testWhen(content) {
-        const verbAction = `^${whenWordsPattern}(${actionsPattern})(?:\\s+(${prepPattern}(?:\\s+the)?|the))?\\s*-?\\s*(\\w+)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s+(${prepPattern})\\s+(${widgetsPattern})\\s+"[^"]*"\\s+(${prepPattern})(?:\\s+the)?\\s*(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
-        const DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})(?:\\s+(${prepPattern}))?(?:\\s+the)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
+        //const verbAction = `^${whenWordsPattern}(${actionsPattern})(?:\\s+(${prepPattern}(?:\\s+the)?|the))?\\s*-?\\s*(\\w+)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s+(${prepPattern})\\s+(${widgetsPattern})\\s+"[^"]*"\\s+(${prepPattern})(?:\\s+the)?\\s*(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
+        //const DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})(?:\\s+(${prepPattern}))?(?:\\s+the)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
 
-        const verbActionRegex = new RegExp(verbAction);
-        const DeclarativeEntityActionRegex = new RegExp(DeclarativeEntityAction);
+        let actionRef = `^${whenWordsPattern}(${actionsPattern})(?:\\s+on)?\\s*(?:(?:${propertiesPattern})\\s+"[^"]+?")?\\s*(?:${prepPattern})?\\s*(?:(?:the|on)\\s+(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+and)?\\s*(?:"[^"]*?")?(?:\\s+on)?\\s*(?:"[^"]+?"\\s*-\s*"[^"]+?")?(?:\\s+(?:for the|the|on))?\\s*(?:(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+(on|off|in))?\\s+(${widgetsPattern})\\s+"[^"]+"(?:\\s+(on|off|in))?(?:\\s+(of|for|for the|of the))?\\s*(?:${prepPattern})?\\s*(?:(${widgetsPattern})\\s+"[^"]+")?$`
+
+        //let newVerbAction = `^${actionRef}(?:\\s+and)?\\s*.*?\\s*(?:on)?\\s*(?:(.+?)-(.+?))?\\s*(?:(?:for the|the|on))?\\s*(?:(?:(${widgetsPattern})\\s+(.+?))?)\\s*(?:(on|off|in))?\\s*(${widgetsPattern})\\s+(.+?)\\s*(?:(on|off|in))?\\s*(?:(?:of|for|for the|of the))?\\s*(?:${prepPattern})?\\s*(?:(?:(${widgetsPattern})\\s+(.+?)))?$`
+        //newVerbAction = `^${actionRef}(?:\\s+and)?\\s*(?:"[^"]*?"\\s*)?(?:on)?\\s*(?:(.+?)-(.+?))?\\s*(?:(?:for the|the|on)\\s+)?(${widgetsPattern}\\s+"[^"]+?")?(?:\\s+(on|off|in))?\\s*(${widgetsPattern}\\s+"[^"]+?")(?:\\s+(on|off|in))?\\s*(?:(?:of|for|for the|of the)\\s+)?(?:${prepPattern}\\s+)?(${widgetsPattern}\\s+"[^"]+?")?$`
+
+
+        const actionRefRegex = new RegExp(actionRef);
 
         let widgets = []
         let attribute = null;
 
-        if (verbActionRegex.test(content)) {
+        if (actionRefRegex.test(content)) {
             /*let words = content.split(/\s+/);
 
             words.forEach((word, index) => {
@@ -138,7 +143,9 @@ class DslSpecificationHandler {
                 return "Widget not found";
             }*/
 
-            const pattern = new RegExp(`\\b(${widgetsPattern})\\s+"\([^"]+\)"`, "g");
+            //const pattern = new RegExp(`\\b(${widgetsPattern})\\s+"\([^"]+\)"`, "g");
+            const pattern = new RegExp(`\\b(${widgetsPattern})\\s+"([^"]+)"`, "g");
+
 
             let matches;
 
@@ -166,48 +173,6 @@ class DslSpecificationHandler {
                 return "No matching state or property found in content for the identified widget.";
             }
 
-        } else if (DeclarativeEntityActionRegex.test(content)) {
-            /*let words = content.split(/\s+/);
-
-            words.forEach((word, index) => {
-                if (getWidget(word) != null) {
-                    let widgetID = words[index + 1];
-                    //console.log(`Widget: ${word}, ID: ${widgetID}`);
-                    widgets.push({ widget: word, id: widgetID });
-                }
-            });
-
-            if (widgets.length == 0) {
-                return "Widget not found";
-            }*/
-
-            const pattern = new RegExp(`\\b(${widgetsPattern})\\s+"\([^"]+\)"`, "g");
-
-            let matches;
-
-            while ((matches = pattern.exec(content)) !== null) {
-                // Extract the widget name and ID from the matches
-                let widget = matches[1]; // The widget name
-                let id = matches[2]; // The widget ID, extracted including quotes
-
-                widgets.push({ widget: widget, id: id });
-            }
-
-            if (widgets.length == 0) {
-                return "Widget not found";
-            }
-
-            let { actions, states, properties } = WidgetHandler.widgets[widgets[0].widget];
-
-            let possibleAttributes = [...actions, ...states, ...properties];
-
-            attribute = getAttribute(content, possibleAttributes)
-
-            //console.log(attribute);
-
-            if (attribute === null) {
-                return "No matching state or property found in content for the identified widget.";
-            }
         }
         else {
             return "Content is invalid";
