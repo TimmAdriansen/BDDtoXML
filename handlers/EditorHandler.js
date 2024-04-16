@@ -51,8 +51,8 @@ class EditorHandler {
                         lastMethodCalled = DslSpecificationHandler.testWhen;
                         break;
                     case "Then":
-                        result = DslSpecificationHandler.testGiven(step.content);
-                        lastMethodCalled = DslSpecificationHandler.testGiven;
+                        result = DslSpecificationHandler.testThen(step.content);
+                        lastMethodCalled = DslSpecificationHandler.testThen;
                         break;
                     case "And":
                         if (lastMethodCalled) result = lastMethodCalled(step.content);
@@ -74,7 +74,9 @@ class EditorHandler {
                     widget.widget === 'FieldSet' ||
                     widget.widget === 'Menu' ||
                     widget.widget === 'ListBox' ||
-                    widget.widget === 'DropdownList'
+                    widget.widget === 'DropdownList' ||
+                    widget.widget === 'ModalWindow' ||
+                    widget.widget === 'WindowDialog'
                 );
 
                 if (isContainerPresent) {
@@ -91,7 +93,7 @@ class EditorHandler {
 
                     // Process all container widgets
                     result.forEach(container => {
-                        if (['FieldSet', 'Menu', 'ListBox', 'DropdownList'].includes(container.widget)) {
+                        if (['FieldSet', 'Menu', 'ListBox', 'DropdownList', 'ModalWindow', 'WindowDialog'].includes(container.widget)) {
                             // Filter out the current container from its own widgets list
                             let newWidgets = result.filter(widget => widget.id !== container.id);
 
@@ -121,16 +123,29 @@ class EditorHandler {
                     i++;
                     if (item.widget === 'BrowserWindow') {
                         //currentPage = item.id;
-                        //console.log(currentPage);
-                        if (!this.browserWindowExists(item.id)) {
+                        //console.log(this.pages);
+                        if (!item.actions) {
+                            //console.log(item.id)
+                            item.actions = [];
+                        }
+                        let browserWindow = this.browserWindowExists(item.id)
+                        if (!browserWindow) {
+                            //console.log(item.id);
                             this.pages.BrowserWindows.push({
                                 page: item.id, // Use item.id as the name of the BrowserWindow
-                                widgets: [] // Initialize an empty array for widgets
+                                widgets: [], // Initialize an empty array for widgets
+                                actions: item.actions
                             });
+                        } else {
+                            item.actions.forEach(action => {
+                                browserWindow.actions.push(action);
+                            })
                         }
                         if (step.type === "Given" || step.type === "Then") {
                             currentPage = item.id;
                         }
+                        //console.log(item.id);
+                        //console.log(item.actions);
                         return;
                     }
 
@@ -146,11 +161,17 @@ class EditorHandler {
 
                     const browserWindow = this.pages.BrowserWindows.find(bw => bw.page === currentPage);
 
-                    const widgetExists = browserWindow.widgets.some(widget => widget.id === item.id);
+                    //const widgetExists = browserWindow.widgets.some(widget => widget.id === item.id);
 
-                    if (!widgetExists) {
+                    if (!widgetExistsInPage(item.id, browserWindow.widgets)) {
                         browserWindow.widgets.push(item);
+                    } else{
+                        //update the widget here!!!
                     }
+
+                    /*if (!widgetExists) {
+                        browserWindow.widgets.push(item);
+                    }*/
                 });
             });
         });
@@ -246,9 +267,24 @@ class EditorHandler {
         return annotations;
     }
 
-    static browserWindowExists(name) {
-        return this.pages.BrowserWindows.some(browserWindow => browserWindow.name === name);
+    static browserWindowExists(pageName) {
+        return this.pages.BrowserWindows.find(browserWindow => browserWindow.page === pageName);
     }
+}
+
+function widgetExistsInPage(widgetId, widgets) {
+    // Check if the widget ID exists in the current level of widgets
+    for (const widget of widgets) {
+        if (widget.id === widgetId) {
+            return true;
+        }
+        // If the current widget has nested widgets, recursively search within them
+        if (widget.widgets && widgetExistsInPage(widgetId, widget.widgets)) {
+            return true;
+        }
+    }
+    // If we reach here, it means the widget ID does not exist at this level or any nested level
+    return false;
 }
 
 function logPagesAndWidgets(pages) {

@@ -6,9 +6,9 @@ class WidgetHandler {
     static widgets = {
         Field: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
         FieldSet: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
-        Text: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
-        Label: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
-        ProgressBar: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
+        Text: { actions: [...this.commonActions], states: [...this.commonStates], properties: ['value', 'text'] },
+        Label: { actions: [...this.commonActions], states: [...this.commonStates], properties: ['value', 'text'] },
+        ProgressBar: { actions: [...this.commonActions], states: [...this.commonStates], properties: ['value'] },
         Tooltip: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
         CheckBox: { actions: [...this.commonActions, 'check', 'pick', 'select', 'choose', 'uncheck'], states: [...this.commonStates, 'checked','unchecked', 'picked', 'selected', 'chosen'], properties: ['option', 'options'] },
         ListBox: { actions: [...this.commonActions, 'pick', 'select', 'choose'], states: [...this.commonStates, 'picked', 'selected', 'chosen'], properties: ['option', 'options'] },
