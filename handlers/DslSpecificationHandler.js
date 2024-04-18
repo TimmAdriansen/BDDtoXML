@@ -59,7 +59,6 @@ const widgetAndWidgetIDPattern = `(${widgetsPattern})\\s+"[^"]+"`;
 const actionsPattern = [].concat(...Object.values(widgets).map(w => w.actions)).join("|");
 const statesPattern = [].concat(...Object.values(widgets).map(w => w.states)).join("|");
 const propertiesPattern = [].concat(...Object.values(WidgetHandler.widgets).map(w => w.properties)).join("|");
-let lastWhenWidgetID = "";
 let conditions = [];
 
 class DslSpecificationHandler {
@@ -71,7 +70,7 @@ class DslSpecificationHandler {
         "And"
     ];
 
-    static testGiven(content) {
+    static testGiven(content, currentPage) {
         conditions = [];
         const declarativeEntityStatePhrase = `${prePostPattern}((${widgetsPattern}) ".+?" (is|are)( not)? (${statesPattern}))$`;
         const declarativeEntityPropertyStatePhrase = `^(${prePostPattern}) ?(${propertiesPattern}) ".+?" (${prepPattern}) (the )?(${widgetsPattern}) ".+?" (is(?: not)?|are(?: not)?) ".+?"$`;
@@ -95,7 +94,7 @@ class DslSpecificationHandler {
             let widget = matches[1]; // The widget name
             let id = matches[2]; // The widget ID, extracted including quotes
 
-            widgets.push({ widget: widget, id: id });
+            widgets.push({ widget: widget, id: id, actions: [] });
         }
 
         if (widgets.length == 0) {
@@ -149,7 +148,7 @@ class DslSpecificationHandler {
         return widget;*/
     }
 
-    static testWhen(content) {
+    static testWhen(content, currentPage) {
         //const verbAction = `^${whenWordsPattern}(${actionsPattern})(?:\\s+(${prepPattern}(?:\\s+the)?|the))?\\s*-?\\s*(\\w+)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s+(${prepPattern})\\s+(${widgetsPattern})\\s+"[^"]*"\\s+(${prepPattern})(?:\\s+the)?\\s*(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
         //const DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})(?:\\s+(${prepPattern}))?(?:\\s+the)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
 
@@ -190,8 +189,10 @@ class DslSpecificationHandler {
                 let widget = matches[1]; // The widget name
                 let id = matches[2]; // The widget ID, extracted including quotes
 
-                widgets.push({ widget: widget, id: id });
+                widgets.push({ widget: widget, id: id, actions: [] });
             }
+
+            //console.log(widgets);
 
             if (widgets.length == 0) {
                 return "Widget not found";
@@ -223,7 +224,7 @@ class DslSpecificationHandler {
                 let attribute2 = getAttribute(content, possibleAttributes)
                 //console.log(attribute2)
 
-                conditions.push({type: attribute2, params: {widget: widgets[0].widget, id: widgets[0].id, type: attribute, id: getPropertyID(content, attribute)}, negated: containsWordNot(content)})
+                conditions.push({ type: attribute2, params: { widget: widgets[0].widget, id: currentPage + ":" + widgets[0].id, type: attribute, id: getPropertyID(content, attribute) }, negated: containsWordNot(content) })
             } else {
                 possibleAttributes = [...actions, ...states, ...properties];
 
@@ -234,17 +235,16 @@ class DslSpecificationHandler {
                 console.log(containsWordNot(content));
                 console.log(widgets[0].widget)
                 console.log(widgets[0].id)*/
-                conditions.push({type: attribute, params: {widget: widgets[0].widget, id: widgets[0].id}, negated: containsWordNot(content)})
+                conditions.push({ type: attribute, params: { widget: widgets[0].widget, id: currentPage + ":" + widgets[0].id }, negated: containsWordNot(content) })
             }
         }
         else {
             return "Content is invalid";
         }
-        lastWhenWidgetID = widgets[widgets.length - 1].id;
         return widgets;
     }
 
-    static testThen(content) {
+    static testThen(content, currentPage) {
         //console.log(content)
         const declarativeEntityStatePhrase = `${prePostPattern}((${widgetsPattern}) ".+?" (is|are)( not)? (${statesPattern}))$`;
         const declarativeEntityPropertyStatePhrase = `^(${prePostPattern}) ?(${propertiesPattern}) ".+?" (${prepPattern}) (the )?(${widgetsPattern}) ".+?" (is(?: not)?|are(?: not)?) ".+?"$`;
@@ -269,7 +269,7 @@ class DslSpecificationHandler {
             let widget = matches[1]; // The widget name
             let id = matches[2]; // The widget ID, extracted including quotes
             currentID = id;
-            widgets.push({ widget: widget, id: id });
+            widgets.push({ widget: widget, id: id, actions: [] });
         }
 
         //console.log(currentID);
@@ -296,7 +296,6 @@ class DslSpecificationHandler {
         }
 
         console.log(attribute);*/
-        widgets[0].actions = [];
         if (properties.includes(attribute)) {
             //console.log(getPropertyID(content, attribute));
             //console.log(getValue(content));
