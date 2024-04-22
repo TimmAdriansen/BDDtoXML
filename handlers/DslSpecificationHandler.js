@@ -95,7 +95,9 @@ class DslSpecificationHandler {
             let widget = matches[1]; // The widget name
             let id = matches[2]; // The widget ID, extracted including quotes
 
-            widgets.push({ widget: widget, id: id, actions: [] });
+            let widgetObject = { widget: widget, id: id, actions: [], properties: [] };
+
+            widgets.push(widgetObject);
         }
 
         if (widgets.length == 0) {
@@ -122,6 +124,17 @@ class DslSpecificationHandler {
         if (attribute === null) {
             return "No matching state or property found in content for the identified widget.";
         }
+
+        let getChangeableInitWidgets = WidgetHandler.getChangeableInitWidgets();
+
+        if (properties.includes(attribute) && getChangeableInitWidgets.includes(widget.widget)) {
+            console.log(content);
+            widget.properties.push({ [attribute]: getValue(content) });
+            //console.log(getPropertyID(content, attribute));
+            //console.log(getValue(content));
+            //widget.actions.push({ type: "set" + attribute, params: { value: getValue(content) }, negated: containsWordNot(content), conditions: conditions })
+        }
+
         //console.log(widget);
         if (container.widget) {
             return container.widget;
@@ -207,7 +220,7 @@ class DslSpecificationHandler {
                 let widget = matches[1]; // The widget name
                 let id = matches[2]; // The widget ID, extracted including quotes
 
-                widgets.push({ widget: widget, id: id, actions: [] });
+                widgets.push({ widget: widget, id: id, actions: [], properties: [] });
             }
 
             //console.log(widgets);
@@ -240,8 +253,12 @@ class DslSpecificationHandler {
             possibleAttributes = [...properties];
 
             attribute = getAttribute(content, possibleAttributes)
+            //console.log(content)
+            //console.log(possibleAttributes)
+            //console.log(attribute)
 
             if (attribute) {
+                //console.log(attribute);
                 /*console.log(content);
                 console.log(attribute);
                 console.log(containsWordNot(content));
@@ -302,7 +319,7 @@ class DslSpecificationHandler {
             let widget = matches[1]; // The widget name
             let id = matches[2]; // The widget ID, extracted including quotes
             currentID = id;
-            widgets.push({ widget: widget, id: id, actions: [] });
+            widgets.push({ widget: widget, id: id, actions: [], properties: [] });
         }
 
         //console.log(currentID);
@@ -416,6 +433,8 @@ function getValue(inputString) {
 function getPropertyID(inputString, keyword) {
     // Create a regex that finds the specified keyword followed by whitespace and then a word enclosed in quotes
     const regex = new RegExp(`\\b${keyword}\\b\\s+"(\\w+)"`, 'i');
+    console.log(keyword)
+    console.log(inputString);
 
     // Find the match in the string
     const match = inputString.match(regex);

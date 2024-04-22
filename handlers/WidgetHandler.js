@@ -1,16 +1,16 @@
 class WidgetHandler {
 
     static commonActions = ['move'];
-    static commonStates = ['displayed', 'shown', 'available', 'enabled','disabled'];
+    static commonStates = ['displayed', 'shown', 'available', 'enabled', 'disabled'];
 
     static widgets = {
         Field: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
         FieldSet: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
-        Text: { actions: [...this.commonActions], states: [...this.commonStates], properties: ['value', 'text'] },
-        Label: { actions: [...this.commonActions], states: [...this.commonStates], properties: ['value', 'text'] },
+        Text: { actions: [...this.commonActions], states: [...this.commonStates], properties: ['text'] },
+        Label: { actions: [...this.commonActions], states: [...this.commonStates], properties: ['text'] },
         ProgressBar: { actions: [...this.commonActions], states: [...this.commonStates], properties: ['value'] },
         Tooltip: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
-        CheckBox: { actions: [...this.commonActions, 'check', 'pick', 'select', 'choose', 'uncheck'], states: [...this.commonStates, 'checked','unchecked', 'picked', 'selected', 'chosen'], properties: ['option', 'options'] },
+        CheckBox: { actions: [...this.commonActions, 'check', 'pick', 'select', 'choose', 'uncheck'], states: [...this.commonStates, 'checked', 'unchecked', 'picked', 'selected', 'chosen'], properties: ['option', 'options'] },
         ListBox: { actions: [...this.commonActions, 'pick', 'select', 'choose'], states: [...this.commonStates, 'picked', 'selected', 'chosen'], properties: ['option', 'options'] },
         RadioButton: { actions: [...this.commonActions, 'pick', 'select', 'choose'], states: [...this.commonStates, 'picked', 'selected', 'chosen'], properties: ['option'] },
         Button: { actions: [...this.commonActions, 'click', 'submit'], states: [...this.commonStates, 'clicked', 'submitted'], properties: ['value'] },
@@ -21,8 +21,8 @@ class WidgetHandler {
         Menu: { actions: [...this.commonActions, 'click', 'select'], states: [...this.commonStates, 'clicked', 'selected'], properties: ['option'] },
         MenuItem: { actions: [...this.commonActions, 'click', 'select'], states: [...this.commonStates, 'clicked', 'selected'], properties: ['option'] },
         Grid: { actions: [...this.commonActions, 'click', 'select', 'type', 'compare'], states: [...this.commonStates, 'clicked', 'selected', 'typed', 'compared'], properties: ['table', 'column', 'line', 'cell'] },
-        TextField: { actions: [...this.commonActions, 'type', 'set', 'fill'], states: [...this.commonStates, 'typed', 'set', 'filled'], properties: ['value'] },
-        TextArea: { actions: [...this.commonActions, 'type', 'set', 'fill'], states: [...this.commonStates, 'typed', 'set', 'filled'], properties: ['text'] },
+        TextField: { actions: [...this.commonActions, 'type', 'set', 'fill'], states: [...this.commonStates, 'typed', 'set', 'filled'], properties: ['text', 'value'] },
+        TextArea: { actions: [...this.commonActions, 'type', 'set', 'fill'], states: [...this.commonStates, 'typed', 'set', 'filled'], properties: ['text', 'value'] },
         BrowserWindow: { actions: [...this.commonActions, 'go'], states: [...this.commonStates], properties: ['page', 'title'] },
         Autocomplete: { actions: [...this.commonActions, 'type and choose', 'type and select'], states: [...this.commonStates, 'set', 'filled'], properties: ['value'] },
         Tree: { actions: [...this.commonActions, 'click', 'select'], states: [...this.commonStates, 'clicked', 'selected'], properties: ['line', 'tree'] },
@@ -58,6 +58,10 @@ class WidgetHandler {
 
     static lookupByState(state) {
         return Object.keys(this.widgets).filter(widget => this.widgets[widget].states.includes(state));
+    }
+
+    static getChangeableInitWidgets() {
+        return ["Text", "Label", "xd"];
     }
 }
 

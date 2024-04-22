@@ -311,6 +311,24 @@ function updateWidget(existingWidget, newWidget) {
                     updateWidget(nestedWidget, widget);
                 }
             });
+        } else if (key === "properties" && newWidget[key]) {
+            // Update or add properties
+            newWidget[key].forEach(newProp => {
+                let propFound = false;
+                for (let i = 0; i < existingWidget[key].length; i++) {
+                    let existingProp = existingWidget[key][i];
+                    if (Object.keys(existingProp)[0] === Object.keys(newProp)[0]) {
+                        // Update existing property
+                        existingWidget[key][i] = newProp;
+                        propFound = true;
+                        break;
+                    }
+                }
+                if (!propFound) {
+                    // Add new property if not found
+                    existingWidget[key].push(newProp);
+                }
+            });
         } else {
             // Update other properties
             existingWidget[key] = newWidget[key];
