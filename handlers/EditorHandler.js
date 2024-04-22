@@ -33,35 +33,33 @@ class EditorHandler {
         });*/
 
         let lastMethodCalled = null;
-        let result = null;
+        let item = null;
         let currentPage = null
-
-        let i = 0;
 
         scenarios.forEach(scenario => {
             scenario.steps.forEach(step => {
 
                 switch (step.type) {
                     case "Given":
-                        result = DslSpecificationHandler.testGiven(step.content, currentPage);
+                        item = DslSpecificationHandler.testGiven(step.content, currentPage);
                         lastMethodCalled = DslSpecificationHandler.testGiven;
                         break;
                     case "When":
-                        result = DslSpecificationHandler.testWhen(step.content, currentPage);
+                        item = DslSpecificationHandler.testWhen(step.content, currentPage);
                         lastMethodCalled = DslSpecificationHandler.testWhen;
                         break;
                     case "Then":
-                        result = DslSpecificationHandler.testThen(step.content, currentPage);
+                        item = DslSpecificationHandler.testThen(step.content, currentPage);
                         lastMethodCalled = DslSpecificationHandler.testThen;
                         break;
                     case "And":
-                        if (lastMethodCalled) result = lastMethodCalled(step.content, currentPage);
+                        if (lastMethodCalled) item = lastMethodCalled(step.content, currentPage);
                         break;
                 }
 
-                if (typeof result === 'string' || result instanceof String) {
-                    errors.push({ lineNumber: step.line, text: result, type: "error" });
-                    result = null;
+                if (typeof item === 'string' || item instanceof String) {
+                    errors.push({ lineNumber: step.line, text: item, type: "error" });
+                    item = null;
                     this.canGenerate = false;
                     return;
                 }
@@ -70,144 +68,100 @@ class EditorHandler {
                     return;
                 }
 
-                let isContainerPresent = result.some(widget =>
-                    widget.widget === 'FieldSet' ||
-                    widget.widget === 'Menu' ||
-                    widget.widget === 'ListBox' ||
-                    widget.widget === 'DropdownList' ||
-                    widget.widget === 'ModalWindow' ||
-                    widget.widget === 'WindowDialog'
-                );
+                //console.log(step.content);
+                //console.log(item);
 
-                if (isContainerPresent) {
-                    if (currentPage === null) {
-                        if (!this.browserWindowExists('Name Not Specified')) {
-                            this.pages.BrowserWindows.push({
-                                page: 'Name Not Specified', // Use item.id as the name of the BrowserWindow
-                                widgets: [] // Initialize an empty array for widgets
-                            });
-                            currentPage = 'Name Not Specified';
-                        }
+
+                if (item.widget === 'BrowserWindow') {
+                    //currentPage = item.id;
+                    //console.log(this.pages);
+                    /*if (!item.actions) {
+                        //console.log(item.id)
+                        item.actions = [];
+                    }*/
+                    let browserWindow = this.browserWindowExists(item.id)
+                    if (!browserWindow) {
+                        //console.log(item.id);
+                        this.pages.BrowserWindows.push({
+                            page: item.id, // Use item.id as the name of the BrowserWindow
+                            widgets: [], // Initialize an empty array for widgets
+                            actions: item.actions
+                        });
+                    } else {
+                        item.actions.forEach(action => {
+                            browserWindow.actions.push(action);
+                        })
                     }
-                    const browserWindow = this.pages.BrowserWindows.find(bw => bw.page === currentPage);
-
-                    // Process all container widgets
-                    result.forEach(container => {
-                        if (['FieldSet', 'Menu', 'ListBox', 'DropdownList', 'ModalWindow', 'WindowDialog'].includes(container.widget)) {
-                            // Filter out the current container from its own widgets list
-                            let newWidgets = result.filter(widget => widget.id !== container.id);
-
-                            // Check if the container already exists and update or add
-                            const existingContainerIndex = browserWindow.widgets.findIndex(widget => widget.id === container.id);
-                            if (existingContainerIndex !== -1) {
-                                // Append new widgets to existing container
-                                let existingContainer = browserWindow.widgets[existingContainerIndex];
-                                newWidgets.forEach(newWidget => {
-                                    // Ensure we're not adding duplicates
-                                    let existingWidget = existingContainer.widgets.find(w => w.id === newWidget.id);
-                                    if (newWidget.actions) {
-                                        //console.log(newWidget.actions);
-                                    }
-                                    if (!existingWidget) {
-                                        existingContainer.widgets.push(newWidget);
-                                    } else {
-                                        if (!newWidget.actions) {
-                                            newWidget.actions = [];
-                                        }
-                                        if (!existingWidget.actions) {
-                                            existingWidget.actions = [];
-                                        }
-                                        newWidget.actions.forEach(action => {
-                                            existingWidget.actions.push(action);
-                                        });
-                                    }
-                                });
-                            } else {
-                                // Add new container
-                                container.widgets = newWidgets; // Assign filtered widgets to the new container
-                                container.widgets.forEach(widget => {
-                                    //console.log(widget);
-                                    if (widget.actions) {
-                                        widget.actions.forEach(action => {
-                                            //console.log(action);
-                                        })
-                                    }
-                                })
-                                browserWindow.widgets.push(container);
-                            }
-                        }
-                    });
-
+                    if (step.type === "Given" || step.type === "Then") {
+                        currentPage = item.id;
+                    }
+                    //console.log(item.id);
+                    //console.log(item.actions);
                     return;
                 }
 
-                result.forEach(item => {
-                    i++;
-                    if (item.widget === 'BrowserWindow') {
-                        //currentPage = item.id;
-                        //console.log(this.pages);
-                        /*if (!item.actions) {
-                            //console.log(item.id)
-                            item.actions = [];
-                        }*/
-                        let browserWindow = this.browserWindowExists(item.id)
-                        if (!browserWindow) {
-                            //console.log(item.id);
-                            this.pages.BrowserWindows.push({
-                                page: item.id, // Use item.id as the name of the BrowserWindow
-                                widgets: [], // Initialize an empty array for widgets
-                                actions: item.actions
-                            });
-                        } else {
-                            item.actions.forEach(action => {
-                                browserWindow.actions.push(action);
-                            })
-                        }
-                        if (step.type === "Given" || step.type === "Then") {
-                            currentPage = item.id;
-                        }
-                        //console.log(item.id);
-                        //console.log(item.actions);
-                        return;
+                if (currentPage === null) {
+                    if (!this.browserWindowExists('Name Not Specified')) {
+                        this.pages.BrowserWindows.push({
+                            page: 'Name Not Specified', // Use item.id as the name of the BrowserWindow
+                            widgets: [] // Initialize an empty array for widgets
+                        });
+                        currentPage = 'Name Not Specified';
                     }
+                }
 
-                    if (currentPage === null) {
-                        if (!this.browserWindowExists('Name Not Specified')) {
-                            this.pages.BrowserWindows.push({
-                                page: 'Name Not Specified', // Use item.id as the name of the BrowserWindow
-                                widgets: [] // Initialize an empty array for widgets
-                            });
-                            currentPage = 'Name Not Specified';
-                        }
-                    }
+                const browserWindow = this.pages.BrowserWindows.find(bw => bw.page === currentPage);
 
-                    const browserWindow = this.pages.BrowserWindows.find(bw => bw.page === currentPage);
-
-                    //console.log(item);
-                    /*if (item.actions) {
-                        item.actions.forEach(action => {
-                            console.log(action.conditions);
-                            action.conditions.forEach(condition => {
-                                condition.params.id = currentPage + ":" + condition.params.id;
-                            })
+                //console.log(item);
+                /*if (item.actions) {
+                    item.actions.forEach(action => {
+                        console.log(action.conditions);
+                        action.conditions.forEach(condition => {
+                            condition.params.id = currentPage + ":" + condition.params.id;
                         })
+                    })
+                }*/
+
+                //const widgetExists = browserWindow.widgets.some(widget => widget.id === item.id);
+                const existingWidget = findWidgetById(item.id, browserWindow.widgets);
+                if (!existingWidget) {
+                    browserWindow.widgets.push(item);
+                    //console.log(item.widget);
+                    //console.log(item.id);
+                    //console.log(item.actions);
+                } else {
+                    updateWidget(existingWidget, item);
+                    //update the widget here!!!
+                    /*for (const key in item) {
+                        if (key === "actions") {
+                            existingWidget[key] = existingWidget[key].concat(...item[key]);
+                        } else if (key === "widgets") {
+                            item[key].forEach(widget => {
+                                let nestedWidget = findWidgetById(widget.id, existingWidget[key]);
+                                if (!nestedWidget) {
+                                    existingWidget[key].push(widget);
+                                } else {
+                                    for (const key2 in widget) {
+                                        if (key2 === "actions") {
+                                            nestedWidget[key2] = nestedWidget[key2].concat(...widget[key2]);
+                                        } else {
+                                            nestedWidget[key2] = widget[key2];
+                                        }
+                                    }
+                                }
+                            })
+                        } else {
+                            existingWidget[key] = item[key];
+                        }
                     }*/
+                    //console.log(item.widget);
+                    //console.log(item.id);
+                    //console.log(item.actions);
+                }
 
-                    //const widgetExists = browserWindow.widgets.some(widget => widget.id === item.id);
-
-                    if (!widgetExistsInPage(item.id, browserWindow.widgets)) {
-                        browserWindow.widgets.push(item);
-                    } else {
-                        //update the widget here!!!'
-                        //console.log(item.widget);
-                        //console.log(item.id);
-                        //console.log(item.actions);
-                    }
-
-                    /*if (!widgetExists) {
-                        browserWindow.widgets.push(item);
-                    }*/
-                });
+                /*if (!widgetExists) {
+                    browserWindow.widgets.push(item);
+                }*/
             });
         });
 
@@ -320,6 +274,48 @@ function widgetExistsInPage(widgetId, widgets) {
     }
     // If we reach here, it means the widget ID does not exist at this level or any nested level
     return false;
+}
+
+function findWidgetById(widgetId, widgets) {
+    // Search for the widget by ID in the current list of widgets
+    for (const widget of widgets) {
+        //console.log(widget);
+        // If the widget ID matches, return the widget object
+        if (widget.id === widgetId) {
+            return widget;
+        }
+        // If the current widget has nested widgets, recursively search within them
+        if (widget.widgets) {
+            const foundWidget = findWidgetById(widgetId, widget.widgets);
+            if (foundWidget) {
+                return foundWidget;
+            }
+        }
+    }
+    // If we reach here, it means the widget ID does not exist at this level or any nested level
+    return null;
+}
+
+function updateWidget(existingWidget, newWidget) {
+    for (const key in newWidget) {
+        if (key === "actions") {
+            // Concatenate actions
+            existingWidget[key] = existingWidget[key].concat(...newWidget[key]);
+        } else if (key === "widgets" && newWidget[key]) {
+            // Recursively update nested widgets
+            newWidget[key].forEach(widget => {
+                let nestedWidget = findWidgetById(widget.id, existingWidget[key]);
+                if (!nestedWidget) {
+                    existingWidget[key].push(widget);
+                } else {
+                    updateWidget(nestedWidget, widget);
+                }
+            });
+        } else {
+            // Update other properties
+            existingWidget[key] = newWidget[key];
+        }
+    }
 }
 
 function logPagesAndWidgets(pages) {

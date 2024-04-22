@@ -71,6 +71,7 @@ class DslSpecificationHandler {
     ];
 
     static testGiven(content, currentPage) {
+        //console.log(content)
         conditions = [];
         const declarativeEntityStatePhrase = `${prePostPattern}((${widgetsPattern}) ".+?" (is|are)( not)? (${statesPattern}))$`;
         const declarativeEntityPropertyStatePhrase = `^(${prePostPattern}) ?(${propertiesPattern}) ".+?" (${prepPattern}) (the )?(${widgetsPattern}) ".+?" (is(?: not)?|are(?: not)?) ".+?"$`;
@@ -101,7 +102,18 @@ class DslSpecificationHandler {
             return "Widget not found";
         }
 
-        let { actions, states, properties } = WidgetHandler.widgets[widgets[0].widget];
+        let container = getContainer(widgets);
+        let widget;
+
+        if (!container.widget) {
+            widget = widgets[0];
+        } else if (container.widget.widgets.length != 0) {
+            widget = container.widget.widgets[0];
+        } else {
+            widget = container.widget;
+        }
+
+        let { actions, states, properties } = WidgetHandler.widgets[widget.widget];
 
         let possibleAttributes = [...actions, ...states, ...properties];
 
@@ -110,8 +122,11 @@ class DslSpecificationHandler {
         if (attribute === null) {
             return "No matching state or property found in content for the identified widget.";
         }
-
-        return widgets;
+        //console.log(widget);
+        if (container.widget) {
+            return container.widget;
+        }
+        return widget;
 
 
         /*let widget = getWidget(content);
@@ -149,6 +164,7 @@ class DslSpecificationHandler {
     }
 
     static testWhen(content, currentPage) {
+        //console.log(content)
         //const verbAction = `^${whenWordsPattern}(${actionsPattern})(?:\\s+(${prepPattern}(?:\\s+the)?|the))?\\s*-?\\s*(\\w+)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s+(${prepPattern})\\s+(${widgetsPattern})\\s+"[^"]*"\\s+(${prepPattern})(?:\\s+the)?\\s*(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
         //const DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})(?:\\s+(${prepPattern}))?(?:\\s+the)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
 
@@ -161,6 +177,8 @@ class DslSpecificationHandler {
         const actionRefRegex = new RegExp(actionRef);
 
         let widgets = []
+        let container = null;
+        let widget = null;
         let attribute = null;
 
         if (actionRefRegex.test(content)) {
@@ -198,7 +216,18 @@ class DslSpecificationHandler {
                 return "Widget not found";
             }
 
-            let { actions, states, properties } = WidgetHandler.widgets[widgets[0].widget];
+            container = getContainer(widgets);
+            let containerID = container.containerID;
+
+            if (!container.widget) {
+                widget = widgets[0];
+            } else if (container.widget.widgets.length != 0) {
+                widget = container.widget.widgets[0];
+            } else {
+                widget = container.widget;
+            }
+
+            let { actions, states, properties } = WidgetHandler.widgets[widget.widget];
 
             let possibleAttributes = [...actions, ...states, ...properties];
 
@@ -224,7 +253,7 @@ class DslSpecificationHandler {
                 let attribute2 = getAttribute(content, possibleAttributes)
                 //console.log(attribute2)
 
-                conditions.push({ type: attribute2, params: { widget: widgets[0].widget, id: currentPage + ":" + widgets[0].id, type: attribute, id: getPropertyID(content, attribute) }, negated: containsWordNot(content) })
+                conditions.push({ type: attribute2, params: { widget: widget.widget, id: currentPage + ":" + containerID + widget.id, type: attribute, typeId: getPropertyID(content, attribute) }, negated: containsWordNot(content) })
             } else {
                 possibleAttributes = [...actions, ...states, ...properties];
 
@@ -235,13 +264,17 @@ class DslSpecificationHandler {
                 console.log(containsWordNot(content));
                 console.log(widgets[0].widget)
                 console.log(widgets[0].id)*/
-                conditions.push({ type: attribute, params: { widget: widgets[0].widget, id: currentPage + ":" + widgets[0].id }, negated: containsWordNot(content) })
+                conditions.push({ type: attribute, params: { widget: widget.widget, id: currentPage + ":" + containerID + widget.id }, negated: containsWordNot(content) })
             }
         }
         else {
             return "Content is invalid";
         }
-        return widgets;
+        //console.log(widgets);
+        if (container.widget) {
+            return container.widget;
+        }
+        return widget;
     }
 
     static testThen(content, currentPage) {
@@ -279,7 +312,18 @@ class DslSpecificationHandler {
             return "Widget not found";
         }
 
-        let { actions, states, properties } = WidgetHandler.widgets[widgets[0].widget];
+        let container = getContainer(widgets);
+        let widget;
+
+        if (!container.widget) {
+            widget = widgets[0];
+        } else if (container.widget.widgets.length != 0) {
+            widget = container.widget.widgets[0];
+        } else {
+            widget = container.widget;
+        }
+
+        let { actions, states, properties } = WidgetHandler.widgets[widget.widget];
 
         let possibleAttributes = [...actions, ...states, ...properties];
 
@@ -299,15 +343,19 @@ class DslSpecificationHandler {
         if (properties.includes(attribute)) {
             //console.log(getPropertyID(content, attribute));
             //console.log(getValue(content));
-            widgets[0].actions.push({ type: "set" + attribute, params: { value: getValue(content) }, negated: containsWordNot(content), conditions: conditions })
+            widget.actions.push({ type: "set" + attribute, params: { value: getValue(content) }, negated: containsWordNot(content), conditions: conditions })
         } else {
-            widgets[0].actions.push({ type: attribute, params: {}, negated: containsWordNot(content), conditions: conditions })
+            widget.actions.push({ type: attribute, params: {}, negated: containsWordNot(content), conditions: conditions })
         }
         /*console.log(widgets[0].widget);
         console.log(widgets[0].id);*/
 
         //console.log(widgets[0].actions)
-        return widgets;
+        //console.log(widgets);
+        if (container.widget) {
+            return container.widget;
+        }
+        return widget;
     }
 }
 
@@ -378,6 +426,45 @@ function getPropertyID(inputString, keyword) {
     } else {
         return null; // Return null if no keyword or quoted word is found
     }
+}
+
+function getContainer(widgets) {
+    let isContainerPresent = widgets.some(widget =>
+        widget.widget === 'FieldSet' ||
+        widget.widget === 'Menu' ||
+        widget.widget === 'ListBox' ||
+        widget.widget === 'DropdownList' ||
+        widget.widget === 'ModalWindow' ||
+        widget.widget === 'WindowDialog'
+    );
+
+    let widget = null;
+    let containerID = "";
+
+    if (isContainerPresent) {
+        let containerWidget;
+        widgets.forEach(container => {
+            if (['FieldSet', 'Menu', 'ListBox', 'DropdownList', 'ModalWindow', 'WindowDialog'].includes(container.widget)) {
+                if (!containerWidget) {
+                    // Filter out the current container from its own widgets list
+                    let newWidgets = widgets.filter(widget => widget.id !== container.id);
+
+                    container.widgets = newWidgets;
+                    containerWidget = container;
+                } else {
+                    containerWidget = null;
+                    return;
+                }
+            }
+        });
+        if (!containerWidget) {
+            return "A container cannot contain another container"
+        }
+        widget = containerWidget;
+        containerID = containerWidget.id + ":";
+    }
+
+    return { widget: widget, containerID: containerID };
 }
 
 
