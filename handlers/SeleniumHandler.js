@@ -8,7 +8,7 @@ class SeleniumHandler {
 
     static async initDriver() {
         const chromeOptions = new chrome.Options();
-        chromeOptions.addArguments("--headless");
+        //chromeOptions.addArguments("--headless");
         //chromeOptions.addArguments("window-size=500x500");
         chromeOptions.addArguments('disable-infobars'); // Disables the "Chrome is being controlled by automated test software" notification
         chromeOptions.addArguments('--disable-extensions'); // Disables extensions to avoid pop-ups from them
@@ -28,11 +28,15 @@ class SeleniumHandler {
 
             await this.driver.get("https://www.figma.com/login");
 
-            await this.driver.wait(until.elementLocated(By.id('email')), 10000);
-            await this.driver.findElement(By.id('email')).sendKeys(username);
+            //await sleep(5000);
 
-            await this.driver.wait(until.elementLocated(By.id('current-password')), 10000);
-            await this.driver.findElement(By.id('current-password')).sendKeys(password);
+            let emailField = await this.driver.wait(until.elementLocated(By.id('email')), 10000);
+            await this.driver.wait(until.elementIsVisible(emailField), 10000);
+            await emailField.sendKeys(username);
+
+            let passwordField = await this.driver.wait(until.elementLocated(By.id('current-password')), 10000);
+            await this.driver.wait(until.elementIsVisible(passwordField), 10000);
+            await passwordField.sendKeys(password);
 
             let loginButton = await this.driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'Log in')]")), 10000);
             await loginButton.click();
@@ -43,7 +47,7 @@ class SeleniumHandler {
         } catch (error) {
             console.log(error);
             await this.driver.takeScreenshot().then(
-                function(image, err) {
+                function (image, err) {
                     require('fs').writeFileSync('screenshot.png', image, 'base64');
                 }
             );
@@ -68,7 +72,7 @@ class SeleniumHandler {
 
             await this.driver.switchTo().window(windowHandles[windowHandles.length - 1]);
 
-            return await this.driver.getCurrentUrl();
+            return true;
 
             /*
 
@@ -85,47 +89,72 @@ class SeleniumHandler {
         } catch (error) {
             console.log(error);
             await this.driver.takeScreenshot().then(
-                function(image, err) {
+                function (image, err) {
                     require('fs').writeFileSync('screenshot.png', image, 'base64');
                 }
             );
-            return null;
+            return false;
         }
     }
 
     static async renameFile(fileName) {
         try {
-            await this.driver.get("https://www.figma.com/files");
+
+            let fileNameElement = await this.driver.wait(until.elementLocated(By.xpath("//span[@data-testid='filename' and contains(text(), 'Wireframe component template (Community)')]")), 50000);
+            await this.driver.wait(until.elementIsVisible(fileNameElement), 5000);
+
+            // Ensure element is visible and enabled, which generally covers 'clickable'
+            await this.driver.wait(until.elementIsEnabled(fileNameElement), 5000);
+
+            await fileNameElement.click();
+
+            await this.driver.switchTo().activeElement().sendKeys(fileName, Key.RETURN);
+
+            await sleep(3000); // Wait for the action to complete
+
+            return await this.driver.getCurrentUrl();
+
+            /*await this.driver.get("https://www.figma.com/files");
 
             let bodyElement = await this.driver.wait(until.elementLocated(By.css('body')), 10000);
             let childElements = await bodyElement.findElements(By.xpath(".//*"));
+
+            await sleep(3000);
 
             let element = await loopElements(childElements, "Wireframe component template (Community)");
 
             let actions = this.driver.actions({ bridge: true });
 
+            await sleep(3000);
+
             await actions.contextClick(element).perform();
+
+            await sleep(3000);
 
             bodyElement = await this.driver.wait(until.elementLocated(By.css('body')), 50000);
             childElements = await bodyElement.findElements(By.xpath(".//*"));
 
+            await sleep(3000);
+
             element = await loopElements(childElements, "Rename");
+
+            await sleep(3000);
 
             await element.click();
 
-            await sleep(1000);
+            await sleep(3000);
 
             await this.driver.switchTo().activeElement().sendKeys(fileName, Key.RETURN);
 
-            return true;
+            await sleep(3000);*/
         } catch (error) {
             console.log(error);
             await this.driver.takeScreenshot().then(
-                function(image, err) {
+                function (image, err) {
                     require('fs').writeFileSync('screenshot.png', image, 'base64');
                 }
             );
-            return false;
+            return null;
         }
     }
 
@@ -160,7 +189,7 @@ class SeleniumHandler {
             bool = true;
         } catch (error) {
             await this.driver.takeScreenshot().then(
-                function(image, err) {
+                function (image, err) {
                     require('fs').writeFileSync('screenshot.png', image, 'base64');
                 }
             );
@@ -233,7 +262,7 @@ class SeleniumHandler {
             bool = true;
         } catch (error) {
             await this.driver.takeScreenshot().then(
-                function(image, err) {
+                function (image, err) {
                     require('fs').writeFileSync('screenshot.png', image, 'base64');
                 }
             );

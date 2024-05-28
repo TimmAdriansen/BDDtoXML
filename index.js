@@ -42,7 +42,7 @@ const menuTemplate = [
         }
     },
     {
-        label: 'test',
+        label: 'PrintAllActions',
         click() {
             /*XMLHandler.updateXML();
             //console.log(XMLHandler.getXML());
@@ -66,6 +66,13 @@ const menuTemplate = [
             /*console.log("test")
             EditorHandler.generate = true;
             win.webContents.send('generateJSON');*/
+            XMLHandler.printAllActions();
+        }
+    },
+    {
+        label: 'PrintSelectedActions',
+        click() {
+            XMLHandler.printSelectedActions();
         }
     },
     {
@@ -349,8 +356,7 @@ async function initProject() {
 
     win.webContents.send('updateStatusBar', 33);
 
-    let figma = await SeleniumHandler.copyTemplate();
-    if (figma == null) {
+    if (!await SeleniumHandler.copyTemplate()) {
         electron.dialog.showMessageBox({
             type: 'info',
             buttons: ['OK'],
@@ -363,7 +369,8 @@ async function initProject() {
 
     win.webContents.send('updateStatusBar', 66);
 
-    if (!await SeleniumHandler.renameFile(projectName)) {
+    let figma = await SeleniumHandler.renameFile(projectName);
+    if (figma == null) {
         electron.dialog.showMessageBox({
             type: 'info',
             buttons: ['OK'],

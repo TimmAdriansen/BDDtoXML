@@ -128,7 +128,7 @@ class DslSpecificationHandler {
         let getChangeableInitWidgets = WidgetHandler.getChangeableInitWidgets();
 
         if (properties.includes(attribute) && getChangeableInitWidgets.includes(widget.widget)) {
-            console.log(content);
+            //console.log(content);
             widget.properties.push({ [attribute]: getValue(content) });
             //console.log(getPropertyID(content, attribute));
             //console.log(getValue(content));
@@ -413,7 +413,11 @@ function getAttribute(content, possibleAttributes) {
 }*/
 
 function containsWordNot(inputString) {
-    return /\bnot\b/i.test(inputString);
+    // Remove all occurrences of "..." (with any characters inside) from the input string
+    const sanitizedString = inputString.replace(/"[^"]*"/g, '');
+
+    // Check if the remaining string contains the word "not" as a whole word
+    return /\bnot\b/i.test(sanitizedString);
 }
 
 function getValue(inputString) {
@@ -433,8 +437,8 @@ function getValue(inputString) {
 function getPropertyID(inputString, keyword) {
     // Create a regex that finds the specified keyword followed by whitespace and then a word enclosed in quotes
     const regex = new RegExp(`\\b${keyword}\\b\\s+"(\\w+)"`, 'i');
-    console.log(keyword)
-    console.log(inputString);
+    //console.log(keyword)
+    //console.log(inputString);
 
     // Find the match in the string
     const match = inputString.match(regex);

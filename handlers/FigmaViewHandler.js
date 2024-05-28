@@ -2,8 +2,8 @@ class FigmaViewHandler {
 
     static convertLinkToEmbed(link) {
         let embedLink = "";
-        
-        if(!link.includes("file") || !link.includes("https://www.figma.com")){
+
+        if (!link.includes("https://www.figma.com")) {
             return "0";
         }
 
@@ -22,7 +22,7 @@ class FigmaViewHandler {
         split.forEach(function (split, index) {
             embedLink += split;
         });
-        
+
         return embedLink;
     }
 
