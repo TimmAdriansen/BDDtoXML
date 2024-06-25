@@ -70,14 +70,19 @@ class DslSpecificationHandler {
         "And"
     ];
 
+    static resetConditions() {
+        conditions = [];
+    }
+
     static testGiven(content, currentPage) {
         //console.log(content)
-        conditions = [];
+        //conditions = [];
         const declarativeEntityStatePhrase = `${prePostPattern}((${widgetsPattern}) ".+?" (is|are)( not)? (${statesPattern}))$`;
         const declarativeEntityPropertyStatePhrase = `^(${prePostPattern}) ?(${propertiesPattern}) ".+?" (${prepPattern}) (the )?(${widgetsPattern}) ".+?" (is(?: not)?|are(?: not)?) ".+?"$`;
+        const declarativeEntityPropertyStatePhraseNoPropertyID = `^(${prePostPattern}) ?(${propertiesPattern})( ".*?")? (${prepPattern}) (the )?(${widgetsPattern}) ".*?" (is(?: not)?|are(?: not)?) ".*?"$`;
 
         const declarativeEntityStatePhraseRegex = new RegExp(declarativeEntityStatePhrase);
-        const declarativeEntityPropertyStatePhraseRegex = new RegExp(declarativeEntityPropertyStatePhrase);
+        const declarativeEntityPropertyStatePhraseRegex = new RegExp(declarativeEntityPropertyStatePhraseNoPropertyID);
 
         let widgets = []
         let attribute = null;
@@ -105,6 +110,7 @@ class DslSpecificationHandler {
         }
 
         let container = getContainer(widgets);
+        let containerID = container.containerID;
         let widget;
 
         if (!container.widget) {
@@ -129,10 +135,19 @@ class DslSpecificationHandler {
 
         if (properties.includes(attribute) && getChangeableInitWidgets.includes(widget.widget)) {
             //console.log(content);
-            widget.properties.push({ [attribute]: getValue(content) });
+            widget.properties.push({ [attribute]: getValuesAfterKeywords(content) });
             //console.log(getPropertyID(content, attribute));
             //console.log(getValue(content));
             //widget.actions.push({ type: "set" + attribute, params: { value: getValue(content) }, negated: containsWordNot(content), conditions: conditions })
+        }
+
+        let existingConditionId = getIdFromConditions(widget.id);
+        let id = existingConditionId !== null ? existingConditionId : currentPage + ":" + containerID + widget.id;
+
+        if (properties.includes(attribute)) {
+            conditions.push({ type: attribute + "Is", params: { widget: widget.widget, id: id, value: getValuesAfterKeywords(content) }, negated: containsWordNot(content) })
+        } else {
+            conditions.push({ type: attribute, params: { widget: widget.widget, id: id }, negated: containsWordNot(content) })
         }
 
         //console.log(widget);
@@ -298,9 +313,11 @@ class DslSpecificationHandler {
         //console.log(content)
         const declarativeEntityStatePhrase = `${prePostPattern}((${widgetsPattern}) ".+?" (is|are)( not)? (${statesPattern}))$`;
         const declarativeEntityPropertyStatePhrase = `^(${prePostPattern}) ?(${propertiesPattern}) ".+?" (${prepPattern}) (the )?(${widgetsPattern}) ".+?" (is(?: not)?|are(?: not)?) ".+?"$`;
+        const declarativeEntityPropertyStatePhraseNoPropertyID = `^(${prePostPattern}) ?(${propertiesPattern})( ".*?")? (${prepPattern}) (the )?(${widgetsPattern}) ".+?" (is(?: not)?|are(?: not)?) ".+?"$`;
+
 
         const declarativeEntityStatePhraseRegex = new RegExp(declarativeEntityStatePhrase);
-        const declarativeEntityPropertyStatePhraseRegex = new RegExp(declarativeEntityPropertyStatePhrase);
+        const declarativeEntityPropertyStatePhraseRegex = new RegExp(declarativeEntityPropertyStatePhraseNoPropertyID);
 
         let widgets = []
         let attribute = null;
@@ -360,7 +377,7 @@ class DslSpecificationHandler {
         if (properties.includes(attribute)) {
             //console.log(getPropertyID(content, attribute));
             //console.log(getValue(content));
-            widget.actions.push({ type: "set" + attribute, params: { value: getValue(content) }, negated: containsWordNot(content), conditions: conditions })
+            widget.actions.push({ type: "SET_VARIABLE:" + attribute, params: { value: getValuesAfterKeywords(content) }, negated: containsWordNot(content), conditions: conditions })
         } else {
             widget.actions.push({ type: attribute, params: {}, negated: containsWordNot(content), conditions: conditions })
         }
@@ -434,6 +451,20 @@ function getValue(inputString) {
     return lastQuotedWord;
 }
 
+function getValuesAfterKeywords(inputString) {
+    // Regular expression to find instances of "is", "are", or "not" followed by a quoted word
+    const regex = /\b(?:is|are|not)\s+"([^"]+)"/;
+    let match = regex.exec(inputString);
+
+    // If a match is found, return the quoted word
+    if (match) {
+        return match[1]; // match[1] captures the group within the quotes
+    }
+
+    // If no match is found, return null
+    return null;
+}
+
 function getPropertyID(inputString, keyword) {
     // Create a regex that finds the specified keyword followed by whitespace and then a word enclosed in quotes
     const regex = new RegExp(`\\b${keyword}\\b\\s+"(\\w+)"`, 'i');
@@ -488,6 +519,22 @@ function getContainer(widgets) {
     }
 
     return { widget: widget, containerID: containerID };
+}
+
+function getIdFromConditions(idToCheck) {
+    for (const condition of conditions) {
+        // Split the id in the condition
+        const conditionIdParts = condition.params.id.split(':');
+        // Get the last part of the id
+        const conditionLastPart = conditionIdParts[conditionIdParts.length - 1];
+        // Check if the last part matches the idToCheck
+        if (conditionLastPart === idToCheck) {
+            // Return the entire id if it matches
+            return condition.params.id;
+        }
+    }
+    // Return null if no match is found
+    return null;
 }
 
 

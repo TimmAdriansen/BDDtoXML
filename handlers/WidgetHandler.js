@@ -1,7 +1,7 @@
 class WidgetHandler {
 
     static commonActions = ['move'];
-    static commonStates = ['displayed', 'shown', 'available', 'enabled', 'disabled'];
+    static commonStates = [/*'displayed', 'shown', 'available',*/'enabled', 'disabled'];
 
     static widgets = {
         Field: { actions: [...this.commonActions], states: [...this.commonStates], properties: [] },
@@ -23,14 +23,14 @@ class WidgetHandler {
         Grid: { actions: [...this.commonActions, 'click', 'select', 'type', 'compare'], states: [...this.commonStates, 'clicked', 'selected', 'typed', 'compared'], properties: ['table', 'column', 'line', 'cell'] },
         TextField: { actions: [...this.commonActions, 'type', 'set', 'fill'], states: [...this.commonStates, 'typed', 'set', 'filled'], properties: ['text', 'value'] },
         TextArea: { actions: [...this.commonActions, 'type', 'set', 'fill'], states: [...this.commonStates, 'typed', 'set', 'filled'], properties: ['text', 'value'] },
-        BrowserWindow: { actions: [...this.commonActions, 'go'], states: [...this.commonStates], properties: ['page', 'title'] },
+        BrowserWindow: { actions: [...this.commonActions, 'go'], states: [...this.commonStates, 'displayed', 'shown', 'available'], properties: ['page', 'title'] },
         Autocomplete: { actions: [...this.commonActions, 'type and choose', 'type and select'], states: [...this.commonStates, 'set', 'filled'], properties: ['value'] },
         Tree: { actions: [...this.commonActions, 'click', 'select'], states: [...this.commonStates, 'clicked', 'selected'], properties: ['line', 'tree'] },
-        WindowDialog: { actions: [...this.commonActions, 'confirm', 'cancel', 'close'], states: [...this.commonStates, 'confirmed', 'canceled', 'closed'], properties: ['content'] },
-        ModalWindow: { actions: [...this.commonActions, 'confirm', 'cancel', 'close'], states: [...this.commonStates, 'confirmed', 'canceled', 'closed'], properties: ['content'] },
+        WindowDialog: { actions: [...this.commonActions, 'confirm', 'cancel', 'close'], states: [...this.commonStates, 'confirmed', 'canceled', 'closed', 'displayed', 'shown', 'available'], properties: ['content'] },
+        ModalWindow: { actions: [...this.commonActions, 'confirm', 'cancel', 'close'], states: [...this.commonStates, 'confirmed', 'canceled', 'closed', 'displayed', 'shown', 'available'], properties: ['content'] },
         Accordion: { actions: [...this.commonActions, 'click', 'show', 'hide'], states: [...this.commonStates, 'clicked', 'shown', 'hidden'], properties: ['item'] },
         TabBar: { actions: [...this.commonActions, 'click', 'select'], states: [...this.commonStates, 'clicked', 'selected'], properties: ['tab'] },
-        Notification: { actions: [...this.commonActions, 'click', 'open', 'close'], states: [...this.commonStates, 'clicked', 'open', 'closed'], properties: ['message'] },
+        Notification: { actions: [...this.commonActions, 'click', 'open', 'close'], states: [...this.commonStates, 'clicked', 'open', 'closed', 'displayed', 'shown', 'available'], properties: ['message'] },
         NumericStepper: { actions: [...this.commonActions, 'type', 'set', 'fill', 'increase', 'decrease'], states: [...this.commonStates, 'typed', 'set', 'filled', 'increased', 'decreased'], properties: ['value'] },
         ToggleButton: { actions: [...this.commonActions, 'switch on', 'switch off'], states: [...this.commonStates, 'switched'], properties: [] },
         Breadcrumb: { actions: [...this.commonActions, 'select', 'choose', 'click'], states: [...this.commonStates, 'selected', 'chosen', 'clicked'], properties: ['option'] },
@@ -61,7 +61,7 @@ class WidgetHandler {
     }
 
     static getChangeableInitWidgets() {
-        return ["Text", "Label", "xd"];
+        return ["Text", "Label"];
     }
 }
 

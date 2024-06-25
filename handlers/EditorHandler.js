@@ -35,27 +35,90 @@ class EditorHandler {
         let lastMethodCalled = null;
         let item = null;
         let currentPage = null
+        let hasGivens = false;
+        let hasWhens = false;
+        let hasThens = false;
 
         scenarios.forEach(scenario => {
+            DslSpecificationHandler.resetConditions();
+            let stepCount = 0;
             scenario.steps.forEach(step => {
-
+                stepCount++;
                 switch (step.type) {
                     case "Given":
+                        if (hasWhens || hasThens) {
+                            errors.push({ lineNumber: step.line, text: "Given statements must be before When and Then", type: "error" });
+                            return;
+                        }
                         item = DslSpecificationHandler.testGiven(step.content, currentPage);
                         lastMethodCalled = DslSpecificationHandler.testGiven;
+                        hasGivens = true;
                         break;
                     case "When":
+                        if (!hasGivens) {
+                            errors.push({ lineNumber: step.line, text: "Missing Given statements", type: "error" });
+                            return;
+                        }
+                        if (hasWhens) {
+                            errors.push({ lineNumber: step.line, text: "Only one When statement is allowed", type: "error" });
+                            return;
+                        }
+                        if (hasThens) {
+                            errors.push({ lineNumber: step.line, text: "When statements must be before Then", type: "error" });
+                            return;
+                        }
                         item = DslSpecificationHandler.testWhen(step.content, currentPage);
                         lastMethodCalled = DslSpecificationHandler.testWhen;
+                        hasWhens = true;
                         break;
                     case "Then":
+                        if (!hasGivens || !hasWhens) {
+                            errors.push({ lineNumber: step.line, text: "Missing Given or When statements", type: "error" });
+                            return;
+                        }
                         item = DslSpecificationHandler.testThen(step.content, currentPage);
                         lastMethodCalled = DslSpecificationHandler.testThen;
+                        hasThens = true;
                         break;
                     case "And":
-                        if (lastMethodCalled) item = lastMethodCalled(step.content, currentPage);
+                        if (lastMethodCalled) {
+                            if (lastMethodCalled == DslSpecificationHandler.testGiven) {
+                                if (hasWhens || hasThens) {
+                                    errors.push({ lineNumber: step.line, text: "Given statements must be before When and Then", type: "error" });
+                                    return;
+                                }
+                            }
+                            if (lastMethodCalled == DslSpecificationHandler.testWhen) {
+                                if (!hasGivens) {
+                                    errors.push({ lineNumber: step.line, text: "Missing Given statements", type: "error" });
+                                    return;
+                                }
+                                if (hasWhens) {
+                                    errors.push({ lineNumber: step.line, text: "Only one When statement is allowed", type: "error" });
+                                    return;
+                                }
+                                if (hasThens) {
+                                    errors.push({ lineNumber: step.line, text: "When statements must be before Then", type: "error" });
+                                    return;
+                                }
+                            }
+                            if (lastMethodCalled == DslSpecificationHandler.testThen) {
+                                if (!hasGivens || !hasWhens) {
+                                    errors.push({ lineNumber: step.line, text: "Missing Given or When statements", type: "error" });
+                                    return;
+                                }
+                            }
+                            item = lastMethodCalled(step.content, currentPage);
+                        }
                         break;
                 }
+
+                /*if(stepCount == 1){
+                    if(item.widget !== 'BrowserWindow' || item.widget !== 'ModalWindow' || item.widget !== 'WindowDialog' || item.widget !== 'Notification'){
+                        errors.push({lineNumber: step.line, text: "First step has to define BrowserWindow or type of ModalWindow", type: "error"});
+                        return;
+                    }
+                }*/
 
                 if (typeof item === 'string' || item instanceof String) {
                     errors.push({ lineNumber: step.line, text: item, type: "error" });
@@ -70,7 +133,6 @@ class EditorHandler {
 
                 //console.log(step.content);
                 //console.log(item);
-
 
                 if (item.widget === 'BrowserWindow') {
                     //currentPage = item.id;
@@ -123,14 +185,30 @@ class EditorHandler {
                 }*/
 
                 //const widgetExists = browserWindow.widgets.some(widget => widget.id === item.id);
-                const existingWidget = findWidgetById(item.id, browserWindow.widgets);
+
+                let idToCheck = item.id;
+
+                if (item.widgets != null && item.widgets.length > 0) {
+                    idToCheck = item.widgets[0].id;
+                }
+                //console.log(idToCheck);
+
+                let existingWidget = findWidgetById(idToCheck, browserWindow.widgets);
+
+                if (item.id != idToCheck && !existingWidget) {
+                    existingWidget = findWidgetById(item.id, browserWindow.widgets);
+                }
                 if (!existingWidget) {
                     browserWindow.widgets.push(item);
                     //console.log(item.widget);
                     //console.log(item.id);
                     //console.log(item.actions);
                 } else {
-                    updateWidget(existingWidget, item);
+                    if (existingWidget.id == item.id) {
+                        updateWidget(existingWidget, item);
+                    } else{
+                        updateWidget(existingWidget, item.widgets[0]);
+                    }
                     //update the widget here!!!
                     /*for (const key in item) {
                         if (key === "actions") {
@@ -163,6 +241,14 @@ class EditorHandler {
                     browserWindow.widgets.push(item);
                 }*/
             });
+
+            lastMethodCalled = null;
+            item = null;
+            currentPage = null
+            hasGivens = false;
+            hasWhens = false;
+            hasThens = false;
+
         });
 
         /*lines.forEach((line, lineNumber) => {
@@ -282,6 +368,7 @@ function findWidgetById(widgetId, widgets) {
         //console.log(widget);
         // If the widget ID matches, return the widget object
         if (widget.id === widgetId) {
+            console.log(widget)
             return widget;
         }
         // If the current widget has nested widgets, recursively search within them
@@ -319,7 +406,7 @@ function updateWidget(existingWidget, newWidget) {
                     let existingProp = existingWidget[key][i];
                     if (Object.keys(existingProp)[0] === Object.keys(newProp)[0]) {
                         // Update existing property
-                        existingWidget[key][i] = newProp;
+                        //existingWidget[key][i] = newProp;
                         propFound = true;
                         break;
                     }
