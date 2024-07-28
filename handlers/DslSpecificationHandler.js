@@ -79,7 +79,9 @@ class DslSpecificationHandler {
         //conditions = [];
         const declarativeEntityStatePhrase = `${prePostPattern}((${widgetsPattern}) ".+?" (is|are)( not)? (${statesPattern}))$`;
         const declarativeEntityPropertyStatePhrase = `^(${prePostPattern}) ?(${propertiesPattern}) ".+?" (${prepPattern}) (the )?(${widgetsPattern}) ".+?" (is(?: not)?|are(?: not)?) ".+?"$`;
-        const declarativeEntityPropertyStatePhraseNoPropertyID = `^(${prePostPattern}) ?(${propertiesPattern})( ".*?")? (${prepPattern}) (the )?(${widgetsPattern}) ".*?" (is(?: not)?|are(?: not)?) ".*?"$`;
+        //const declarativeEntityPropertyStatePhraseNoPropertyID = `^(${prePostPattern}) ?(${propertiesPattern})( ".*?")? (${prepPattern}) (the )?(${widgetsPattern}) ".*?" (is(?: not)?|are(?: not)?) ".*?"$`;
+        const declarativeEntityPropertyStatePhraseNoPropertyID = `^(${prePostPattern}) ?(${propertiesPattern})( ".*?")? (${prepPattern}) (the )?(${widgetsPattern}) ".*?" (is(?: not)?|are(?: not)?) (".*?"|${statesPattern})$`;
+
 
         const declarativeEntityStatePhraseRegex = new RegExp(declarativeEntityStatePhrase);
         const declarativeEntityPropertyStatePhraseRegex = new RegExp(declarativeEntityPropertyStatePhraseNoPropertyID);
@@ -121,7 +123,7 @@ class DslSpecificationHandler {
             widget = container.widget;
         }
 
-        let { actions, states, properties } = WidgetHandler.widgets[widget.widget];
+        let { actions, states, properties, regex } = WidgetHandler.widgets[widget.widget];
 
         let possibleAttributes = [...actions, ...states, ...properties];
 
@@ -132,6 +134,15 @@ class DslSpecificationHandler {
         }
 
         let getChangeableInitWidgets = WidgetHandler.getChangeableInitWidgets();
+
+        if (properties.includes(attribute)) {
+            let value = getValuesAfterKeywords(content);
+            if (regex != null) {
+                if (!regex.test(value)) {
+                    return "Value " + value + " does not fit the widget " + widget.widget;
+                }
+            }
+        }
 
         if (properties.includes(attribute) && getChangeableInitWidgets.includes(widget.widget)) {
             //console.log(content);
@@ -196,7 +207,9 @@ class DslSpecificationHandler {
         //const verbAction = `^${whenWordsPattern}(${actionsPattern})(?:\\s+(${prepPattern}(?:\\s+the)?|the))?\\s*-?\\s*(\\w+)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s+(${prepPattern})\\s+(${widgetsPattern})\\s+"[^"]*"\\s+(${prepPattern})(?:\\s+the)?\\s*(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
         //const DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})(?:\\s+(${prepPattern}))?(?:\\s+the)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
 
-        let actionRef = `^${whenWordsPattern}(${actionsPattern})(?:\\s+on)?\\s*(?:(?:${propertiesPattern})\\s+"[^"]+?")?\\s*(?:${prepPattern})?\\s*(?:(?:the|on)\\s+(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+and)?\\s*(?:"[^"]*?")?(?:\\s+on)?\\s*(?:"[^"]+?"\\s*-\s*"[^"]+?")?(?:\\s+(?:for the|the|on))?\\s*(?:(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+(on|off|in))?\\s+(${widgetsPattern})\\s+"[^"]+"(?:\\s+(on|off|in))?(?:\\s+(of|for|for the|of the))?\\s*(?:${prepPattern})?\\s*(?:(${widgetsPattern})\\s+"[^"]+")?$`
+        //let actionRef = `^${whenWordsPattern}(${actionsPattern})(?:\\s+on)?\\s*(?:(?:${propertiesPattern})\\s+"[^"]+?")?\\s*(?:${prepPattern})?\\s*(?:(?:the|on)\\s+(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+and)?\\s*(?:"[^"]*?")?(?:\\s+on)?\\s*(?:"[^"]+?"\\s*-\s*"[^"]+?")?(?:\\s+(?:for the|the|on))?\\s*(?:(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+(on|off|in))?\\s+(${widgetsPattern})\\s+"[^"]+"(?:\\s+(on|off|in))?(?:\\s+(of|for|for the|of the))?\\s*(?:${prepPattern})?\\s*(?:(${widgetsPattern})\\s+"[^"]+")?$`
+        let actionRef = `^${whenWordsPattern}(${actionsPattern})(?:\\s+(?:on|the))?\\s*(?:(?:${propertiesPattern})\\s+"[^"]+?")?\\s*(?:${prepPattern})?\\s*(?:(?:the|on)\\s+(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+and)?\\s*(?:"[^"]*?")?(?:\\s+on)?\\s*(?:"[^"]+?"\\s*-\s*"[^"]+?")?(?:\\s+(?:for the|the|on))?\\s*(?:(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+(on|off|in))?\\s+(${widgetsPattern})\\s+"[^"]+"(?:\\s+(on|off|in))?(?:\\s+(of|for|for the|of the))?\\s*(?:${prepPattern})?\\s*(?:(${widgetsPattern})\\s+"[^"]+")?$`
+
 
         //let newVerbAction = `^${actionRef}(?:\\s+and)?\\s*.*?\\s*(?:on)?\\s*(?:(.+?)-(.+?))?\\s*(?:(?:for the|the|on))?\\s*(?:(?:(${widgetsPattern})\\s+(.+?))?)\\s*(?:(on|off|in))?\\s*(${widgetsPattern})\\s+(.+?)\\s*(?:(on|off|in))?\\s*(?:(?:of|for|for the|of the))?\\s*(?:${prepPattern})?\\s*(?:(?:(${widgetsPattern})\\s+(.+?)))?$`
         //newVerbAction = `^${actionRef}(?:\\s+and)?\\s*(?:"[^"]*?"\\s*)?(?:on)?\\s*(?:(.+?)-(.+?))?\\s*(?:(?:for the|the|on)\\s+)?(${widgetsPattern}\\s+"[^"]+?")?(?:\\s+(on|off|in))?\\s*(${widgetsPattern}\\s+"[^"]+?")(?:\\s+(on|off|in))?\\s*(?:(?:of|for|for the|of the)\\s+)?(?:${prepPattern}\\s+)?(${widgetsPattern}\\s+"[^"]+?")?$`
@@ -313,7 +326,8 @@ class DslSpecificationHandler {
         //console.log(content)
         const declarativeEntityStatePhrase = `${prePostPattern}((${widgetsPattern}) ".+?" (is|are)( not)? (${statesPattern}))$`;
         const declarativeEntityPropertyStatePhrase = `^(${prePostPattern}) ?(${propertiesPattern}) ".+?" (${prepPattern}) (the )?(${widgetsPattern}) ".+?" (is(?: not)?|are(?: not)?) ".+?"$`;
-        const declarativeEntityPropertyStatePhraseNoPropertyID = `^(${prePostPattern}) ?(${propertiesPattern})( ".*?")? (${prepPattern}) (the )?(${widgetsPattern}) ".+?" (is(?: not)?|are(?: not)?) ".+?"$`;
+        const declarativeEntityPropertyStatePhraseNoPropertyID = `^(${prePostPattern}) ?(${propertiesPattern})( ".*?")? (${prepPattern}) (the )?(${widgetsPattern}) ".*?" (is(?: not)?|are(?: not)?) (".*?"|${statesPattern})$`;
+
 
 
         const declarativeEntityStatePhraseRegex = new RegExp(declarativeEntityStatePhrase);
@@ -357,7 +371,7 @@ class DslSpecificationHandler {
             widget = container.widget;
         }
 
-        let { actions, states, properties } = WidgetHandler.widgets[widget.widget];
+        let { actions, states, properties, regex } = WidgetHandler.widgets[widget.widget];
 
         let possibleAttributes = [...actions, ...states, ...properties];
 
@@ -365,6 +379,15 @@ class DslSpecificationHandler {
 
         if (attribute === null) {
             return "No matching state or property found in content for the identified widget.";
+        }
+
+        if (properties.includes(attribute)) {
+            let value = getValuesAfterKeywords(content);
+            if (regex != null) {
+                if (!regex.test(value)) {
+                    return "Value " + value + " does not fit the widget " + widget.widget;
+                }
+            }
         }
         /*
         if (containsWordNot(content)) {
@@ -453,6 +476,7 @@ function getValue(inputString) {
 
 function getValuesAfterKeywords(inputString) {
     // Regular expression to find instances of "is", "are", or "not" followed by a quoted word
+    // I WANT TO DO CONVERSION HERE TO EITHER STRING OR INT - CAN WE ALSO CHECK FOR WHETHER THE VALUE IS OKAY AND ERRORHANDLE
     const regex = /\b(?:is|are|not)\s+"([^"]+)"/;
     let match = regex.exec(inputString);
 
@@ -461,8 +485,7 @@ function getValuesAfterKeywords(inputString) {
         return match[1]; // match[1] captures the group within the quotes
     }
 
-    // If no match is found, return null
-    return null;
+    return "";
 }
 
 function getPropertyID(inputString, keyword) {
