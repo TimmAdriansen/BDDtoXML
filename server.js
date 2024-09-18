@@ -12,39 +12,7 @@ function runServer() {
 
     // Enable CORS for all routes and origins
     app.use(cors());
-
-    //route
-    /*app.get(route, (req, res) => {
-      res.send(`<?xml version="1.0" encoding="UTF-8"?>
-      <Website>
-          <Browser_Window name="page1">
-              <Text>Example page 1</Text>
-              <Button url="page2">Go</Button>
-              <Calendar date="10/10/2000"></Calendar>
-              <Checkbox boolean="false"></Checkbox>
-              <Dropdown_Button></Dropdown_Button>
-              <Dropdown_List></Dropdown_List>
-              <Grid></Grid>
-              <Label></Label>
-              <Link url="page2">another page</Link>
-              <List_Box></List_Box>
-              <Menu>
-                  <Menu_Item>Example item</Menu_Item>
-              </Menu>
-              <Message_Box></Message_Box>
-              <Text>test!</Text>
-              <Text_Field id="inputField">input text here</Text_Field>
-          </Browser_Window>
-          <Browser_Window name="page2">
-              <Text>Example page 2</Text>
-              <Button url="page1">Go back</Button>
-              <Button id="showDialog">Show</Button>
-              <Window_Dialog id="showDialog"></Window_Dialog>
-          </Browser_Window>
-      </Website>`)
-      //res.json({ message: 'Hello from server!!!!' });
-    });*/
-
+    
     app.get(route, (req, res) => {
         const startTime = Date.now(); // Record the start time of the request
 

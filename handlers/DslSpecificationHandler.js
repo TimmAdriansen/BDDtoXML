@@ -87,7 +87,7 @@ class DslSpecificationHandler {
         const declarativeEntityPropertyStatePhraseRegex = new RegExp(declarativeEntityPropertyStatePhraseNoPropertyID);
 
         let widgets = []
-        let attribute = null;
+        //let attribute = null;
 
         if (!declarativeEntityStatePhraseRegex.test(content) && !declarativeEntityPropertyStatePhraseRegex.test(content)) {
             return "Content is invalid";
@@ -123,42 +123,81 @@ class DslSpecificationHandler {
             widget = container.widget;
         }
 
-        let { actions, states, properties, regex } = WidgetHandler.widgets[widget.widget];
+        let { /*actions,*/ states, properties, regex } = WidgetHandler.widgets[widget.widget];
 
-        let possibleAttributes = [...actions, ...states, ...properties];
+        let possibleAttributes = [/*...actions,*/ ...states, ...properties];
 
-        attribute = getAttribute(content, possibleAttributes)
+        let state = getAttribute(content, states)
+        let property = getAttribute(content, properties);
 
-        if (attribute === null) {
+        //attribute = getAttribute(content, possibleAttributes)
+
+        if (state === null && property === null) {
             return "No matching state or property found in content for the identified widget.";
         }
 
+        if (state === null && getValuesAfterKeywords(content) === null) {
+            return "No matching state or value found in content for the identified widget.";
+        }
+
+
+
         let getChangeableInitWidgets = WidgetHandler.getChangeableInitWidgets();
 
-        if (properties.includes(attribute)) {
-            let value = getValuesAfterKeywords(content);
-            if (regex != null) {
-                if (!regex.test(value)) {
-                    return "Value " + value + " does not fit the widget " + widget.widget;
+        //we dont need to set the value of textfields (only the getChangeableInitWidgets) - what we need to figure out is how to make a DLIST with options.
+        if (property) {
+            let propertyID = getPropertyID(content, property);
+            if (property === "option") {
+                //ask is a state present? because then we dont need value -> option "a" is selected vs option "b" is "true"
+                if (state) {
+                    widget.properties.push({ [property]: propertyID });
+                } else {
+                    let value = getValuesAfterKeywords(content);
+                    if (regex != null) {
+                        if (!regex.test(value)) {
+                            return "Value " + value + " does not fit the widget " + widget.widget;
+                        }
+                        widget.properties.push({ [property]: propertyID });
+                    } else {
+                        return "not implemented yet"
+                    }
+                }
+            } else {
+                if (state) {
+                    //widget.properties.push({ [property]: propertyID });
+                } else {
+                    let value = getValuesAfterKeywords(content);
+                    if (regex != null) {
+                        if (!regex.test(value)) {
+                            return "Value " + value + " does not fit the widget " + widget.widget;
+                        }
+                        widget.properties.push({ [property]: value });
+                    } else {
+                        return "not implemented yet"
+                    }
                 }
             }
         }
 
-        if (properties.includes(attribute) && getChangeableInitWidgets.includes(widget.widget)) {
+        /*if (properties.includes(attribute) && getChangeableInitWidgets.includes(widget.widget)) {
             //console.log(content);
             widget.properties.push({ [attribute]: getValuesAfterKeywords(content) });
             //console.log(getPropertyID(content, attribute));
             //console.log(getValue(content));
             //widget.actions.push({ type: "set" + attribute, params: { value: getValue(content) }, negated: containsWordNot(content), conditions: conditions })
-        }
+        }*/
 
         let existingConditionId = getIdFromConditions(widget.id);
         let id = existingConditionId !== null ? existingConditionId : currentPage + ":" + containerID + widget.id;
 
-        if (properties.includes(attribute)) {
-            conditions.push({ type: attribute + "Is", params: { widget: widget.widget, id: id, value: getValuesAfterKeywords(content) }, negated: containsWordNot(content) })
-        } else {
-            conditions.push({ type: attribute, params: { widget: widget.widget, id: id }, negated: containsWordNot(content) })
+        //look into this solution
+        if (property && !state) {
+            conditions.push({ type: property + "Is", params: { widget: widget.widget, id: id, value: getValuesAfterKeywords(content) }, negated: containsWordNot(content) })
+        } /*else if (property && state) {
+            conditions.push({ type: property + "Is", params: { widget: widget.widget, id: id, value: state }, negated: containsWordNot(content) })
+        }*/ 
+        else {
+            conditions.push({ type: state, params: { widget: widget.widget, id: id }, negated: containsWordNot(content) })
         }
 
         //console.log(widget);
@@ -268,24 +307,31 @@ class DslSpecificationHandler {
                 widget = container.widget;
             }
 
-            let { actions, states, properties } = WidgetHandler.widgets[widget.widget];
 
-            let possibleAttributes = [...actions, ...states, ...properties];
 
-            attribute = getAttribute(content, possibleAttributes)
+            let { actions, /*states,*/ properties } = WidgetHandler.widgets[widget.widget];
 
-            if (attribute === null) {
-                return "No matching state or property found in content for the identified widget.";
+            //let possibleAttributes = [...actions, /*...states,*/ ...properties];
+
+            let action = getAttribute(content, actions)
+            let property = getAttribute(content, properties);
+
+            //attribute = getAttribute(content, possibleAttributes)
+
+            if (action === null && property === null) {
+                return "No matching action or property found in content for the identified widget.";
             }
 
-            possibleAttributes = [...properties];
+            //possibleAttributes = [...properties];
 
-            attribute = getAttribute(content, possibleAttributes)
+            //attribute = getAttribute(content, possibleAttributes)
             //console.log(content)
             //console.log(possibleAttributes)
             //console.log(attribute)
 
-            if (attribute) {
+
+
+            if (property) {
                 //console.log(attribute);
                 /*console.log(content);
                 console.log(attribute);
@@ -293,23 +339,30 @@ class DslSpecificationHandler {
                 console.log(widgets[0].widget)
                 console.log(widgets[0].id)*/
 
-                possibleAttributes = [...actions, ...states, ...properties];
+                //possibleAttributes = [...actions, ...states, ...properties];
 
-                let attribute2 = getAttribute(content, possibleAttributes)
+                //let attribute2 = getAttribute(content, possibleAttributes)
                 //console.log(attribute2)
 
-                conditions.push({ type: attribute2, params: { widget: widget.widget, id: currentPage + ":" + containerID + widget.id, type: attribute, typeId: getPropertyID(content, attribute) }, negated: containsWordNot(content) })
-            } else {
-                possibleAttributes = [...actions, ...states, ...properties];
+                let propertyID = getPropertyID(content, property);
+                if (property === "option") {
+                    widget.properties.push({ [property]: propertyID });
+                } else {
+                    //not sure if needed but here is the space for it!
+                }
 
-                attribute = getAttribute(content, possibleAttributes)
+                conditions.push({ type: action, params: { widget: widget.widget, id: currentPage + ":" + containerID + widget.id, type: property, typeId: propertyID}, negated: containsWordNot(content) })
+            } else {
+                //possibleAttributes = [...actions, ...states, ...properties];
+
+                //attribute = getAttribute(content, possibleAttributes)
 
                 /*console.log(content);
                 console.log(attribute);
                 console.log(containsWordNot(content));
                 console.log(widgets[0].widget)
                 console.log(widgets[0].id)*/
-                conditions.push({ type: attribute, params: { widget: widget.widget, id: currentPage + ":" + containerID + widget.id }, negated: containsWordNot(content) })
+                conditions.push({ type: action, params: { widget: widget.widget, id: currentPage + ":" + containerID + widget.id }, negated: containsWordNot(content) })
             }
         }
         else {
@@ -427,6 +480,7 @@ function getWidget(content) {
     return null;
 }
 
+//rewrite this if we have more than one attribute that fits (example: text of Text is set)
 function getAttribute(content, possibleAttributes) {
     for (let attribute of possibleAttributes) {
         let regex = new RegExp(`\\b${attribute}\\b`);
@@ -476,7 +530,6 @@ function getValue(inputString) {
 
 function getValuesAfterKeywords(inputString) {
     // Regular expression to find instances of "is", "are", or "not" followed by a quoted word
-    // I WANT TO DO CONVERSION HERE TO EITHER STRING OR INT - CAN WE ALSO CHECK FOR WHETHER THE VALUE IS OKAY AND ERRORHANDLE
     const regex = /\b(?:is|are|not)\s+"([^"]+)"/;
     let match = regex.exec(inputString);
 
@@ -485,7 +538,7 @@ function getValuesAfterKeywords(inputString) {
         return match[1]; // match[1] captures the group within the quotes
     }
 
-    return "";
+    return null;
 }
 
 function getPropertyID(inputString, keyword) {
@@ -508,9 +561,9 @@ function getPropertyID(inputString, keyword) {
 function getContainer(widgets) {
     let isContainerPresent = widgets.some(widget =>
         widget.widget === 'FieldSet' ||
-        widget.widget === 'Menu' ||
-        widget.widget === 'ListBox' ||
-        widget.widget === 'DropdownList' ||
+        //widget.widget === 'Menu' ||
+        //widget.widget === 'ListBox' ||
+        //widget.widget === 'DropdownList' ||
         widget.widget === 'ModalWindow' ||
         widget.widget === 'WindowDialog'
     );
@@ -521,7 +574,7 @@ function getContainer(widgets) {
     if (isContainerPresent) {
         let containerWidget;
         widgets.forEach(container => {
-            if (['FieldSet', 'Menu', 'ListBox', 'DropdownList', 'ModalWindow', 'WindowDialog'].includes(container.widget)) {
+            if (['FieldSet', /*'Menu', 'ListBox', 'DropdownList',*/ 'ModalWindow', 'WindowDialog'].includes(container.widget)) {
                 if (!containerWidget) {
                     // Filter out the current container from its own widgets list
                     let newWidgets = widgets.filter(widget => widget.id !== container.id);

@@ -206,7 +206,7 @@ class EditorHandler {
                 } else {
                     if (existingWidget.id == item.id) {
                         updateWidget(existingWidget, item);
-                    } else{
+                    } else {
                         updateWidget(existingWidget, item.widgets[0]);
                     }
                     //update the widget here!!!
@@ -407,6 +407,10 @@ function updateWidget(existingWidget, newWidget) {
                     if (Object.keys(existingProp)[0] === Object.keys(newProp)[0]) {
                         // Update existing property
                         //existingWidget[key][i] = newProp;
+                        if (Object.keys(existingProp)[0] === "option") {
+                            existingWidget[key].push(newProp);
+                            
+                        }
                         propFound = true;
                         break;
                     }

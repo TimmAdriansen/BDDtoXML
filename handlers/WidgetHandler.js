@@ -28,8 +28,8 @@ class WidgetHandler {
         Label: { actions: [...this.commonActions], states: [...this.commonStates], properties: ['text'], regex: this.regexAnyString },
         ProgressBar: { actions: [...this.commonActions], states: [...this.commonStates], properties: ['value'], regex: this.regexIntNumbers },
         Tooltip: { actions: [...this.commonActions], states: [...this.commonStates], properties: [], regex: null},
-        CheckBox: { actions: [...this.commonActions, 'check', 'pick', 'select', 'choose', 'uncheck'], states: [...this.commonStates, 'checked', 'unchecked', 'picked', 'selected', 'chosen'], properties: ['option', 'options'], regex: this.regexBoolean},
-        ListBox: { actions: [...this.commonActions, 'pick', 'select', 'choose'], states: [...this.commonStates, 'picked', 'selected', 'chosen'], properties: ['option', 'options'], regex: this.regexBoolean},
+        CheckBox: { actions: [...this.commonActions, 'check', 'pick', 'select', 'choose', 'uncheck'], states: [...this.commonStates, 'checked', 'unchecked', 'picked', 'selected', 'chosen'], properties: ['option', /*'options'*/], regex: this.regexBoolean},
+        ListBox: { actions: [...this.commonActions, 'pick', 'select', 'choose'], states: [...this.commonStates, 'picked', 'selected', 'chosen'], properties: ['option', /*'options'*/], regex: this.regexBoolean},
         RadioButton: { actions: [...this.commonActions, 'pick', 'select', 'choose'], states: [...this.commonStates, 'picked', 'selected', 'chosen'], properties: ['option'], regex: this.regexBoolean},
         Button: { actions: [...this.commonActions, 'click', 'submit'], states: [...this.commonStates, 'clicked', 'submitted'], properties: ['value'], regex: this.regexBoolean},
         Calendar: { actions: [...this.commonActions, 'select', 'choose', 'pick', 'set'], states: [...this.commonStates, 'selected', 'chosen', 'picked', 'set'], properties: ['date'], regex: this.regexDate},
@@ -79,7 +79,7 @@ class WidgetHandler {
     }
 
     static getChangeableInitWidgets() {
-        return ["Text", "Label"];
+        return ["Text", "Label", "ListBox", "DropdownList", "Menu"];
     }
 }
 

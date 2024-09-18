@@ -38,9 +38,9 @@ class SeleniumHandler {
             await this.driver.wait(until.elementIsVisible(passwordField), 10000);
             await passwordField.sendKeys(password);
 
-            let loginButton = await this.driver.wait(until.elementLocated(By.xpath("//button[contains(text(), 'Log in')]")), 10000);
+            let loginButton = await this.driver.wait(until.elementLocated(By.xpath("//button[.//span[contains(text(), 'Log in')]]")), 10000);
             await loginButton.click();
-
+            
             await this.driver.wait(until.elementLocated(By.css('[data-testid="file-import-button"]')), 20000);
 
             return true;
@@ -229,6 +229,8 @@ class SeleniumHandler {
 
             await sleep(5000);
 
+            bool = true; 
+
             /*let printElement = await printElements(childElements);
 
             console.log(await printElement.getText())
@@ -258,8 +260,6 @@ class SeleniumHandler {
             element = await loopElements(childElements, "Save local copy...");
 
             await element.click();*/
-
-            bool = true;
         } catch (error) {
             await this.driver.takeScreenshot().then(
                 function (image, err) {
