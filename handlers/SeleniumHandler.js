@@ -41,7 +41,8 @@ class SeleniumHandler {
             let loginButton = await this.driver.wait(until.elementLocated(By.xpath("//button[.//span[contains(text(), 'Log in')]]")), 10000);
             await loginButton.click();
             
-            await this.driver.wait(until.elementLocated(By.css('[data-testid="file-import-button"]')), 20000);
+            await this.driver.wait(until.elementLocated(By.xpath("//*[contains(text(), 'Recents')]")), 20000);
+            
 
             return true;
         } catch (error) {
@@ -66,13 +67,36 @@ class SeleniumHandler {
             const button = this.driver.wait(until.elementLocated(By.css('[data-testid="community-duplicate-button"]')), 10000);
             await button.click();
 
-            await this.driver.sleep(2000);
+            try {
+                const popup = await this.driver.wait(
+                    until.elementLocated(By.xpath("//*[contains(text(), 'Where would you like to open it?')]")), 
+                    5000 // Shorter timeout to detect the popup
+                );
+    
+                if (popup) {
+                    console.log("Popup detected. Waiting for user interaction...");
+    
+                    // Let the user select a team (or auto-select a default team)
+                    const teamOption = await this.driver.wait(
+                        until.elementLocated(By.xpath("//*[contains(text(), 'Andreas Chang')]")), 
+                        5000
+                    );
+                    await teamOption.click();
+                }
+            } catch (popupNotFoundError) {
+                console.log("Popup not detected. Continuing process...");
+            }
+
+            await sleep(5000); // Wait for the action to complete
 
             const windowHandles = await this.driver.getAllWindowHandles();
 
-            await this.driver.switchTo().window(windowHandles[windowHandles.length - 1]);
+            await this.driver.switchTo().window(windowHandles[1]);
 
-            return true;
+            await sleep(10000); // Wait for the action to complete
+
+            return await this.driver.getCurrentUrl();
+            
 
             /*
 

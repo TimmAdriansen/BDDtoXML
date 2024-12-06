@@ -1,6 +1,7 @@
 const electron = require('electron');
 const path = require('path');
 const os = require('os');
+const fs = require('fs').promises;
 const runTests = require('./main.js');
 const runServer = require('./server.js');
 const XMLHandler = require("./handlers/XMLHandler.js");
@@ -40,6 +41,53 @@ const menuTemplate = [
                 win.webContents.send('showCredentialsModal');
             }
         }
+    },
+    {
+        label: 'File',
+        submenu: [
+            {
+                label: 'New page file',
+                async click() {
+                    win.webContents.send('showNewFileModal');
+                },
+            },
+            {
+                label: 'Open page file',
+                async click() {
+                    const projectFolder = path.resolve(projectPath); // Resolves to the absolute path of the project folder
+
+                    const result = await electron.dialog.showOpenDialog({
+                        title: 'Open Page File',
+                        defaultPath: projectFolder, // Set the default directory to the project folder
+                        filters: [
+                            { name: 'Text Files', extensions: ['txt'] }, // Allow only .txt files
+                        ],
+                        properties: ['openFile']
+                    });
+
+                    // If the user selects a file
+                    if (!result.canceled && result.filePaths.length > 0) {
+                        const filePath = path.resolve(result.filePaths[0]); // Get the absolute path of the selected file
+
+                        // Validate that the file is within the project folder
+                        if (!filePath.startsWith(projectFolder)) {
+                            console.error('The selected file is outside the allowed project folder.');
+                            electron.dialog.showErrorBox(
+                                'Invalid File Selection',
+                                `Please select a file from the project folder: ${projectFolder}`
+                            );
+                            return; // Exit the function
+                        }
+                        const fileName = path.basename(filePath); // Get the file name (e.g., 'example.txt')
+
+                        // Send the file name to the renderer process
+                        win.webContents.send('addTab', fileName);
+                    } else {
+                        console.log('File selection canceled.');
+                    }
+                },
+            },
+        ]
     },
     {
         label: 'PrintAllActions',
@@ -86,7 +134,7 @@ const menuTemplate = [
             } else {
                 theme = "dark";
                 electron.nativeTheme.themeSource = "dark";
-                win.setIcon(path.join(__dirname, './resources/resumeWhite.PNG'));
+                //win.setIcon(path.join(__dirname, './resources/resumeWhite.PNG'));
                 win.webContents.send('toggleTheme', 'dark');
             }
             //win.webContents.send('toggle-theme');
@@ -170,7 +218,7 @@ function createWindow() {
     win = new BrowserWindow({
         width: width,
         height: height,
-        icon: path.join(__dirname, './resources/resumeWhite.PNG'),
+        icon: path.join(__dirname, './resources/resume.png'),
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true,
@@ -206,6 +254,7 @@ function createInitialPromptWindow() {
         width: 400,
         height: 350,
         resizable: false,
+        icon: path.join(__dirname, './resources/resume.png'),
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true,
@@ -296,7 +345,7 @@ async function attemptLogin(username, password) {
 electron.ipcMain.on('create-new-project', async (event, projectN, filePath) => {
     newProject = true;
     projectName = projectN;
-    projectPath = filePath;
+    projectPath = filePath + "\\" + projectN;
     createWindow();
 });
 
@@ -356,7 +405,8 @@ async function initProject() {
 
     win.webContents.send('updateStatusBar', 33);
 
-    if (!await SeleniumHandler.copyTemplate()) {
+    let figma = await SeleniumHandler.copyTemplate();
+    if (figma == null) {
         electron.dialog.showMessageBox({
             type: 'info',
             buttons: ['OK'],
@@ -369,7 +419,7 @@ async function initProject() {
 
     win.webContents.send('updateStatusBar', 66);
 
-    let figma = await SeleniumHandler.renameFile(projectName);
+    /*let figma = await SeleniumHandler.renameFile(projectName);
     if (figma == null) {
         electron.dialog.showMessageBox({
             type: 'info',
@@ -379,9 +429,10 @@ async function initProject() {
         });
         SeleniumHandler.closeDriver();
         return;
-    }
+    }*/
 
-    FileHandler.createAndSaveJson(projectPath + "\\" + projectName, figma, "")
+    //FileHandler.createAndSaveJson(projectPath + "\\" + projectName, figma, "")
+    FileHandler.createAndSaveProject(projectPath + "\\" + projectName, figma);
 
     win.webContents.send('setFigmaSource', FigmaViewHandler.convertLinkToEmbed(figma));
 
@@ -436,35 +487,112 @@ electron.ipcMain.on('open-folder-dialog', async (event) => {
     }
 });
 
-electron.ipcMain.on('saveBDD', (event, newBDD) => {
+electron.ipcMain.on('saveBDD', (event, fileName, newBDD) => {
     BDD = newBDD;
-    saveProject();
+    saveProject(fileName);
+});
+
+electron.ipcMain.on('getTabContent', async (event, fileName) => {
+    const fileContents = await fs.readFile(projectPath + "\\" + fileName, 'utf-8');
+    console.log(`Loaded content for ${fileName}:\n${fileContents}`);
+    win.webContents.send('setBDD', fileContents);
+});
+
+electron.ipcMain.on('saveBeforeGenerating', async (event, fileName, newBDD) => {
+    try {
+
+        BDD = newBDD;
+        await saveProject(fileName);
+
+
+
+        //foreach txt file in project folder, do the stuff below, if the length is bigger than 0, set canGenerate and tryToGenerate to false, break loop
+        const files = await fs.readdir(projectPath);
+        const txtFiles = files.filter((file) => path.extname(file) === '.txt');
+
+        let scenarios = ""
+
+        for (const txtFile of txtFiles) {
+            // Read and process each .txt file
+            const filePath = path.join(projectPath, txtFile);
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+
+            // Update annotations
+            const annotations = EditorHandler.updateEditorAnnotations(fileContent);
+
+            // If any annotations exist, stop the process
+            if (annotations.length > 0) {
+                EditorHandler.canGenerate = false;
+                // Stop further processing
+                break;
+            }
+            EditorHandler.canGenerate = true;
+            scenarios += fileContent + "\n";
+        }
+
+        if (EditorHandler.tryToGenerate && EditorHandler.canGenerate) {
+            //lets just add all the texts together EASY - editor value doesnt exist here
+            console.log(scenarios);
+            annotations = EditorHandler.updateEditorAnnotations(scenarios);
+            EditorHandler.tryToGenerate = false;
+            XMLHandler.updateXML(EditorHandler.pages);
+        } else if (EditorHandler.tryToGenerate && !EditorHandler.canGenerate) {
+            EditorHandler.tryToGenerate = false;
+            electron.dialog.showMessageBox({
+                type: 'info',
+                title: 'Alert',
+                message: "Please fix all errors before generating",
+                buttons: ['OK']
+            });
+        }
+    } catch (error) {
+        console.error('Error during saveBeforeGenerating:', error);
+
+        // Show an error popup if something fails
+        electron.dialog.showMessageBox({
+            type: 'error',
+            buttons: ['OK'],
+            title: 'Error',
+            message: 'An error occurred while processing files.',
+            detail: error.message,
+        });
+    }
+
 });
 
 electron.ipcMain.on('errorDetection', (event, editor) => {
     let annotations = EditorHandler.updateEditorAnnotations(editor);
-    if (annotations.length == 0) {
-        EditorHandler.canGenerate = true;
-    }
-
-    if (EditorHandler.tryToGenerate && EditorHandler.canGenerate) {
-        annotations = EditorHandler.updateEditorAnnotations(editor);
-        EditorHandler.tryToGenerate = false;
-        XMLHandler.updateXML(EditorHandler.pages);
-    } else if (EditorHandler.tryToGenerate && !EditorHandler.canGenerate) {
-        EditorHandler.tryToGenerate = false;
-        electron.dialog.showMessageBox({
-            type: 'info',
-            title: 'Alert',
-            message: "Please fix all errors before generating",
-            buttons: ['OK']
-        });
-    }
     win.webContents.send('setErrorAnnotations', annotations);
 });
 
-async function saveProject() {
-    await FileHandler.updateBddInJsonFile(projectPath + "\\" + projectName, BDD);
+electron.ipcMain.on('createFile', async (event, fileName) => {
+    try {
+        const filePath = path.join(projectPath, `${fileName}.txt`); // Append .txt extension
+
+        await fs.writeFile(filePath, '', 'utf-8');
+
+        fileName = path.basename(filePath);
+
+        win.webContents.send('addTab', fileName);
+
+    } catch (error) {
+        // Show a popup only if file creation failed
+        dialog.showMessageBox({
+            type: 'error',
+            buttons: ['OK'],
+            title: 'File Creation Failed',
+            message: 'An error occurred while creating the file.',
+            detail: error.message // Include error details in the popup
+        });
+    }
+});
+
+async function saveProject(fileName) {
+    //await FileHandler.updateBddInJsonFile(projectPath + "\\" + fileName, BDD);
+    if (fileName == null) {
+        return;
+    }
+    await FileHandler.updateBddInFile(projectPath + "\\" + fileName, BDD);
 }
 
 function runSelenium() {

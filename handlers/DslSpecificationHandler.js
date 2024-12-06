@@ -195,13 +195,34 @@ class DslSpecificationHandler {
             conditions.push({ type: property + "Is", params: { widget: widget.widget, id: id, value: getValuesAfterKeywords(content) }, negated: containsWordNot(content) })
         } /*else if (property && state) {
             conditions.push({ type: property + "Is", params: { widget: widget.widget, id: id, value: state }, negated: containsWordNot(content) })
-        }*/ 
+        }*/
         else {
             conditions.push({ type: state, params: { widget: widget.widget, id: id }, negated: containsWordNot(content) })
         }
 
         //console.log(widget);
         if (container.widget) {
+            if (container.widget.widget == "Grid") {
+                const cellMatch = content.match(/\b(\d{1,2}:\d{1,2})\b/);
+                if (cellMatch) {
+                    let cell = cellMatch[1]; // Extract the cell value
+
+                    // Validate cell format
+                    const [x, y] = cell.split(":").map(Number);
+                    if (x > 99 || y > 99) {
+                        return "cell must be defined as 'x:y' where x and y are between 0 and 99";
+                    }
+                    let widgets = container.widget.widgets;
+                    delete container.widget.widgets;
+                    container.widget.cells = [];
+                    container.widget.cells.push({
+                        id: cell,
+                        widgets: widgets
+                    });
+                } else {
+                    return "no cell defined";
+                }
+            }
             return container.widget;
         }
         return widget;
@@ -247,7 +268,34 @@ class DslSpecificationHandler {
         //const DeclarativeEntityAction = `^${whenWordsPattern}(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*(${actionsPattern})(?:\\s+(${prepPattern}))?(?:\\s+the)?(?:\\s+(${widgetsPattern})\\s+"[^"]*")?\\s*$`;
 
         //let actionRef = `^${whenWordsPattern}(${actionsPattern})(?:\\s+on)?\\s*(?:(?:${propertiesPattern})\\s+"[^"]+?")?\\s*(?:${prepPattern})?\\s*(?:(?:the|on)\\s+(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+and)?\\s*(?:"[^"]*?")?(?:\\s+on)?\\s*(?:"[^"]+?"\\s*-\s*"[^"]+?")?(?:\\s+(?:for the|the|on))?\\s*(?:(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+(on|off|in))?\\s+(${widgetsPattern})\\s+"[^"]+"(?:\\s+(on|off|in))?(?:\\s+(of|for|for the|of the))?\\s*(?:${prepPattern})?\\s*(?:(${widgetsPattern})\\s+"[^"]+")?$`
-        let actionRef = `^${whenWordsPattern}(${actionsPattern})(?:\\s+(?:on|the))?\\s*(?:(?:${propertiesPattern})\\s+"[^"]+?")?\\s*(?:${prepPattern})?\\s*(?:(?:the|on)\\s+(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+and)?\\s*(?:"[^"]*?")?(?:\\s+on)?\\s*(?:"[^"]+?"\\s*-\s*"[^"]+?")?(?:\\s+(?:for the|the|on))?\\s*(?:(${widgetsPattern})\\s+"[^"]+?")?(?:\\s+(on|off|in))?\\s+(${widgetsPattern})\\s+"[^"]+"(?:\\s+(on|off|in))?(?:\\s+(of|for|for the|of the))?\\s*(?:${prepPattern})?\\s*(?:(${widgetsPattern})\\s+"[^"]+")?$`
+        let actionRef = `^${whenWordsPattern}(${actionsPattern})` +
+            `(?:\\s+(?:on|the))?` +
+            `\\s*` +
+            `(?:(?:${propertiesPattern})\\s+"[^"]+?")?` +
+            `\\s*` +
+            `(?:${prepPattern})?` +
+            `\\s*` +
+            `(?:(?:the|on)\\s+(${widgetsPattern})\\s+"[^"]+?")?` +
+            `(?:\\s+and)?` +
+            `\\s*` +
+            `(?:"[^"]*?")?` +
+            `(?:\\s+on)?` +
+            `\\s*` +
+            `(?:"[^"]+?"\\s*-\s*"[^"]+?")?` +
+            `(?:\\s+(?:for the|the|on))?` +
+            `\\s*` +
+            `(?:(${widgetsPattern})\\s+"[^"]+?")?` +
+            `(?:\\s+(on|off|in))?` +
+            `\\s+` +
+            `(${widgetsPattern})` +
+            `\\s+"[^"]+"` +
+            `(?:\\s+(on|off|in))?` +
+            `(?:\\s+of\\s+the\\s+cell\\s+"[0-9]{1,2}\\s*:\\s*[0-9]{1,2}")?` +
+            `(?:\\s+(of|for|for the|of the))?` +
+            `\\s*` +
+            `(?:${prepPattern})?` +
+            `\\s*` +
+            `(?:(${widgetsPattern})\\s+"[^"]+")?$`;
 
 
         //let newVerbAction = `^${actionRef}(?:\\s+and)?\\s*.*?\\s*(?:on)?\\s*(?:(.+?)-(.+?))?\\s*(?:(?:for the|the|on))?\\s*(?:(?:(${widgetsPattern})\\s+(.+?))?)\\s*(?:(on|off|in))?\\s*(${widgetsPattern})\\s+(.+?)\\s*(?:(on|off|in))?\\s*(?:(?:of|for|for the|of the))?\\s*(?:${prepPattern})?\\s*(?:(?:(${widgetsPattern})\\s+(.+?)))?$`
@@ -263,7 +311,6 @@ class DslSpecificationHandler {
 
         if (actionRefRegex.test(content)) {
             /*let words = content.split(/\s+/);
-
             words.forEach((word, index) => {
                 if (getWidget(word) != null) {
                     let widgetID = words[index + 1];
@@ -351,7 +398,7 @@ class DslSpecificationHandler {
                     //not sure if needed but here is the space for it!
                 }
 
-                conditions.push({ type: action, params: { widget: widget.widget, id: currentPage + ":" + containerID + widget.id, type: property, typeId: propertyID}, negated: containsWordNot(content) })
+                conditions.push({ type: action, params: { widget: widget.widget, id: currentPage + ":" + containerID + widget.id, type: property, typeId: propertyID }, negated: containsWordNot(content) })
             } else {
                 //possibleAttributes = [...actions, ...states, ...properties];
 
@@ -370,8 +417,30 @@ class DslSpecificationHandler {
         }
         //console.log(widgets);
         if (container.widget) {
+            if (container.widget.widget == "Grid") {
+                const cellMatch = content.match(/\b(\d{1,2}:\d{1,2})\b/);
+                if (cellMatch) {
+                    let cell = cellMatch[1]; // Extract the cell value
+
+                    // Validate cell format
+                    const [x, y] = cell.split(":").map(Number);
+                    if (x > 99 || y > 99) {
+                        return "cell must be defined as 'x:y' where x and y are between 0 and 99";
+                    }
+                    let widgets = container.widget.widgets;
+                    delete container.widget.widgets;
+                    container.widget.cells = [];
+                    container.widget.cells.push({
+                        id: cell,
+                        widgets: widgets
+                    });
+                } else {
+                    return "no cell defined";
+                }
+            }
             return container.widget;
         }
+
         return widget;
     }
 
@@ -463,6 +532,27 @@ class DslSpecificationHandler {
         //console.log(widgets[0].actions)
         //console.log(widgets);
         if (container.widget) {
+            if (container.widget.widget == "Grid") {
+                const cellMatch = content.match(/\b(\d{1,2}:\d{1,2})\b/);
+                if (cellMatch) {
+                    let cell = cellMatch[1]; // Extract the cell value
+
+                    // Validate cell format
+                    const [x, y] = cell.split(":").map(Number);
+                    if (x > 99 || y > 99) {
+                        return "cell must be defined as 'x:y' where x and y are between 0 and 99";
+                    }
+                    let widgets = container.widget.widgets;
+                    delete container.widget.widgets;
+                    container.widget.cells = [];
+                    container.widget.cells.push({
+                        id: cell,
+                        widgets: widgets
+                    });
+                } else {
+                    return "no cell defined";
+                }
+            }
             return container.widget;
         }
         return widget;
@@ -565,7 +655,8 @@ function getContainer(widgets) {
         //widget.widget === 'ListBox' ||
         //widget.widget === 'DropdownList' ||
         widget.widget === 'ModalWindow' ||
-        widget.widget === 'WindowDialog'
+        widget.widget === 'WindowDialog' ||
+        widget.widget === 'Grid'
     );
 
     let widget = null;
@@ -574,7 +665,7 @@ function getContainer(widgets) {
     if (isContainerPresent) {
         let containerWidget;
         widgets.forEach(container => {
-            if (['FieldSet', /*'Menu', 'ListBox', 'DropdownList',*/ 'ModalWindow', 'WindowDialog'].includes(container.widget)) {
+            if (['FieldSet', /*'Menu', 'ListBox', 'DropdownList',*/ 'ModalWindow', 'WindowDialog', 'Grid'].includes(container.widget)) {
                 if (!containerWidget) {
                     // Filter out the current container from its own widgets list
                     let newWidgets = widgets.filter(widget => widget.id !== container.id);

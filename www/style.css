@@ -214,3 +214,50 @@ body {
 .ace_editor .ace_scenario {
     color: #FF00FF;
 }
+
+.tabs-container {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    background-color: #1e1e1e; /* Dark background like VS Code */
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    margin-right: 5px;
+    background-color: #2d2d2d; /* Tab background */
+    color: #ccc; /* Text color */
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    font-size: 14px;
+    user-select: none;
+}
+
+.tab:hover {
+    background-color: #383838; /* Lighter on hover */
+}
+
+.tab.active {
+    background-color: #007acc; /* Active tab color */
+    color: white;
+}
+
+.tab .close {
+    display: none; /* Hidden by default */
+    margin-left: 10px;
+    font-size: 12px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.tab:hover .close {
+    display: inline-block; /* Show on hover */
+}
+
+.tab .close:hover {
+    color: #ff5f56; /* Highlight the close button on hover */
+}

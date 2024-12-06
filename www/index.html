@@ -13,10 +13,14 @@
 </head>
 
 <body onload="init()">
+    <div class="tabs-container"></div>
+
     <div id="statusBarContainer">
         <div id="statusBar" style="width: 0%;"></div>
     </div>
     <div id="overlay"></div>
+
+    <!-- Credentials Modal -->
     <div id="credentialsModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeCredentialsModal()">&times;</span>
@@ -32,8 +36,26 @@
             </div>
         </div>
     </div>
+
+    <!-- New File Modal -->
+    <div id="newFileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNewFileModal()">&times;</span>
+            <div class="modal-body">
+                <div class="input-container">
+                    <div class="input-content">
+                        <p class="input-description">Please enter a page name:</p>
+                        <input type="text" id="pageNameInput" placeholder="Page name" class="url-input">
+                        <button id="createFileNameButton" class="set-url-button">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
-        <div class="text-input" id="editor">Scenario: Select a Multidestination Flight
+        <div class="text-input" id="editor">
+            Scenario: Select a Multidestination Flight
             Given the BrowserWindow "Availability Page" is displayed
             When I click on the Button "No Bag"
             And I click on the Button "Book"
@@ -44,16 +66,19 @@
                 allowfullscreen></iframe>
         </div>
     </div>
+
     <script>
         require(["ace/mode/my-dsl"], function (MyDslMode) {
             var editor = ace.edit("editor");
             editor.setTheme("ace/theme/dracula");
             editor.session.setMode(new MyDslMode.Mode());
             editor.session.setUseWrapMode(true);
+            editor.setReadOnly(true); // false to make it editable
         });
     </script>
     <script type="" defer src="../render.js"></script>
 </body>
+
 
 
 </html>

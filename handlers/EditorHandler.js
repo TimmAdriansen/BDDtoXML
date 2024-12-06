@@ -1,4 +1,5 @@
 const DslSpecificationHandler = require("./DslSpecificationHandler.js");
+const { widgets } = require("./WidgetHandler.js");
 
 class EditorHandler {
 
@@ -409,7 +410,7 @@ function updateWidget(existingWidget, newWidget) {
                         //existingWidget[key][i] = newProp;
                         if (Object.keys(existingProp)[0] === "option") {
                             existingWidget[key].push(newProp);
-                            
+
                         }
                         propFound = true;
                         break;
@@ -420,6 +421,19 @@ function updateWidget(existingWidget, newWidget) {
                     existingWidget[key].push(newProp);
                 }
             });
+        } else if (key === "cells" && newWidget[key]) {
+            if (newWidget[key][0]?.id != existingWidget[key][0]?.id) {
+                existingWidget[key].push({id: newWidget[key][0].id, widgets: newWidget[key][0].widgets})
+            } else {
+                newWidget[key][0].widgets.forEach(widget => {
+                    let nestedWidget = findWidgetById(widget.id, existingWidget[key][0].widgets);
+                    if (!nestedWidget) {
+                        existingWidget[key][0].widgets.push(widget);
+                    } else {
+                        updateWidget(nestedWidget, widget);
+                    }
+                });
+            }
         } else {
             // Update other properties
             existingWidget[key] = newWidget[key];
