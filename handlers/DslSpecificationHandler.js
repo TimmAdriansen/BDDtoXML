@@ -112,7 +112,6 @@ class DslSpecificationHandler {
         }
 
         let container = getContainer(widgets);
-        let containerID = container.containerID;
         let widget;
 
         if (!container.widget) {
@@ -121,6 +120,33 @@ class DslSpecificationHandler {
             widget = container.widget.widgets[0];
         } else {
             widget = container.widget;
+        }
+
+        let containerID = container.containerID;
+
+        if (container.widget) {
+            if (container.widget.widget == "Grid") {
+                const cellMatch = content.match(/\b(\d{1,2}:\d{1,2})\b/);
+                if (cellMatch) {
+                    let cell = cellMatch[1]; // Extract the cell value
+
+                    // Validate cell format
+                    const [x, y] = cell.split(":").map(Number);
+                    if (x > 99 || y > 99) {
+                        return "cell must be defined as 'x:y' where x and y are between 0 and 99";
+                    }
+                    let widgets = container.widget.widgets;
+                    delete container.widget.widgets;
+                    container.widget.cells = [];
+                    container.widget.cells.push({
+                        id: cell,
+                        widgets: widgets
+                    });
+                    containerID += x + ":" + y + ":";
+                } else {
+                    return "no cell defined";
+                }
+            }
         }
 
         let { /*actions,*/ states, properties, regex } = WidgetHandler.widgets[widget.widget];
@@ -187,8 +213,10 @@ class DslSpecificationHandler {
             //widget.actions.push({ type: "set" + attribute, params: { value: getValue(content) }, negated: containsWordNot(content), conditions: conditions })
         }*/
 
-        let existingConditionId = getIdFromConditions(widget.id);
-        let id = existingConditionId !== null ? existingConditionId : currentPage + ":" + containerID + widget.id;
+        //let existingConditionId = getIdFromConditions(widget.id);
+        //let id = existingConditionId !== null ? existingConditionId : currentPage + ":" + containerID + widget.id;
+        
+        let id = currentPage + ":" + containerID + widget.id;
 
         //look into this solution
         if (property && !state) {
@@ -202,29 +230,9 @@ class DslSpecificationHandler {
 
         //console.log(widget);
         if (container.widget) {
-            if (container.widget.widget == "Grid") {
-                const cellMatch = content.match(/\b(\d{1,2}:\d{1,2})\b/);
-                if (cellMatch) {
-                    let cell = cellMatch[1]; // Extract the cell value
-
-                    // Validate cell format
-                    const [x, y] = cell.split(":").map(Number);
-                    if (x > 99 || y > 99) {
-                        return "cell must be defined as 'x:y' where x and y are between 0 and 99";
-                    }
-                    let widgets = container.widget.widgets;
-                    delete container.widget.widgets;
-                    container.widget.cells = [];
-                    container.widget.cells.push({
-                        id: cell,
-                        widgets: widgets
-                    });
-                } else {
-                    return "no cell defined";
-                }
-            }
             return container.widget;
         }
+
         return widget;
 
 
@@ -344,7 +352,6 @@ class DslSpecificationHandler {
             }
 
             container = getContainer(widgets);
-            let containerID = container.containerID;
 
             if (!container.widget) {
                 widget = widgets[0];
@@ -352,6 +359,33 @@ class DslSpecificationHandler {
                 widget = container.widget.widgets[0];
             } else {
                 widget = container.widget;
+            }
+
+            let containerID = container.containerID;
+
+            if (container.widget) {
+                if (container.widget.widget == "Grid") {
+                    const cellMatch = content.match(/\b(\d{1,2}:\d{1,2})\b/);
+                    if (cellMatch) {
+                        let cell = cellMatch[1]; // Extract the cell value
+
+                        // Validate cell format
+                        const [x, y] = cell.split(":").map(Number);
+                        if (x > 99 || y > 99) {
+                            return "cell must be defined as 'x:y' where x and y are between 0 and 99";
+                        }
+                        let widgets = container.widget.widgets;
+                        delete container.widget.widgets;
+                        container.widget.cells = [];
+                        container.widget.cells.push({
+                            id: cell,
+                            widgets: widgets
+                        });
+                        containerID += x + ":" + y + ":";
+                    } else {
+                        return "no cell defined";
+                    }
+                }
             }
 
 
@@ -397,7 +431,6 @@ class DslSpecificationHandler {
                 } else {
                     //not sure if needed but here is the space for it!
                 }
-
                 conditions.push({ type: action, params: { widget: widget.widget, id: currentPage + ":" + containerID + widget.id, type: property, typeId: propertyID }, negated: containsWordNot(content) })
             } else {
                 //possibleAttributes = [...actions, ...states, ...properties];
@@ -417,27 +450,6 @@ class DslSpecificationHandler {
         }
         //console.log(widgets);
         if (container.widget) {
-            if (container.widget.widget == "Grid") {
-                const cellMatch = content.match(/\b(\d{1,2}:\d{1,2})\b/);
-                if (cellMatch) {
-                    let cell = cellMatch[1]; // Extract the cell value
-
-                    // Validate cell format
-                    const [x, y] = cell.split(":").map(Number);
-                    if (x > 99 || y > 99) {
-                        return "cell must be defined as 'x:y' where x and y are between 0 and 99";
-                    }
-                    let widgets = container.widget.widgets;
-                    delete container.widget.widgets;
-                    container.widget.cells = [];
-                    container.widget.cells.push({
-                        id: cell,
-                        widgets: widgets
-                    });
-                } else {
-                    return "no cell defined";
-                }
-            }
             return container.widget;
         }
 
