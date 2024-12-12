@@ -26,6 +26,7 @@ let projectPath = "";
 let projectName = "";
 let figmaSrc = "";
 let BDD;
+let useUILayoutGPT = false;
 
 let initialWindow;
 
@@ -207,7 +208,19 @@ const menuTemplate = [
             win.webContents.send('getBDD');
         }
     },
-];
+    {
+        label: 'Extra options',
+        submenu: [
+            {
+                label: "Use GPT layoutting",
+                type: "checkbox",
+                checked: useUILayoutGPT,
+                click: e => {
+                    useUILayoutGPT = e.checked;
+                }
+            }
+        ]
+    }];
 
 function createWindow() {
     if (initialWindow) {
@@ -535,7 +548,12 @@ electron.ipcMain.on('saveBeforeGenerating', async (event, fileName, newBDD) => {
             console.log(scenarios);
             annotations = EditorHandler.updateEditorAnnotations(scenarios);
             EditorHandler.tryToGenerate = false;
-            XMLHandler.updateXML(EditorHandler.pages);
+            if (!useUILayoutGPT) {
+                XMLHandler.updateXML(EditorHandler.pages);
+            } else {
+                const editorPagesString = JSON.stringify(EditorHandler.pages, null, 2); // Pretty format with indentation
+                win.webContents.send('showGPTModal', editorPagesString);
+            }
         } else if (EditorHandler.tryToGenerate && !EditorHandler.canGenerate) {
             EditorHandler.tryToGenerate = false;
             electron.dialog.showMessageBox({
@@ -558,6 +576,47 @@ electron.ipcMain.on('saveBeforeGenerating', async (event, fileName, newBDD) => {
         });
     }
 
+});
+
+electron.ipcMain.on('returnedGPTValues', (event, pages, value) => {
+
+    const parsedPages = typeof pages === 'string' ? JSON.parse(pages) : pages;
+    const parsedValue = typeof value === 'string' ? JSON.parse(value) : value;
+
+    function appendCoordinate(page, widget) {
+        for (let i = 0; i < parsedPages.BrowserWindows.length; i++) {
+            const browserWindow = parsedPages.BrowserWindows[i];
+            if (browserWindow.page === page) {
+                for (let j = 0; j < browserWindow.widgets.length; j++) {
+                    const pWidget = browserWindow.widgets[j];
+                    if (pWidget.id === widget.id) {
+                        pWidget.x = widget.x;
+                        pWidget.y = widget.y;
+                        return;
+                    }
+                    if (pWidget.widgets) {
+                        for (let k = 0; k < pWidget.widgets.length; k++) {
+                            const nestedWidget = pWidget.widgets[k];
+                            if (nestedWidget.id === widget.id) {
+                                nestedWidget.x = widget.x;
+                                nestedWidget.y = widget.y;
+                                return;
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+        }
+    }
+
+    Object.keys(parsedValue).forEach(page => {
+        parsedValue[page].forEach(widget => {
+            appendCoordinate(page, widget);
+        });
+    });
+
+    XMLHandler.updateXML(parsedPages);
 });
 
 electron.ipcMain.on('errorDetection', (event, editor) => {

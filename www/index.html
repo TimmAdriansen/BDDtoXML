@@ -53,6 +53,32 @@
         </div>
     </div>
 
+    <!-- New Modal -->
+<div id="gptModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeGPTModal()">&times;</span>
+        <div class="modal-body">
+            <div class="input-container">
+                <!-- Read-only text area for EditorHandler.pages -->
+                <div class="input-content">
+                    <p class="input-description">Copy this text and insert it into the GPT</p>
+                    <textarea id="readonlyPagesTextbox" readonly class="url-input no-resize" style="height: 150px;"></textarea>
+                    <!-- Copy Button -->
+                    <button id="copyButton" class="set-url-button" onclick="copyReadonlyText()">Copy</button>
+                </div>
+                <!-- Textbox for inserting new text -->
+                <div class="input-content">
+                    <p class="input-description">Insert the text provided by the GPT</p>
+                    <textarea id="newTextTextbox" placeholder="Enter new text here..." class="url-input no-resize" style="height: 100px;"></textarea>
+                </div>
+                <!-- Go button -->
+                <button id="goButton" class="set-url-button" onclick="handleGPTGoButton()">Go</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <div class="container">
         <div class="text-input" id="editor">
             Scenario: Select a Multidestination Flight

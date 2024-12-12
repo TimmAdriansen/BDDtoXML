@@ -60,6 +60,35 @@ function closeNewFileModal() {
     document.getElementById('newFileModal').style.display = 'none';
 }
 
+window.electronAPI.receiveMessage('showGPTModal', (arg) => {
+    document.getElementById('gptModal').style.display = 'block';
+
+    document.getElementById('readonlyPagesTextbox').value = arg;
+});
+
+function closeGPTModal() {
+    document.getElementById('gptModal').style.display = 'none';
+}
+
+function copyReadonlyText() {
+    // Get the text from the readonly textbox
+    const textToCopy = document.getElementById("readonlyPagesTextbox").value;
+
+    // Copy it to the clipboard
+    navigator.clipboard.writeText(textToCopy).then(() => {
+    }).catch((err) => {
+        console.error("Failed to copy text:", err);
+    });
+}
+
+function handleGPTGoButton(){
+    const value = document.getElementById('newTextTextbox').value;
+    const pages = document.getElementById("readonlyPagesTextbox").value;
+    document.getElementById('gptModal').style.display = 'none';
+
+    window.electronAPI.sendMessage("returnedGPTValues", pages, value);
+}
+
 document.getElementById('createFileNameButton').addEventListener('click', function () {
     const fileName = document.getElementById('pageNameInput').value;
     window.electronAPI.sendMessage("createFile", fileName)
